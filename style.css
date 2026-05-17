@@ -2,6 +2,7 @@
   --accent:#007aff;
 }
 
+/* RESET */
 *{
   margin:0;
   padding:0;
@@ -9,6 +10,7 @@
   font-family:-apple-system, BlinkMacSystemFont, sans-serif;
 }
 
+/* BODY */
 body{
   display:flex;
   justify-content:center;
@@ -18,13 +20,18 @@ body{
   background-position:center;
 }
 
+/* CARD */
 .card{
   backdrop-filter:blur(calc(30px * var(--card-opacity,0.65)));
   background:rgba(255,255,255,var(--card-opacity,0.65));
-  padding:30px;
-  border-radius:24px;
-  width:90%;
-  max-width:400px;
+
+  border-radius:28px;
+  padding:28px;
+
+  width:92%;
+  max-width:420px;
+  min-width:300px;
+
   text-align:center;
 }
 
@@ -33,11 +40,13 @@ body{
   color:#f2f2f7;
 }
 
+/* TITLE */
 h1{
   font-weight:700;
   letter-spacing:-0.5px;
 }
 
+/* BUTTONS */
 .main-btn{
   background:var(--accent);
   color:white;
@@ -49,23 +58,21 @@ h1{
 
 .settings-btn{
   background:rgba(0,0,0,0.1);
-  border-radius:12px;
   padding:10px;
+  border-radius:12px;
 }
 
+/* CREDITS */
 .credits{
   margin-top:10px;
   font-size:14px;
 }
-
 .credits p{
   margin:3px 0;
 }
-
 .version{
-  display:block;
-  margin-top:8px;
   font-size:12px;
+  margin-top:5px;
 }
 
 /* SETTINGS */
@@ -80,21 +87,82 @@ h1{
 
 .settings-card{
   backdrop-filter:blur(30px);
-  background:rgba(255,255,255,0.9);
+  background:rgba(255,255,255,0.92);
   padding:20px;
   border-radius:20px;
   width:90%;
-  max-width:350px;
+  max-width:360px;
 }
 
-.section{
-  margin-top:15px;
+.dark .settings-card{
+  background:rgba(28,28,30,0.92);
+  color:#fff;
 }
 
+/* ROW */
 .row{
   display:flex;
   justify-content:space-between;
   align-items:center;
+  margin-top:10px;
+}
+
+/* COLOR */
+.color-wrap{
+  display:flex;
+  gap:6px;
+}
+
+#setColorBtn{
+  display:none;
+  background:var(--accent);
+  color:white;
+  border:none;
+  padding:6px 10px;
+  border-radius:8px;
+}
+
+/* THEMES */
+.theme-row{
+  display:flex;
+  flex-wrap:wrap;
+  gap:6px;
+  margin-top:10px;
+}
+
+/* FILE */
+.file-btn{
+  display:block;
+  background:var(--accent);
+  color:white;
+  padding:10px;
+  border-radius:10px;
+  margin-top:10px;
+  position:relative;
+}
+.file-btn input{
+  position:absolute;
+  inset:0;
+  opacity:0;
+}
+
+/* BUTTON */
+button{
+  margin-top:10px;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+}
+
+button.secondary{
+  background:rgba(0,0,0,0.1);
+}
+
+/* SLIDER */
+input[type="range"]{
+  width:100%;
+  margin-top:10px;
+  touch-action:pan-y;
 }
 
 /* SWITCH */
@@ -125,36 +193,6 @@ input:checked + .slider{
 }
 input:checked + .slider:before{
   transform:translateX(22px);
-}
-
-/* BUTTONS */
-button{
-  margin-top:10px;
-  padding:10px;
-  border-radius:10px;
-  border:none;
-}
-
-/* FILE */
-.file-btn{
-  display:block;
-  background:var(--accent);
-  color:white;
-  padding:10px;
-  border-radius:10px;
-  margin-top:10px;
-  position:relative;
-}
-.file-btn input{
-  position:absolute;
-  inset:0;
-  opacity:0;
-}
-
-/* SLIDER */
-input[type="range"]{
-  width:100%;
-  margin-top:10px;
 }
 
 /* POPUP */
