@@ -14,7 +14,6 @@
 
 <body>
 
-<!-- Main -->
 <div class="container">
   <div class="card">
 
@@ -34,59 +33,57 @@
   </div>
 </div>
 
-<!-- Settings -->
+<!-- SETTINGS -->
 <div id="settingsPanel">
   <div class="settings-card">
 
     <h2>Settings</h2>
 
-    <!-- Theme -->
-    <div class="section">
-      <div class="row">
-        <span>Dark Mode</span>
-        <label class="switch">
-          <input type="checkbox" id="themeToggle">
-          <span class="slider"></span>
-        </label>
+    <!-- DARK MODE -->
+    <div class="row">
+      <span>Dark Mode</span>
+      <label class="switch">
+        <input type="checkbox" id="themeToggle">
+        <span class="slider"></span>
+      </label>
+    </div>
+
+    <!-- COLOR -->
+    <div class="row">
+      <span>Custom Color</span>
+      <div class="color-wrap">
+        <input type="text" id="colorInput" placeholder="#007aff">
+        <button id="setColorBtn">Set</button>
       </div>
+    </div>
 
-      <div class="row">
-  <span>Custom Color</span>
-  <div class="color-wrap">
-    <input type="text" id="colorInput" placeholder="#007aff">
-    <button id="setColorBtn">Set</button>
-  </div>
-</div>
+    <!-- BACKGROUND -->
+    <h3>Background</h3>
 
-    <!-- Background -->
-    <div class="section">
-      <h3>Background</h3>
-
+    <div class="theme-row">
       <button onclick="setBackground('default')">Default</button>
       <button onclick="setBackground('theme1')">Theme 1</button>
       <button onclick="setBackground('theme2')">Theme 2</button>
       <button onclick="setBackground('theme3')">Theme 3</button>
-
-      <label class="file-btn">
-        Your Photos
-        <input type="file" id="fileInput" accept="image/*">
-      </label>
-
-      <button onclick="customBackgroundURL()">Image URL</button>
     </div>
 
-    <!-- Opacity -->
-    <div class="section">
-      <h3>UI Opacity</h3>
-      <input type="range" id="opacitySlider" min="0" max="1" step="0.02">
-    </div>
+    <label class="file-btn">
+      Your Photos
+      <input type="file" id="fileInput" accept="image/*">
+    </label>
+
+    <button class="secondary" onclick="openURL()">Image URL</button>
+
+    <!-- OPACITY -->
+    <h3>UI Opacity</h3>
+    <input type="range" id="opacitySlider" min="0" max="1" step="0.02">
 
     <button class="secondary" onclick="closeSettings()">Close</button>
 
   </div>
 </div>
 
-<!-- URL Popup -->
+<!-- URL POPUP -->
 <div id="urlPopup">
   <div class="popup-card">
     <input type="text" id="urlInput" placeholder="Paste image URL">
@@ -97,57 +94,69 @@
 
 <script>
 
-/* SETTINGS */
+/* SETTINGS PANEL */
 function openSettings(){ settingsPanel.style.display="flex"; }
 function closeSettings(){ settingsPanel.style.display="none"; }
 
-/* THEME */
+/* DARK MODE */
 const toggle = document.getElementById("themeToggle");
-toggle.onchange = () => {
-  document.body.classList.toggle("dark", toggle.checked);
-  localStorage.setItem("theme", toggle.checked);
-};
 toggle.checked = localStorage.getItem("theme")==="true";
 document.body.classList.toggle("dark", toggle.checked);
 
-/* CUSTOM COLOR */
-const colorInput = document.getElementById("colorInput");
-colorInput.onchange = () => {
-  document.documentElement.style.setProperty('--accent', colorInput.value);
-  localStorage.setItem("color", colorInput.value);
+toggle.onchange = ()=>{
+  document.body.classList.toggle("dark", toggle.checked);
+  localStorage.setItem("theme", toggle.checked);
 };
+
+/* COLOR */
+const colorInput = document.getElementById("colorInput");
+const setBtn = document.getElementById("setColorBtn");
+
+colorInput.addEventListener("input",()=>{
+  setBtn.style.display = colorInput.value ? "block" : "none";
+});
+
+setBtn.onclick = ()=>{
+  const val = colorInput.value.trim();
+  if(!/^#([0-9A-F]{3}){1,2}$/i.test(val)) return;
+
+  document.documentElement.style.setProperty('--accent', val);
+  localStorage.setItem("color", val);
+  setBtn.style.display="none";
+};
+
 const savedColor = localStorage.getItem("color");
 if(savedColor){
-  colorInput.value = savedColor;
   document.documentElement.style.setProperty('--accent', savedColor);
+  colorInput.value = savedColor;
 }
 
 /* BACKGROUND */
 const defaultBG = "https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
 
 const themes = {
-  theme1: "PASTE_THEME1_URL",
-  theme2: "PASTE_THEME2_URL",
-  theme3: "PASTE_THEME3_URL"
+  theme1:"PASTE_THEME1_URL",
+  theme2:"PASTE_THEME2_URL",
+  theme3:"PASTE_THEME3_URL"
 };
 
 function setBackground(bg){
   if(bg==="default"){
-    document.body.style.backgroundImage = `url('${defaultBG}')`;
+    document.body.style.backgroundImage=`url('${defaultBG}')`;
     localStorage.setItem("background","default");
     localStorage.removeItem("customBG");
     return;
   }
 
-  document.body.style.backgroundImage = `url('${themes[bg]}')`;
+  document.body.style.backgroundImage=`url('${themes[bg]}')`;
   localStorage.setItem("background",bg);
   localStorage.removeItem("customBG");
 }
 
 /* FILE */
-fileInput.onchange = e=>{
+fileInput.onchange=e=>{
   const reader=new FileReader();
-  reader.onload = ev=>{
+  reader.onload=ev=>{
     document.body.style.backgroundImage=`url('${ev.target.result}')`;
     localStorage.setItem("customBG",ev.target.result);
     localStorage.removeItem("background");
@@ -156,7 +165,7 @@ fileInput.onchange = e=>{
 };
 
 /* URL */
-function customBackgroundURL(){ urlPopup.style.display="flex"; }
+function openURL(){ urlPopup.style.display="flex"; }
 function closeURL(){ urlPopup.style.display="none"; }
 
 function applyURL(){
@@ -167,7 +176,7 @@ function applyURL(){
   closeURL();
 }
 
-/* RESTORE BG */
+/* RESTORE */
 const savedBG = localStorage.getItem("background");
 const customBG = localStorage.getItem("customBG");
 
@@ -183,15 +192,15 @@ if(customBG){
 
 /* OPACITY */
 const slider=document.getElementById("opacitySlider");
+const savedOpacity=localStorage.getItem("opacity")||0.65;
+
+slider.value=savedOpacity;
+document.documentElement.style.setProperty('--card-opacity',savedOpacity);
 
 slider.oninput=()=>{
-  document.documentElement.style.setProperty('--card-opacity', slider.value);
+  document.documentElement.style.setProperty('--card-opacity',slider.value);
   localStorage.setItem("opacity",slider.value);
 };
-
-const savedOpacity = localStorage.getItem("opacity") || 0.65;
-slider.value=savedOpacity;
-document.documentElement.style.setProperty('--card-opacity', savedOpacity);
 
 </script>
 
