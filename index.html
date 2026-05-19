@@ -21,10 +21,10 @@
 
     <a href="#" class="main-btn">Get Star</a>
 
-    <button class="settings-btn" onclick="openSettings()">Settings</button>
-
-    <!-- NEW BUTTON -->
-    <button class="small-btn" onclick="openWhatsNew()">What’s New</button>
+    <div class="button-row">
+      <button onclick="openSettings()">Settings</button>
+      <button onclick="openWhatsNew()">What’s New</button>
+    </div>
 
     <div class="credits">
       <p>© Endlesspete</p>
@@ -36,20 +36,18 @@
   </div>
 </div>
 
-<!-- WHAT'S NEW SCREEN -->
+<!-- WHAT'S NEW -->
 <div id="whatsNewUI">
   <div class="card">
-
     <h2>What’s New</h2>
 
-    <p class="whats-text">
-      • Placeholder update 1<br>
-      • Placeholder update 2<br>
-      • Placeholder update 3
+    <p>
+      • Placeholder update<br>
+      • Placeholder update<br>
+      • Placeholder update
     </p>
 
     <button onclick="closeWhatsNew()">Back</button>
-
   </div>
 </div>
 
@@ -59,6 +57,7 @@
 
     <h2>Settings</h2>
 
+    <!-- DARK MODE -->
     <div class="row">
       <span>Dark Mode</span>
       <label class="switch">
@@ -67,6 +66,7 @@
       </label>
     </div>
 
+    <!-- COLOR -->
     <div class="row">
       <span>Custom Color</span>
       <div class="color-wrap">
@@ -97,6 +97,15 @@
   </div>
 </div>
 
+<!-- URL POPUP -->
+<div id="urlPopup">
+  <div class="popup-card">
+    <input type="text" id="urlInput" placeholder="Paste image URL">
+    <button onclick="applyURL()">Apply</button>
+    <button onclick="closeURL()">Cancel</button>
+  </div>
+</div>
+
 <script>
 
 /* NAVIGATION */
@@ -123,7 +132,7 @@ toggle.onchange=()=>{
   localStorage.setItem("theme", toggle.checked);
 };
 
-/* COLOR SYSTEM (FIXED FOR ALL ELEMENTS) */
+/* COLOR */
 const colorInput=document.getElementById("colorInput");
 const setBtn=document.getElementById("setColorBtn");
 
@@ -146,7 +155,7 @@ if(savedColor){
   colorInput.value=savedColor;
 }
 
-/* BACKGROUND */
+/* BACKGROUND SYSTEM (RESTORED) */
 const defaultBG="https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
 
 const themes={
@@ -166,6 +175,48 @@ function setBackground(bg){
   document.body.style.backgroundImage=`url('${themes[bg]}')`;
   localStorage.setItem("background",bg);
   localStorage.removeItem("customBG");
+}
+
+/* FILE UPLOAD (RESTORED) */
+fileInput.onchange=e=>{
+  const file=e.target.files[0];
+  if(!file) return;
+
+  const reader=new FileReader();
+  reader.onload=ev=>{
+    document.body.style.backgroundImage=`url('${ev.target.result}')`;
+    localStorage.setItem("customBG",ev.target.result);
+    localStorage.removeItem("background");
+  };
+  reader.readAsDataURL(file);
+};
+
+/* URL */
+function openURL(){ urlPopup.style.display="flex"; }
+function closeURL(){ urlPopup.style.display="none"; }
+
+function applyURL(){
+  const url=urlInput.value.trim();
+  if(!url) return;
+
+  document.body.style.backgroundImage=`url('${url}')`;
+  localStorage.setItem("customBG",url);
+  localStorage.removeItem("background");
+  closeURL();
+}
+
+/* RESTORE BACKGROUND (CRITICAL FIX) */
+const savedBG = localStorage.getItem("background");
+const customBG = localStorage.getItem("customBG");
+
+if(customBG){
+  document.body.style.backgroundImage=`url('${customBG}')`;
+}else if(savedBG==="default"){
+  document.body.style.backgroundImage=`url('${defaultBG}')`;
+}else if(savedBG){
+  document.body.style.backgroundImage=`url('${themes[savedBG]}')`;
+}else{
+  document.body.style.backgroundImage=`url('${defaultBG}')`;
 }
 
 /* OPACITY */
