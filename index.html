@@ -18,10 +18,10 @@
 
     <h1>Star</h1>
 
-    <!-- MAIN BUTTON -->
-    <a href="#" class="main-btn">Get Star</a>
+    <p id="unsupportedMsg"></p>
 
-    <!-- SMALL BUTTONS -->
+    <a href="#" class="main-btn" id="getBtn">Get Star</a>
+
     <div class="sub-buttons">
       <button onclick="openSettings()">Settings</button>
       <button onclick="openWhatsNew()">What’s New</button>
@@ -31,7 +31,7 @@
       <p>© <a href="https://x.com/endlesspeteinc" target="_blank">Endlesspete</a></p>
       <p>© <a href="https://x.com/terralinkslabs" target="_blank">Terralinkslabs</a></p>
       <p>© <a href="https://x.com/SkylarkShortcut" target="_blank">Skylark Inc</a></p>
-      <span>v1.0 Beta 6</span>
+      <span>v1.0 Beta 7</span>
     </div>
 
   </div>
@@ -43,8 +43,8 @@
     <h2>What’s New</h2>
 
     <p>
-      • Add your updates here<br>
-      • UI improvements<br>
+      • Placeholder updates<br>
+      • UI polish<br>
       • Bug fixes
     </p>
 
@@ -60,7 +60,6 @@
 
     <h2>Settings</h2>
 
-    <!-- DARK MODE -->
     <div class="row">
       <span>Dark Mode</span>
       <label class="switch">
@@ -69,13 +68,6 @@
       </label>
     </div>
 
-    <!-- COLOR -->
-    <div class="row">
-      <span>Custom Color</span>
-      <input type="text" id="colorInput" placeholder="007aff">
-    </div>
-
-    <!-- THEMES -->
     <h3>Background</h3>
 
     <div class="theme-grid">
@@ -92,9 +84,6 @@
 
     <button onclick="openURL()">Image URL</button>
 
-    <h3>UI Opacity</h3>
-    <input type="range" id="opacitySlider" min="0" max="1" step="0.02">
-
     <button onclick="closeSettings()">Close</button>
 
   </div>
@@ -109,58 +98,65 @@
   </div>
 </div>
 
+<!-- INFO BUTTON -->
+<div id="infoBtn" onclick="openInfo()">i</div>
+
+<!-- INFO POPUP -->
+<div id="infoPopup">
+  <div class="popup-card">
+    <h3>Image Credit</h3>
+    <p id="creditText">Theme credit placeholder</p>
+    <button onclick="closeInfo()">Close</button>
+  </div>
+</div>
+
 <script>
 
+/* PLATFORM GATE */
+const ua = navigator.userAgent;
+const isApple = /iPhone|iPad|Macintosh/.test(ua);
+
+if(!isApple){
+  document.getElementById("getBtn").classList.add("disabled");
+  document.getElementById("getBtn").innerText = "Not Supported";
+  document.getElementById("unsupportedMsg").innerText =
+    "This feature is not supported on your platform.";
+  document.getElementById("unsupportedMsg").style.color = "red";
+}
+
 /* NAV */
-function openWhatsNew(){
-  document.getElementById("whatsNewUI").style.display="flex";
-}
-function closeWhatsNew(){
-  document.getElementById("whatsNewUI").style.display="none";
-}
+function openWhatsNew(){ whatsNewUI.style.display="flex"; }
+function closeWhatsNew(){ whatsNewUI.style.display="none"; }
 
 /* SETTINGS */
 function openSettings(){ settingsPanel.style.display="flex"; }
 function closeSettings(){ settingsPanel.style.display="none"; }
 
 /* DARK MODE */
-const toggle = document.getElementById("themeToggle");
-toggle.checked = localStorage.getItem("dark")==="true";
+themeToggle.checked = localStorage.getItem("dark")==="true";
+document.body.classList.toggle("dark", themeToggle.checked);
 
-document.body.classList.toggle("dark", toggle.checked);
-
-toggle.onchange=()=>{
-  document.body.classList.toggle("dark", toggle.checked);
-  localStorage.setItem("dark", toggle.checked);
+themeToggle.onchange=()=>{
+  document.body.classList.toggle("dark", themeToggle.checked);
+  localStorage.setItem("dark", themeToggle.checked);
 };
-
-/* COLOR FIX (# optional) */
-const input = document.getElementById("colorInput");
-
-input.value = localStorage.getItem("color") || "";
-
-input.onchange = () => {
-  let val = input.value.trim();
-  if(!val.startsWith("#")) val = "#" + val;
-
-  if(/^#([0-9A-F]{3}){1,2}$/i.test(val)){
-    document.documentElement.style.setProperty('--accent', val);
-    localStorage.setItem("color", val);
-  }
-};
-
-const savedColor = localStorage.getItem("color");
-if(savedColor){
-  document.documentElement.style.setProperty('--accent', savedColor);
-}
 
 /* BACKGROUND */
 const defaultBG="https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
 
 const themes={
-  theme1:"PASTE_THEME1_URL",
-  theme2:"PASTE_THEME2_URL",
-  theme3:"PASTE_THEME3_URL"
+  theme1:{
+    url:"PASTE_THEME1_URL",
+    credit:"Theme 1 credit"
+  },
+  theme2:{
+    url:"PASTE_THEME2_URL",
+    credit:"Theme 2 credit"
+  },
+  theme3:{
+    url:"PASTE_THEME3_URL",
+    credit:"Theme 3 credit"
+  }
 };
 
 function highlight(btn){
@@ -171,31 +167,33 @@ function highlight(btn){
 function setBG(bg){
   if(bg==="default"){
     document.body.style.backgroundImage=`url('${defaultBG}')`;
+    infoBtn.style.display="none";
     localStorage.setItem("bg","default");
     highlight(defaultBtn);
     return;
   }
 
-  document.body.style.backgroundImage=`url('${themes[bg]}')`;
+  document.body.style.backgroundImage=`url('${themes[bg].url}')`;
+  creditText.innerText = themes[bg].credit;
+  infoBtn.style.display="block";
+
   localStorage.setItem("bg",bg);
   highlight(document.getElementById(bg+"Btn"));
 }
 
-/* RESTORE BG */
+/* RESTORE */
 const savedBG = localStorage.getItem("bg") || "default";
 setBG(savedBG);
 
 /* FILE */
 fileInput.onchange=e=>{
-  const file=e.target.files[0];
   const reader=new FileReader();
-
   reader.onload=ev=>{
     document.body.style.backgroundImage=`url('${ev.target.result}')`;
     localStorage.setItem("customBG",ev.target.result);
+    infoBtn.style.display="none";
   };
-
-  reader.readAsDataURL(file);
+  reader.readAsDataURL(e.target.files[0]);
 };
 
 /* URL */
@@ -206,17 +204,13 @@ function applyURL(){
   const url=urlInput.value;
   document.body.style.backgroundImage=`url('${url}')`;
   localStorage.setItem("customBG",url);
+  infoBtn.style.display="none";
   closeURL();
 }
 
-/* OPACITY */
-const slider=document.getElementById("opacitySlider");
-slider.value=localStorage.getItem("opacity")||0.65;
-
-slider.oninput=()=>{
-  document.documentElement.style.setProperty('--card-opacity',slider.value);
-  localStorage.setItem("opacity",slider.value);
-};
+/* INFO */
+function openInfo(){ infoPopup.style.display="flex"; }
+function closeInfo(){ infoPopup.style.display="none"; }
 
 </script>
 
