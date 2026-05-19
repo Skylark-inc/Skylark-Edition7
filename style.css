@@ -2,6 +2,7 @@
   --accent:#007aff;
 }
 
+/* RESET */
 *{
   margin:0;
   padding:0;
@@ -9,11 +10,14 @@
   font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 }
 
+/* BODY (DEFAULT WALLPAPER INCLUDED) */
 body{
   display:flex;
   justify-content:center;
   align-items:center;
   height:100vh;
+
+  background-image: url("https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg");
   background-size:cover;
   background-position:center;
 }
@@ -22,10 +26,17 @@ body{
 .card{
   backdrop-filter:blur(calc(30px * var(--card-opacity,0.65)));
   background:rgba(255,255,255,var(--card-opacity,0.65));
+
   border-radius:28px;
   padding:28px;
+
   width:92%;
   max-width:420px;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px;
+
   text-align:center;
 }
 
@@ -37,23 +48,33 @@ body{
 /* BUTTON ROW */
 .button-row{
   display:flex;
-  gap:10px;
+  flex-wrap:wrap;
   justify-content:center;
+  gap:10px;
 }
 
 /* BUTTONS */
 .main-btn,
-.file-btn,
-button{
+button,
+.file-btn{
   background:var(--accent);
   color:white;
   border:none;
-  padding:12px;
+  padding:12px 14px;
   border-radius:12px;
-  margin-top:10px;
+  font-weight:600;
+
+  width:100%;
+  max-width:200px;
 }
 
-/* SETTINGS PANEL */
+/* LINKS */
+.credits a{
+  color:var(--accent);
+  text-decoration:none;
+}
+
+/* PANELS */
 #settingsPanel,
 #whatsNewUI{
   position:fixed;
@@ -64,19 +85,65 @@ button{
   background:rgba(0,0,0,0.4);
 }
 
-/* SETTINGS CARD */
+/* SETTINGS */
 .settings-card{
   backdrop-filter:blur(30px);
   background:rgba(255,255,255,0.92);
-  padding:20px;
+
   border-radius:20px;
-  width:90%;
+  padding:22px;
+
+  width:92%;
   max-width:360px;
+
+  display:flex;
+  flex-direction:column;
+  gap:14px;
 }
 
 .dark .settings-card{
   background:rgba(28,28,30,0.92);
   color:#fff;
+}
+
+/* ROW */
+.row{
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+  gap:10px;
+}
+
+/* COLOR */
+.color-wrap{
+  display:flex;
+  gap:6px;
+  width:100%;
+}
+
+.color-wrap input{
+  flex:1;
+}
+
+#setColorBtn{
+  display:none;
+}
+
+/* FILE */
+.file-btn{
+  position:relative;
+}
+
+.file-btn input{
+  position:absolute;
+  inset:0;
+  opacity:0;
+}
+
+/* SLIDER */
+input[type="range"]{
+  width:100%;
+  accent-color:var(--accent);
 }
 
 /* SWITCH */
@@ -96,22 +163,6 @@ input:checked + .slider{
   background:var(--accent);
 }
 
-/* COLOR */
-.color-wrap{
-  display:flex;
-  gap:6px;
-}
-
-#setColorBtn{
-  display:none;
-}
-
-/* SLIDER */
-input[type="range"]{
-  width:100%;
-  accent-color:var(--accent);
-}
-
 /* POPUP */
 #urlPopup{
   position:fixed;
@@ -126,4 +177,10 @@ input[type="range"]{
   background:white;
   padding:20px;
   border-radius:16px;
+  width:90%;
+  max-width:300px;
+
+  display:flex;
+  flex-direction:column;
+  gap:10px;
 }
