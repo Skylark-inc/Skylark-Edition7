@@ -13,23 +13,22 @@
 
 <body>
 
-<!-- MAIN -->
+<!-- MAIN UI -->
 <div class="container" id="mainUI">
   <div class="card">
 
     <h1>Star</h1>
 
-    <a href="#" class="main-btn">Get Star</a>
-
     <div class="button-row">
+      <a href="#" class="main-btn">Get Star</a>
       <button onclick="openSettings()">Settings</button>
       <button onclick="openWhatsNew()">What’s New</button>
     </div>
 
     <div class="credits">
-      <p>© Endlesspete</p>
-      <p>© Terralinkslabs</p>
-      <p>© Skylark Inc</p>
+      <p>© <a href="https://x.com/endlesspeteinc" target="_blank">Endlesspete</a></p>
+      <p>© <a href="https://x.com/terralinkslabs" target="_blank">Terralinkslabs</a></p>
+      <p>© <a href="https://x.com/SkylarkShortcut" target="_blank">Skylark Inc</a></p>
       <span class="version">v1.0 Beta 6</span>
     </div>
 
@@ -42,9 +41,9 @@
     <h2>What’s New</h2>
 
     <p>
-      • Placeholder update<br>
-      • Placeholder update<br>
-      • Placeholder update
+      • Add your updates here<br>
+      • UI improvements<br>
+      • Bug fixes
     </p>
 
     <button onclick="closeWhatsNew()">Back</button>
@@ -57,7 +56,6 @@
 
     <h2>Settings</h2>
 
-    <!-- DARK MODE -->
     <div class="row">
       <span>Dark Mode</span>
       <label class="switch">
@@ -66,7 +64,6 @@
       </label>
     </div>
 
-    <!-- COLOR -->
     <div class="row">
       <span>Custom Color</span>
       <div class="color-wrap">
@@ -155,7 +152,7 @@ if(savedColor){
   colorInput.value=savedColor;
 }
 
-/* BACKGROUND SYSTEM (RESTORED) */
+/* BACKGROUND SYSTEM */
 const defaultBG="https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
 
 const themes={
@@ -177,7 +174,7 @@ function setBackground(bg){
   localStorage.removeItem("customBG");
 }
 
-/* FILE UPLOAD (RESTORED) */
+/* FILE */
 fileInput.onchange=e=>{
   const file=e.target.files[0];
   if(!file) return;
@@ -205,15 +202,13 @@ function applyURL(){
   closeURL();
 }
 
-/* RESTORE BACKGROUND (CRITICAL FIX) */
+/* RESTORE BACKGROUND (FIXED) */
 const savedBG = localStorage.getItem("background");
 const customBG = localStorage.getItem("customBG");
 
 if(customBG){
   document.body.style.backgroundImage=`url('${customBG}')`;
-}else if(savedBG==="default"){
-  document.body.style.backgroundImage=`url('${defaultBG}')`;
-}else if(savedBG){
+}else if(savedBG && savedBG !== "default"){
   document.body.style.backgroundImage=`url('${themes[savedBG]}')`;
 }else{
   document.body.style.backgroundImage=`url('${defaultBG}')`;
