@@ -1,5 +1,6 @@
 :root{
   --accent:#007aff;
+  --card-opacity:0.65;
 }
 
 /* RESET */
@@ -10,22 +11,29 @@
   font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 }
 
-/* BODY (DEFAULT WALLPAPER INCLUDED) */
+/* BODY */
 body{
   display:flex;
   justify-content:center;
   align-items:center;
   height:100vh;
 
-  background-image: url("https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg");
+  background-image:url("https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg");
   background-size:cover;
   background-position:center;
 }
 
+/* CONTAINER */
+.container{
+  width:100%;
+  display:flex;
+  justify-content:center;
+}
+
 /* CARD */
 .card{
-  backdrop-filter:blur(calc(30px * var(--card-opacity,0.65)));
-  background:rgba(255,255,255,var(--card-opacity,0.65));
+  backdrop-filter:blur(calc(30px * var(--card-opacity)));
+  background:rgba(255,255,255,var(--card-opacity));
 
   border-radius:28px;
   padding:28px;
@@ -35,46 +43,85 @@ body{
 
   display:flex;
   flex-direction:column;
-  gap:14px;
+  gap:16px;
 
   text-align:center;
 }
 
 .dark .card{
-  background:rgba(28,28,30,var(--card-opacity,0.65));
+  background:rgba(28,28,30,var(--card-opacity));
   color:#fff;
 }
 
-/* BUTTON ROW */
-.button-row{
+/* TITLE */
+h1{
+  font-size:32px;
+  font-weight:700;
+}
+
+/* MAIN BUTTON */
+.main-btn{
+  background:var(--accent);
+  color:white;
+  padding:16px;
+  border-radius:16px;
+  font-size:18px;
+  font-weight:600;
+  text-decoration:none;
+}
+
+/* SMALL BUTTON ROW */
+.sub-buttons{
   display:flex;
-  flex-wrap:wrap;
   justify-content:center;
   gap:10px;
 }
 
-/* BUTTONS */
-.main-btn,
-button,
-.file-btn{
+.sub-buttons button{
+  background:rgba(0,0,0,0.08);
+  color:var(--accent);
+
+  padding:10px 14px;
+  border-radius:12px;
+  font-size:14px;
+
+  border:none;
+}
+
+.dark .sub-buttons button{
+  background:rgba(255,255,255,0.08);
+}
+
+/* GENERAL BUTTON */
+button{
   background:var(--accent);
   color:white;
   border:none;
-  padding:12px 14px;
-  border-radius:12px;
+  border-radius:14px;
+  padding:12px;
   font-weight:600;
-
-  width:100%;
-  max-width:200px;
 }
 
-/* LINKS */
+/* CREDITS */
+.credits{
+  display:flex;
+  flex-direction:column;
+  gap:4px;
+  margin-top:10px;
+}
+
 .credits a{
   color:var(--accent);
   text-decoration:none;
 }
 
-/* PANELS */
+.version{
+  margin-top:6px;
+  font-size:14px;
+  opacity:0.6;
+}
+
+/* SETTINGS PANEL */
 #settingsPanel,
 #whatsNewUI{
   position:fixed;
@@ -85,12 +132,12 @@ button,
   background:rgba(0,0,0,0.4);
 }
 
-/* SETTINGS */
+/* SETTINGS CARD */
 .settings-card{
   backdrop-filter:blur(30px);
   background:rgba(255,255,255,0.92);
 
-  border-radius:20px;
+  border-radius:24px;
   padding:22px;
 
   width:92%;
@@ -114,24 +161,65 @@ button,
   gap:10px;
 }
 
-/* COLOR */
-.color-wrap{
-  display:flex;
-  gap:6px;
+/* SWITCH */
+.switch{
+  position:relative;
+  width:50px;
+  height:28px;
+}
+.switch input{
+  opacity:0;
+}
+.slider{
+  position:absolute;
+  inset:0;
+  background:#ccc;
+  border-radius:30px;
+}
+input:checked + .slider{
+  background:var(--accent);
+}
+
+/* INPUT */
+input[type="text"]{
   width:100%;
+  padding:10px;
+  border-radius:10px;
+  border:none;
+  background:rgba(0,0,0,0.05);
 }
 
-.color-wrap input{
-  flex:1;
+.dark input[type="text"]{
+  background:rgba(255,255,255,0.1);
+  color:white;
 }
 
-#setColorBtn{
-  display:none;
+/* THEME GRID */
+.theme-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
+  gap:10px;
 }
 
-/* FILE */
+.theme-grid button{
+  background:var(--accent);
+  color:white;
+  border-radius:12px;
+}
+
+.theme-grid button.active{
+  outline:3px solid white;
+  transform:scale(0.95);
+}
+
+/* FILE BUTTON */
 .file-btn{
   position:relative;
+  background:var(--accent);
+  color:white;
+  padding:14px;
+  border-radius:14px;
+  text-align:center;
 }
 
 .file-btn input{
@@ -144,23 +232,6 @@ button,
 input[type="range"]{
   width:100%;
   accent-color:var(--accent);
-}
-
-/* SWITCH */
-.switch{
-  position:relative;
-  width:50px;
-  height:28px;
-}
-.switch input{opacity:0;}
-.slider{
-  position:absolute;
-  inset:0;
-  background:#ccc;
-  border-radius:30px;
-}
-input:checked + .slider{
-  background:var(--accent);
 }
 
 /* POPUP */
@@ -183,4 +254,15 @@ input:checked + .slider{
   display:flex;
   flex-direction:column;
   gap:10px;
+}
+
+.dark .popup-card{
+  background:#1c1c1e;
+  color:white;
+}
+
+/* CENTER FIX */
+.center{
+  display:flex;
+  justify-content:center;
 }
