@@ -13,14 +13,16 @@
 
 <body>
 
-<!-- MAIN UI -->
-<div class="container" id="mainUI">
+<div class="container">
   <div class="card">
 
     <h1>Star</h1>
 
-    <div class="button-row">
-      <a href="#" class="main-btn">Get Star</a>
+    <!-- MAIN BUTTON -->
+    <a href="#" class="main-btn">Get Star</a>
+
+    <!-- SMALL BUTTONS -->
+    <div class="sub-buttons">
       <button onclick="openSettings()">Settings</button>
       <button onclick="openWhatsNew()">What’s New</button>
     </div>
@@ -29,7 +31,7 @@
       <p>© <a href="https://x.com/endlesspeteinc" target="_blank">Endlesspete</a></p>
       <p>© <a href="https://x.com/terralinkslabs" target="_blank">Terralinkslabs</a></p>
       <p>© <a href="https://x.com/SkylarkShortcut" target="_blank">Skylark Inc</a></p>
-      <span class="version">v1.0 Beta 6</span>
+      <span>v1.0 Beta 6</span>
     </div>
 
   </div>
@@ -46,7 +48,9 @@
       • Bug fixes
     </p>
 
-    <button onclick="closeWhatsNew()">Back</button>
+    <div class="center">
+      <button onclick="closeWhatsNew()">Back</button>
+    </div>
   </div>
 </div>
 
@@ -56,6 +60,7 @@
 
     <h2>Settings</h2>
 
+    <!-- DARK MODE -->
     <div class="row">
       <span>Dark Mode</span>
       <label class="switch">
@@ -64,20 +69,21 @@
       </label>
     </div>
 
+    <!-- COLOR -->
     <div class="row">
       <span>Custom Color</span>
-      <div class="color-wrap">
-        <input type="text" id="colorInput" placeholder="#007aff">
-        <button id="setColorBtn">Set</button>
-      </div>
+      <input type="text" id="colorInput" placeholder="007aff">
     </div>
 
+    <!-- THEMES -->
     <h3>Background</h3>
 
-    <button onclick="setBackground('default')">Default</button>
-    <button onclick="setBackground('theme1')">Theme 1</button>
-    <button onclick="setBackground('theme2')">Theme 2</button>
-    <button onclick="setBackground('theme3')">Theme 3</button>
+    <div class="theme-grid">
+      <button onclick="setBG('default')" id="defaultBtn">Default</button>
+      <button onclick="setBG('theme1')" id="theme1Btn">Theme 1</button>
+      <button onclick="setBG('theme2')" id="theme2Btn">Theme 2</button>
+      <button onclick="setBG('theme3')" id="theme3Btn">Theme 3</button>
+    </div>
 
     <label class="file-btn">
       Your Photos
@@ -105,14 +111,12 @@
 
 <script>
 
-/* NAVIGATION */
+/* NAV */
 function openWhatsNew(){
-  mainUI.style.display="none";
-  whatsNewUI.style.display="flex";
+  document.getElementById("whatsNewUI").style.display="flex";
 }
 function closeWhatsNew(){
-  whatsNewUI.style.display="none";
-  mainUI.style.display="flex";
+  document.getElementById("whatsNewUI").style.display="none";
 }
 
 /* SETTINGS */
@@ -121,38 +125,36 @@ function closeSettings(){ settingsPanel.style.display="none"; }
 
 /* DARK MODE */
 const toggle = document.getElementById("themeToggle");
-toggle.checked = localStorage.getItem("theme")==="true";
+toggle.checked = localStorage.getItem("dark")==="true";
+
 document.body.classList.toggle("dark", toggle.checked);
 
 toggle.onchange=()=>{
   document.body.classList.toggle("dark", toggle.checked);
-  localStorage.setItem("theme", toggle.checked);
+  localStorage.setItem("dark", toggle.checked);
 };
 
-/* COLOR */
-const colorInput=document.getElementById("colorInput");
-const setBtn=document.getElementById("setColorBtn");
+/* COLOR FIX (# optional) */
+const input = document.getElementById("colorInput");
 
-colorInput.oninput=()=>{
-  setBtn.style.display = colorInput.value ? "block" : "none";
+input.value = localStorage.getItem("color") || "";
+
+input.onchange = () => {
+  let val = input.value.trim();
+  if(!val.startsWith("#")) val = "#" + val;
+
+  if(/^#([0-9A-F]{3}){1,2}$/i.test(val)){
+    document.documentElement.style.setProperty('--accent', val);
+    localStorage.setItem("color", val);
+  }
 };
 
-setBtn.onclick=()=>{
-  const val=colorInput.value.trim();
-  if(!/^#([0-9A-F]{3}){1,2}$/i.test(val)) return;
-
-  document.documentElement.style.setProperty('--accent', val);
-  localStorage.setItem("color", val);
-  setBtn.style.display="none";
-};
-
-const savedColor=localStorage.getItem("color");
+const savedColor = localStorage.getItem("color");
 if(savedColor){
   document.documentElement.style.setProperty('--accent', savedColor);
-  colorInput.value=savedColor;
 }
 
-/* BACKGROUND SYSTEM */
+/* BACKGROUND */
 const defaultBG="https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
 
 const themes={
@@ -161,30 +163,38 @@ const themes={
   theme3:"PASTE_THEME3_URL"
 };
 
-function setBackground(bg){
+function highlight(btn){
+  document.querySelectorAll(".theme-grid button").forEach(b=>b.classList.remove("active"));
+  btn.classList.add("active");
+}
+
+function setBG(bg){
   if(bg==="default"){
     document.body.style.backgroundImage=`url('${defaultBG}')`;
-    localStorage.setItem("background","default");
-    localStorage.removeItem("customBG");
+    localStorage.setItem("bg","default");
+    highlight(defaultBtn);
     return;
   }
 
   document.body.style.backgroundImage=`url('${themes[bg]}')`;
-  localStorage.setItem("background",bg);
-  localStorage.removeItem("customBG");
+  localStorage.setItem("bg",bg);
+  highlight(document.getElementById(bg+"Btn"));
 }
+
+/* RESTORE BG */
+const savedBG = localStorage.getItem("bg") || "default";
+setBG(savedBG);
 
 /* FILE */
 fileInput.onchange=e=>{
   const file=e.target.files[0];
-  if(!file) return;
-
   const reader=new FileReader();
+
   reader.onload=ev=>{
     document.body.style.backgroundImage=`url('${ev.target.result}')`;
     localStorage.setItem("customBG",ev.target.result);
-    localStorage.removeItem("background");
   };
+
   reader.readAsDataURL(file);
 };
 
@@ -193,33 +203,15 @@ function openURL(){ urlPopup.style.display="flex"; }
 function closeURL(){ urlPopup.style.display="none"; }
 
 function applyURL(){
-  const url=urlInput.value.trim();
-  if(!url) return;
-
+  const url=urlInput.value;
   document.body.style.backgroundImage=`url('${url}')`;
   localStorage.setItem("customBG",url);
-  localStorage.removeItem("background");
   closeURL();
-}
-
-/* RESTORE BACKGROUND (FIXED) */
-const savedBG = localStorage.getItem("background");
-const customBG = localStorage.getItem("customBG");
-
-if(customBG){
-  document.body.style.backgroundImage=`url('${customBG}')`;
-}else if(savedBG && savedBG !== "default"){
-  document.body.style.backgroundImage=`url('${themes[savedBG]}')`;
-}else{
-  document.body.style.backgroundImage=`url('${defaultBG}')`;
 }
 
 /* OPACITY */
 const slider=document.getElementById("opacitySlider");
-const savedOpacity=localStorage.getItem("opacity")||0.65;
-
-slider.value=savedOpacity;
-document.documentElement.style.setProperty('--card-opacity',savedOpacity);
+slider.value=localStorage.getItem("opacity")||0.65;
 
 slider.oninput=()=>{
   document.documentElement.style.setProperty('--card-opacity',slider.value);
