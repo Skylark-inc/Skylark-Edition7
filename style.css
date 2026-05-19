@@ -16,7 +16,7 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  height:100vh;
+  min-height:100vh;
 
   background-image:url("https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg");
   background-size:cover;
@@ -28,6 +28,7 @@ body{
   width:100%;
   display:flex;
   justify-content:center;
+  padding:20px;
 }
 
 /* CARD */
@@ -38,7 +39,7 @@ body{
   border-radius:28px;
   padding:28px;
 
-  width:92%;
+  width:100%;
   max-width:420px;
 
   display:flex;
@@ -55,7 +56,7 @@ body{
 
 /* TITLE */
 h1{
-  font-size:32px;
+  font-size:30px;
   font-weight:700;
 }
 
@@ -70,11 +71,19 @@ h1{
   text-decoration:none;
 }
 
-/* SMALL BUTTON ROW */
+/* DISABLED BUTTON */
+.main-btn.disabled{
+  background:rgba(255,0,0,0.3);
+  color:white;
+  pointer-events:none;
+}
+
+/* SUB BUTTONS */
 .sub-buttons{
   display:flex;
   justify-content:center;
   gap:10px;
+  flex-wrap:wrap;
 }
 
 .sub-buttons button{
@@ -89,7 +98,8 @@ h1{
 }
 
 .dark .sub-buttons button{
-  background:rgba(255,255,255,0.08);
+  background:rgba(255,255,255,0.1);
+  color:white;
 }
 
 /* GENERAL BUTTON */
@@ -115,13 +125,13 @@ button{
   text-decoration:none;
 }
 
-.version{
+.credits span{
   margin-top:6px;
   font-size:14px;
   opacity:0.6;
 }
 
-/* SETTINGS PANEL */
+/* OVERLAYS */
 #settingsPanel,
 #whatsNewUI{
   position:fixed;
@@ -130,12 +140,13 @@ button{
   justify-content:center;
   align-items:center;
   background:rgba(0,0,0,0.4);
+  z-index:999;
 }
 
 /* SETTINGS CARD */
 .settings-card{
   backdrop-filter:blur(30px);
-  background:rgba(255,255,255,0.92);
+  background:rgba(255,255,255,0.95);
 
   border-radius:24px;
   padding:22px;
@@ -149,8 +160,8 @@ button{
 }
 
 .dark .settings-card{
-  background:rgba(28,28,30,0.92);
-  color:#fff;
+  background:rgba(28,28,30,0.95);
+  color:white;
 }
 
 /* ROW */
@@ -158,7 +169,6 @@ button{
   display:flex;
   justify-content:space-between;
   align-items:center;
-  gap:10px;
 }
 
 /* SWITCH */
@@ -176,22 +186,22 @@ button{
   background:#ccc;
   border-radius:30px;
 }
+.slider:before{
+  content:"";
+  position:absolute;
+  width:22px;
+  height:22px;
+  background:white;
+  border-radius:50%;
+  top:3px;
+  left:3px;
+  transition:0.2s;
+}
 input:checked + .slider{
   background:var(--accent);
 }
-
-/* INPUT */
-input[type="text"]{
-  width:100%;
-  padding:10px;
-  border-radius:10px;
-  border:none;
-  background:rgba(0,0,0,0.05);
-}
-
-.dark input[type="text"]{
-  background:rgba(255,255,255,0.1);
-  color:white;
+input:checked + .slider:before{
+  transform:translateX(22px);
 }
 
 /* THEME GRID */
@@ -228,20 +238,16 @@ input[type="text"]{
   opacity:0;
 }
 
-/* SLIDER */
-input[type="range"]{
-  width:100%;
-  accent-color:var(--accent);
-}
-
-/* POPUP */
-#urlPopup{
+/* POPUPS */
+#urlPopup,
+#infoPopup{
   position:fixed;
   inset:0;
   display:none;
   justify-content:center;
   align-items:center;
   background:rgba(0,0,0,0.4);
+  z-index:1000;
 }
 
 .popup-card{
@@ -259,6 +265,25 @@ input[type="range"]{
 .dark .popup-card{
   background:#1c1c1e;
   color:white;
+}
+
+/* INFO BUTTON */
+#infoBtn{
+  position:fixed;
+  top:20px;
+  right:20px;
+  width:32px;
+  height:32px;
+  border-radius:50%;
+  background:black;
+  color:white;
+
+  display:none;
+  justify-content:center;
+  align-items:center;
+
+  font-weight:bold;
+  z-index:1001;
 }
 
 /* CENTER FIX */
