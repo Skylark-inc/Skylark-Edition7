@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Star</title>
+
 <link rel="stylesheet" href="style.css">
 
 <link rel="icon" href="https://endlesspete.github.io/Star/Favicon_use.jpeg">
@@ -17,10 +18,9 @@
   <div class="card">
 
     <h1>Star</h1>
+    <span class="product-version">v1.0 Beta 1</span>
 
-    <p id="unsupportedMsg"></p>
-
-    <a href="#" class="main-btn" id="getBtn">Get Star</a>
+    <a href="#" id="getBtn" class="main-btn">Get Star</a>
 
     <div class="sub-buttons">
       <button onclick="openSettings()">Settings</button>
@@ -28,29 +28,12 @@
     </div>
 
     <div class="credits">
-      <p>© <a href="https://x.com/endlesspeteinc" target="_blank">Endlesspete</a></p>
-      <p>© <a href="https://x.com/terralinkslabs" target="_blank">Terralinkslabs</a></p>
-      <p>© <a href="https://x.com/SkylarkShortcut" target="_blank">Skylark Inc</a></p>
-      <span>v1.0 Beta 7</span>
+      <a href="https://x.com/Useskylark" target="_blank">© Skylark Inc</a>
+      <a href="https://x.com/terralinkslabs" target="_blank">© Terralinkslabs</a>
+      <a href="https://x.com/endlesspeteinc" target="_blank">© Endlesspete</a>
+      <span>v1.0 Beta 8</span>
     </div>
 
-  </div>
-</div>
-
-<!-- WHAT'S NEW -->
-<div id="whatsNewUI">
-  <div class="card">
-    <h2>What’s New</h2>
-
-    <p>
-      • Placeholder updates<br>
-      • UI polish<br>
-      • Bug fixes
-    </p>
-
-    <div class="center">
-      <button onclick="closeWhatsNew()">Back</button>
-    </div>
   </div>
 </div>
 
@@ -63,7 +46,7 @@
     <div class="row">
       <span>Dark Mode</span>
       <label class="switch">
-        <input type="checkbox" id="themeToggle">
+        <input type="checkbox" id="darkToggle">
         <span class="slider"></span>
       </label>
     </div>
@@ -71,27 +54,50 @@
     <h3>Background</h3>
 
     <div class="theme-grid">
-      <button onclick="setBG('default')" id="defaultBtn">Default</button>
-      <button onclick="setBG('theme1')" id="theme1Btn">Theme 1</button>
-      <button onclick="setBG('theme2')" id="theme2Btn">Theme 2</button>
-      <button onclick="setBG('theme3')" id="theme3Btn">Theme 3</button>
+      <button onclick="setTheme('default')">Default</button>
+      <button onclick="setTheme('theme1')">Theme 1</button>
+      <button onclick="setTheme('theme2')">Theme 2</button>
+      <button onclick="setTheme('theme3')">Theme 3</button>
     </div>
 
     <label class="file-btn">
       Your Photos
-      <input type="file" id="fileInput">
+      <input type="file" id="fileInput" accept="image/*">
     </label>
 
     <button onclick="openURL()">Image URL</button>
+
+    <div class="opacity-section">
+      <label>UI Opacity</label>
+      <input type="range" id="opacitySlider" min="0.2" max="1" step="0.02">
+    </div>
 
     <button onclick="closeSettings()">Close</button>
 
   </div>
 </div>
 
+<!-- WHAT’S NEW -->
+<div id="whatsNewUI">
+  <div class="settings-card">
+    <h2>What’s New</h2>
+
+    <ul>
+      <li>Background memory fix</li>
+      <li>UI improvements</li>
+      <li>Better stability</li>
+    </ul>
+
+    <div class="center">
+      <button onclick="closeWhatsNew()">Back</button>
+    </div>
+  </div>
+</div>
+
 <!-- URL POPUP -->
 <div id="urlPopup">
   <div class="popup-card">
+    <h3>Enter Image URL</h3>
     <input type="text" id="urlInput" placeholder="Paste image URL">
     <button onclick="applyURL()">Apply</button>
     <button onclick="closeURL()">Cancel</button>
@@ -101,116 +107,147 @@
 <!-- INFO BUTTON -->
 <div id="infoBtn" onclick="openInfo()">i</div>
 
-<!-- INFO POPUP -->
 <div id="infoPopup">
   <div class="popup-card">
-    <h3>Image Credit</h3>
-    <p id="creditText">Theme credit placeholder</p>
+    <p id="infoText">Theme credit</p>
     <button onclick="closeInfo()">Close</button>
   </div>
 </div>
 
 <script>
 
-/* PLATFORM GATE */
-const ua = navigator.userAgent;
-const isApple = /iPhone|iPad|Macintosh/.test(ua);
-
-if(!isApple){
-  document.getElementById("getBtn").classList.add("disabled");
-  document.getElementById("getBtn").innerText = "Not Supported";
-  document.getElementById("unsupportedMsg").innerText =
-    "This feature is not supported on your platform.";
-  document.getElementById("unsupportedMsg").style.color = "red";
+/* =========================
+   DEVICE CHECK
+========================= */
+const supported = /iPhone|iPad|Macintosh/.test(navigator.userAgent);
+if(!supported){
+  const btn = document.getElementById("getBtn");
+  btn.classList.add("disabled");
+  btn.innerText = "Not Supported";
 }
 
-/* NAV */
-function openWhatsNew(){ whatsNewUI.style.display="flex"; }
-function closeWhatsNew(){ whatsNewUI.style.display="none"; }
+/* =========================
+   SETTINGS
+========================= */
+function openSettings(){
+  settingsPanel.style.display="flex";
+}
+function closeSettings(){
+  settingsPanel.style.display="none";
+}
 
-/* SETTINGS */
-function openSettings(){ settingsPanel.style.display="flex"; }
-function closeSettings(){ settingsPanel.style.display="none"; }
+function openWhatsNew(){
+  whatsNewUI.style.display="flex";
+}
+function closeWhatsNew(){
+  whatsNewUI.style.display="none";
+}
 
-/* DARK MODE */
-themeToggle.checked = localStorage.getItem("dark")==="true";
-document.body.classList.toggle("dark", themeToggle.checked);
+/* =========================
+   DARK MODE
+========================= */
+const toggle = document.getElementById("darkToggle");
 
-themeToggle.onchange=()=>{
-  document.body.classList.toggle("dark", themeToggle.checked);
-  localStorage.setItem("dark", themeToggle.checked);
+toggle.addEventListener("change",()=>{
+  document.body.classList.toggle("dark",toggle.checked);
+  localStorage.setItem("dark",toggle.checked);
+});
+
+if(localStorage.getItem("dark")==="true"){
+  toggle.checked=true;
+  document.body.classList.add("dark");
+}
+
+/* =========================
+   BACKGROUND (FIXED MEMORY)
+========================= */
+
+const defaultBG = "https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
+
+const themes = {
+  theme1:"PASTE_THEME1_URL",
+  theme2:"PASTE_THEME2_URL",
+  theme3:"PASTE_THEME3_URL"
 };
 
-/* BACKGROUND */
-const defaultBG="https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
+function setTheme(name){
+  localStorage.setItem("bgType","theme");
+  localStorage.setItem("bgValue",name);
 
-const themes={
-  theme1:{
-    url:"PASTE_THEME1_URL",
-    credit:"Theme 1 credit"
-  },
-  theme2:{
-    url:"PASTE_THEME2_URL",
-    credit:"Theme 2 credit"
-  },
-  theme3:{
-    url:"PASTE_THEME3_URL",
-    credit:"Theme 3 credit"
+  if(name==="default"){
+    document.body.style.backgroundImage = `url('${defaultBG}')`;
+  } else {
+    document.body.style.backgroundImage = `url('${themes[name]}')`;
   }
-};
-
-function highlight(btn){
-  document.querySelectorAll(".theme-grid button").forEach(b=>b.classList.remove("active"));
-  btn.classList.add("active");
 }
-
-function setBG(bg){
-  if(bg==="default"){
-    document.body.style.backgroundImage=`url('${defaultBG}')`;
-    infoBtn.style.display="none";
-    localStorage.setItem("bg","default");
-    highlight(defaultBtn);
-    return;
-  }
-
-  document.body.style.backgroundImage=`url('${themes[bg].url}')`;
-  creditText.innerText = themes[bg].credit;
-  infoBtn.style.display="block";
-
-  localStorage.setItem("bg",bg);
-  highlight(document.getElementById(bg+"Btn"));
-}
-
-/* RESTORE */
-const savedBG = localStorage.getItem("bg") || "default";
-setBG(savedBG);
 
 /* FILE */
-fileInput.onchange=e=>{
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    document.body.style.backgroundImage=`url('${ev.target.result}')`;
-    localStorage.setItem("customBG",ev.target.result);
-    infoBtn.style.display="none";
+fileInput.addEventListener("change",e=>{
+  const file = e.target.files[0];
+  if(!file) return;
+
+  const reader = new FileReader();
+  reader.onload = ev=>{
+    localStorage.setItem("bgType","custom");
+    localStorage.setItem("bgValue",ev.target.result);
+    document.body.style.backgroundImage = `url('${ev.target.result}')`;
   };
-  reader.readAsDataURL(e.target.files[0]);
-};
+  reader.readAsDataURL(file);
+});
 
 /* URL */
-function openURL(){ urlPopup.style.display="flex"; }
-function closeURL(){ urlPopup.style.display="none"; }
-
-function applyURL(){
-  const url=urlInput.value;
-  document.body.style.backgroundImage=`url('${url}')`;
-  localStorage.setItem("customBG",url);
-  infoBtn.style.display="none";
-  closeURL();
+function openURL(){
+  urlPopup.style.display="flex";
+}
+function closeURL(){
+  urlPopup.style.display="none";
 }
 
-/* INFO */
-function openInfo(){ infoPopup.style.display="flex"; }
-function closeInfo(){ infoPopup.style.display="none"; }
+function applyURL(){
+  const url = urlInput.value.trim();
+  if(!url) return;
+
+  const img = new Image();
+  img.onload = ()=>{
+    localStorage.setItem("bgType","custom");
+    localStorage.setItem("bgValue",url);
+    document.body.style.backgroundImage = `url('${url}')`;
+    closeURL();
+  };
+  img.src = url;
+}
+
+/* RESTORE BACKGROUND (THIS IS THE REAL FIX) */
+const type = localStorage.getItem("bgType");
+const value = localStorage.getItem("bgValue");
+
+if(type==="custom" && value){
+  document.body.style.backgroundImage = `url('${value}')`;
+}
+else if(type==="theme" && value){
+  if(value==="default"){
+    document.body.style.backgroundImage = `url('${defaultBG}')`;
+  } else {
+    document.body.style.backgroundImage = `url('${themes[value]}')`;
+  }
+}
+else{
+  document.body.style.backgroundImage = `url('${defaultBG}')`;
+}
+
+/* =========================
+   OPACITY
+========================= */
+const slider = document.getElementById("opacitySlider");
+
+slider.addEventListener("input",()=>{
+  document.documentElement.style.setProperty("--card-opacity",slider.value);
+  localStorage.setItem("opacity",slider.value);
+});
+
+const savedOpacity = localStorage.getItem("opacity") || 0.65;
+slider.value = savedOpacity;
+document.documentElement.style.setProperty("--card-opacity",savedOpacity);
 
 </script>
 
