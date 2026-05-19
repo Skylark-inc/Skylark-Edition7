@@ -2,10 +2,9 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
 <title>Star</title>
-
 <link rel="stylesheet" href="style.css">
 
 <link rel="icon" href="https://endlesspete.github.io/Star/Favicon_use.jpeg">
@@ -14,7 +13,8 @@
 
 <body>
 
-<div class="container">
+<!-- MAIN -->
+<div class="container" id="mainUI">
   <div class="card">
 
     <h1>Star</h1>
@@ -23,12 +23,32 @@
 
     <button class="settings-btn" onclick="openSettings()">Settings</button>
 
+    <!-- NEW BUTTON -->
+    <button class="small-btn" onclick="openWhatsNew()">What’s New</button>
+
     <div class="credits">
-      <p>© <a href="https://x.com/endlesspeteinc" target="_blank">Endlesspete</a></p>
-      <p>© <a href="https://x.com/terralinkslabs" target="_blank">Terralinkslabs</a></p>
-      <p>© <a href="https://x.com/SkylarkShortcut" target="_blank">Skylark Inc</a></p>
-      <span class="version">v1.0 Beta 5</span>
+      <p>© Endlesspete</p>
+      <p>© Terralinkslabs</p>
+      <p>© Skylark Inc</p>
+      <span class="version">v1.0 Beta 6</span>
     </div>
+
+  </div>
+</div>
+
+<!-- WHAT'S NEW SCREEN -->
+<div id="whatsNewUI">
+  <div class="card">
+
+    <h2>What’s New</h2>
+
+    <p class="whats-text">
+      • Placeholder update 1<br>
+      • Placeholder update 2<br>
+      • Placeholder update 3
+    </p>
+
+    <button onclick="closeWhatsNew()">Back</button>
 
   </div>
 </div>
@@ -39,7 +59,6 @@
 
     <h2>Settings</h2>
 
-    <!-- DARK MODE -->
     <div class="row">
       <span>Dark Mode</span>
       <label class="switch">
@@ -48,7 +67,6 @@
       </label>
     </div>
 
-    <!-- COLOR -->
     <div class="row">
       <span>Custom Color</span>
       <div class="color-wrap">
@@ -57,44 +75,41 @@
       </div>
     </div>
 
-    <!-- BACKGROUND -->
     <h3>Background</h3>
 
-    <div class="theme-row">
-      <button onclick="setBackground('default')">Default</button>
-      <button onclick="setBackground('theme1')">Theme 1</button>
-      <button onclick="setBackground('theme2')">Theme 2</button>
-      <button onclick="setBackground('theme3')">Theme 3</button>
-    </div>
+    <button onclick="setBackground('default')">Default</button>
+    <button onclick="setBackground('theme1')">Theme 1</button>
+    <button onclick="setBackground('theme2')">Theme 2</button>
+    <button onclick="setBackground('theme3')">Theme 3</button>
 
     <label class="file-btn">
       Your Photos
-      <input type="file" id="fileInput" accept="image/*">
+      <input type="file" id="fileInput">
     </label>
 
-    <button class="secondary" onclick="openURL()">Image URL</button>
+    <button onclick="openURL()">Image URL</button>
 
-    <!-- OPACITY -->
     <h3>UI Opacity</h3>
     <input type="range" id="opacitySlider" min="0" max="1" step="0.02">
 
-    <button class="secondary" onclick="closeSettings()">Close</button>
+    <button onclick="closeSettings()">Close</button>
 
-  </div>
-</div>
-
-<!-- URL POPUP -->
-<div id="urlPopup">
-  <div class="popup-card">
-    <input type="text" id="urlInput" placeholder="Paste image URL">
-    <button onclick="applyURL()">Apply</button>
-    <button onclick="closeURL()">Cancel</button>
   </div>
 </div>
 
 <script>
 
-/* SETTINGS PANEL */
+/* NAVIGATION */
+function openWhatsNew(){
+  mainUI.style.display="none";
+  whatsNewUI.style.display="flex";
+}
+function closeWhatsNew(){
+  whatsNewUI.style.display="none";
+  mainUI.style.display="flex";
+}
+
+/* SETTINGS */
 function openSettings(){ settingsPanel.style.display="flex"; }
 function closeSettings(){ settingsPanel.style.display="none"; }
 
@@ -103,21 +118,21 @@ const toggle = document.getElementById("themeToggle");
 toggle.checked = localStorage.getItem("theme")==="true";
 document.body.classList.toggle("dark", toggle.checked);
 
-toggle.onchange = ()=>{
+toggle.onchange=()=>{
   document.body.classList.toggle("dark", toggle.checked);
   localStorage.setItem("theme", toggle.checked);
 };
 
-/* COLOR */
-const colorInput = document.getElementById("colorInput");
-const setBtn = document.getElementById("setColorBtn");
+/* COLOR SYSTEM (FIXED FOR ALL ELEMENTS) */
+const colorInput=document.getElementById("colorInput");
+const setBtn=document.getElementById("setColorBtn");
 
-colorInput.addEventListener("input",()=>{
+colorInput.oninput=()=>{
   setBtn.style.display = colorInput.value ? "block" : "none";
-});
+};
 
-setBtn.onclick = ()=>{
-  const val = colorInput.value.trim();
+setBtn.onclick=()=>{
+  const val=colorInput.value.trim();
   if(!/^#([0-9A-F]{3}){1,2}$/i.test(val)) return;
 
   document.documentElement.style.setProperty('--accent', val);
@@ -125,16 +140,16 @@ setBtn.onclick = ()=>{
   setBtn.style.display="none";
 };
 
-const savedColor = localStorage.getItem("color");
+const savedColor=localStorage.getItem("color");
 if(savedColor){
   document.documentElement.style.setProperty('--accent', savedColor);
-  colorInput.value = savedColor;
+  colorInput.value=savedColor;
 }
 
 /* BACKGROUND */
-const defaultBG = "https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
+const defaultBG="https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
 
-const themes = {
+const themes={
   theme1:"PASTE_THEME1_URL",
   theme2:"PASTE_THEME2_URL",
   theme3:"PASTE_THEME3_URL"
@@ -151,43 +166,6 @@ function setBackground(bg){
   document.body.style.backgroundImage=`url('${themes[bg]}')`;
   localStorage.setItem("background",bg);
   localStorage.removeItem("customBG");
-}
-
-/* FILE */
-fileInput.onchange=e=>{
-  const reader=new FileReader();
-  reader.onload=ev=>{
-    document.body.style.backgroundImage=`url('${ev.target.result}')`;
-    localStorage.setItem("customBG",ev.target.result);
-    localStorage.removeItem("background");
-  };
-  reader.readAsDataURL(e.target.files[0]);
-};
-
-/* URL */
-function openURL(){ urlPopup.style.display="flex"; }
-function closeURL(){ urlPopup.style.display="none"; }
-
-function applyURL(){
-  const url=urlInput.value;
-  document.body.style.backgroundImage=`url('${url}')`;
-  localStorage.setItem("customBG",url);
-  localStorage.removeItem("background");
-  closeURL();
-}
-
-/* RESTORE */
-const savedBG = localStorage.getItem("background");
-const customBG = localStorage.getItem("customBG");
-
-if(customBG){
-  document.body.style.backgroundImage=`url('${customBG}')`;
-}else if(savedBG==="default"){
-  document.body.style.backgroundImage=`url('${defaultBG}')`;
-}else if(savedBG){
-  document.body.style.backgroundImage=`url('${themes[savedBG]}')`;
-}else{
-  document.body.style.backgroundImage=`url('${defaultBG}')`;
 }
 
 /* OPACITY */
