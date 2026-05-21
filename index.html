@@ -15,24 +15,28 @@
 <body>
 
 <div class="container">
+
   <div class="card">
 
     <h1>Star</h1>
-    <span class="product-version">v1.0 Beta 1</span>
+    <p class="sub-version">v1.0 Beta 1</p>
 
-    <a href="#" id="getBtn" class="main-btn">Get Star</a>
+    <a id="mainBtn" class="main-btn">Get Star</a>
 
     <div class="sub-buttons">
       <button onclick="openSettings()">Settings</button>
       <button onclick="openWhatsNew()">What’s New</button>
     </div>
 
+    <p id="unsupportedText" class="unsupported-text"></p>
+
     <div class="credits">
-      <a href="https://x.com/Useskylark" target="_blank">© Skylark Inc</a>
-      <a href="https://x.com/terralinkslabs" target="_blank">© Terralinkslabs</a>
-      <a href="https://x.com/endlesspeteinc" target="_blank">© Endlesspete</a>
-      <span>v1.0 Beta 8</span>
+      © <a href="https://x.com/Useskylark" target="_blank">Skylark Inc</a>
+      © <a href="https://x.com/terralinkslabs" target="_blank">Terralinkslabs</a>
+      © <a href="https://x.com/endlesspeteinc" target="_blank">Endlesspete</a>
     </div>
+
+    <p class="version">v1.0 Beta 9</p>
 
   </div>
 </div>
@@ -51,51 +55,63 @@
       </label>
     </div>
 
-    <div class="row">
-  <span>Custom Color</span>
-  <input 
-    type="text" 
-    id="colorInput" 
-    placeholder="#007aff"
-    style="max-width:140px; text-align:center;"
-  >
-</div>
-    
+    <!-- HEX -->
+    <div>
+      <span>Custom Color</span>
+      <input type="text" id="hexInput" placeholder="007aff or #007aff">
+      <button id="setColorBtn" style="display:none;">Set</button>
+    </div>
+
+    <!-- BACKGROUND -->
     <h3>Background</h3>
 
     <div class="theme-grid">
-      <button onclick="setTheme('default')">Default</button>
-      <button onclick="setTheme('theme1')">Theme 1</button>
-      <button onclick="setTheme('theme2')">Theme 2</button>
-      <button onclick="setTheme('theme3')">Theme 3</button>
+      <button onclick="setTheme('default')" id="defaultBtn">Default</button>
+      <button onclick="setTheme('theme1')" id="theme1Btn">Theme 1</button>
+      <button onclick="setTheme('theme2')" id="theme2Btn">Theme 2</button>
+      <button onclick="setTheme('theme3')" id="theme3Btn">Theme 3</button>
     </div>
+
+    <button onclick="useSavedImage()" id="imageBtn" disabled>Image</button>
 
     <label class="file-btn">
       Your Photos
-      <input type="file" id="fileInput" accept="image/*">
+      <input type="file" id="fileInput">
     </label>
 
     <button onclick="openURL()">Image URL</button>
 
-    <div class="opacity-section">
-      <label>UI Opacity</label>
-      <input type="range" id="opacitySlider" min="0.2" max="1" step="0.02">
-    </div>
+    <!-- SLIDER -->
+    <span>UI Opacity</span>
+    <input type="range" id="opacitySlider" min="0.2" max="1" step="0.01">
 
     <button onclick="closeSettings()">Close</button>
 
   </div>
 </div>
 
-<!-- WHAT’S NEW -->
+<!-- URL POPUP -->
+<div id="urlPopup">
+  <div class="popup-card">
+    <h3>Enter Image URL</h3>
+
+    <input id="urlInput" type="text" placeholder="Paste image URL">
+
+    <button onclick="pasteURL()">Paste</button>
+    <button onclick="applyURL()">Apply</button>
+    <button onclick="closeURL()">Cancel</button>
+  </div>
+</div>
+
+<!-- WHATS NEW -->
 <div id="whatsNewUI">
   <div class="settings-card">
     <h2>What’s New</h2>
 
     <ul>
-      <li>Background memory fix</li>
+      <li>Add your updates here</li>
       <li>UI improvements</li>
-      <li>Better stability</li>
+      <li>Bug fixes</li>
     </ul>
 
     <div class="center">
@@ -104,160 +120,164 @@
   </div>
 </div>
 
-<!-- URL POPUP -->
-<div id="urlPopup">
-  <div class="popup-card">
-    <h3>Enter Image URL</h3>
-    <input type="text" id="urlInput" placeholder="Paste image URL">
-    <button onclick="applyURL()">Apply</button>
-    <button onclick="closeURL()">Cancel</button>
-  </div>
-</div>
-
 <!-- INFO BUTTON -->
-<div id="infoBtn" onclick="openInfo()">i</div>
-
-<div id="infoPopup">
-  <div class="popup-card">
-    <p id="infoText">Theme credit</p>
-    <button onclick="closeInfo()">Close</button>
-  </div>
-</div>
+<div id="infoButton">i</div>
 
 <script>
 
-/* =========================
-   DEVICE CHECK
-========================= */
-const supported = /iPhone|iPad|Macintosh/.test(navigator.userAgent);
+/* PLATFORM CHECK */
+const supported = /iPhone|iPad|Mac/.test(navigator.userAgent);
 if(!supported){
-  const btn = document.getElementById("getBtn");
-  btn.classList.add("disabled");
-  btn.innerText = "Not Supported";
+  document.getElementById("mainBtn").classList.add("disabled");
+  document.getElementById("unsupportedText").innerText =
+    "⚠️ Not supported on this platform";
 }
 
-/* =========================
-   SETTINGS
-========================= */
-function openSettings(){
-  settingsPanel.style.display="flex";
-}
-function closeSettings(){
-  settingsPanel.style.display="none";
-}
+/* SETTINGS */
+function openSettings(){ settingsPanel.style.display="flex"; }
+function closeSettings(){ settingsPanel.style.display="none"; }
 
-function openWhatsNew(){
-  whatsNewUI.style.display="flex";
-}
-function closeWhatsNew(){
-  whatsNewUI.style.display="none";
-}
+/* WHATS NEW */
+function openWhatsNew(){ whatsNewUI.style.display="flex"; }
+function closeWhatsNew(){ whatsNewUI.style.display="none"; }
 
-/* =========================
-   DARK MODE
-========================= */
-const toggle = document.getElementById("darkToggle");
+/* URL POPUP */
+function openURL(){ urlPopup.style.display="flex"; }
+function closeURL(){ urlPopup.style.display="none"; }
 
-toggle.addEventListener("change",()=>{
-  document.body.classList.toggle("dark",toggle.checked);
-  localStorage.setItem("dark",toggle.checked);
-});
-
-if(localStorage.getItem("dark")==="true"){
-  toggle.checked=true;
-  document.body.classList.add("dark");
+/* PASTE */
+async function pasteURL(){
+  const text = await navigator.clipboard.readText();
+  urlInput.value = text;
 }
 
-/* =========================
-   BACKGROUND (FIXED MEMORY)
-========================= */
-
+/* BACKGROUNDS */
 const defaultBG = "https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
 
 const themes = {
-  theme1:"PASTE_THEME1_URL",
-  theme2:"PASTE_THEME2_URL",
-  theme3:"PASTE_THEME3_URL"
+  theme1:"PASTE_THEME1",
+  theme2:"PASTE_THEME2",
+  theme3:"PASTE_THEME3"
 };
 
-function setTheme(name){
-  localStorage.setItem("bgType","theme");
-  localStorage.setItem("bgValue",name);
+function applyBG(url){
+  document.body.style.backgroundImage = `url('${url}')`;
+}
 
-  if(name==="default"){
-    document.body.style.backgroundImage = `url('${defaultBG}')`;
-  } else {
-    document.body.style.backgroundImage = `url('${themes[name]}')`;
-  }
+function setTheme(t){
+  localStorage.setItem("mode","theme");
+  localStorage.setItem("theme",t);
+  localStorage.removeItem("savedImage");
+
+  applyThemeHighlight(t);
+
+  applyBG(t==="default" ? defaultBG : themes[t]);
+}
+
+function applyThemeHighlight(t){
+  document.querySelectorAll(".theme-grid button").forEach(b=>b.classList.remove("active"));
+  if(t!=="default") document.getElementById(t+"Btn").classList.add("active");
 }
 
 /* FILE */
-fileInput.addEventListener("change",e=>{
+fileInput.onchange = e=>{
   const file = e.target.files[0];
-  if(!file) return;
-
   const reader = new FileReader();
-  reader.onload = ev=>{
-    localStorage.setItem("bgType","custom");
-    localStorage.setItem("bgValue",ev.target.result);
-    document.body.style.backgroundImage = `url('${ev.target.result}')`;
+
+  reader.onload = ()=>{
+    localStorage.setItem("mode","custom");
+    localStorage.setItem("savedImage",reader.result);
+
+    applyBG(reader.result);
+    imageBtn.disabled=false;
   };
+
   reader.readAsDataURL(file);
-});
+};
 
 /* URL */
-function openURL(){
-  urlPopup.style.display="flex";
-}
-function closeURL(){
-  urlPopup.style.display="none";
-}
-
 function applyURL(){
   const url = urlInput.value.trim();
-  if(!url) return;
 
   const img = new Image();
   img.onload = ()=>{
-    localStorage.setItem("bgType","custom");
-    localStorage.setItem("bgValue",url);
-    document.body.style.backgroundImage = `url('${url}')`;
+    localStorage.setItem("mode","custom");
+    localStorage.setItem("savedImage",url);
+
+    applyBG(url);
+    imageBtn.disabled=false;
+
     closeURL();
   };
   img.src = url;
 }
 
-/* RESTORE BACKGROUND (THIS IS THE REAL FIX) */
-const type = localStorage.getItem("bgType");
-const value = localStorage.getItem("bgValue");
-
-if(type==="custom" && value){
-  document.body.style.backgroundImage = `url('${value}')`;
-}
-else if(type==="theme" && value){
-  if(value==="default"){
-    document.body.style.backgroundImage = `url('${defaultBG}')`;
-  } else {
-    document.body.style.backgroundImage = `url('${themes[value]}')`;
+/* IMAGE BUTTON */
+function useSavedImage(){
+  const img = localStorage.getItem("savedImage");
+  if(img){
+    applyBG(img);
+    localStorage.setItem("mode","custom");
   }
 }
+
+/* RESTORE BG */
+const mode = localStorage.getItem("mode");
+
+if(mode==="custom"){
+  const img = localStorage.getItem("savedImage");
+  if(img){
+    applyBG(img);
+    imageBtn.disabled=false;
+  }
+}
+else if(mode==="theme"){
+  const t = localStorage.getItem("theme");
+  setTheme(t);
+}
 else{
-  document.body.style.backgroundImage = `url('${defaultBG}')`;
+  applyBG(defaultBG);
 }
 
-/* =========================
-   OPACITY
-========================= */
-const slider = document.getElementById("opacitySlider");
+/* HEX COLOR */
+const hexInput = document.getElementById("hexInput");
+const setBtn = document.getElementById("setColorBtn");
 
-slider.addEventListener("input",()=>{
-  document.documentElement.style.setProperty("--card-opacity",slider.value);
-  localStorage.setItem("opacity",slider.value);
+hexInput.addEventListener("input", ()=>{
+  setBtn.style.display = hexInput.value ? "block" : "none";
 });
 
-const savedOpacity = localStorage.getItem("opacity") || 0.65;
-slider.value = savedOpacity;
-document.documentElement.style.setProperty("--card-opacity",savedOpacity);
+setBtn.onclick = ()=>{
+  let val = hexInput.value.trim();
+  if(!val.startsWith("#")) val = "#"+val;
+
+  document.documentElement.style.setProperty("--accent", val);
+  localStorage.setItem("accent", val);
+
+  setBtn.style.display="none";
+};
+
+const savedAccent = localStorage.getItem("accent");
+if(savedAccent){
+  document.documentElement.style.setProperty("--accent", savedAccent);
+}
+
+/* DARK MODE */
+darkToggle.onchange = ()=>{
+  document.body.classList.toggle("dark", darkToggle.checked);
+};
+
+/* OPACITY */
+opacitySlider.oninput = ()=>{
+  document.documentElement.style.setProperty("--card-opacity", opacitySlider.value);
+  localStorage.setItem("opacity", opacitySlider.value);
+};
+
+const savedOp = localStorage.getItem("opacity");
+if(savedOp){
+  opacitySlider.value = savedOp;
+  document.documentElement.style.setProperty("--card-opacity", savedOp);
+}
 
 </script>
 
