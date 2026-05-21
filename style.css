@@ -3,7 +3,7 @@
   --card-opacity:0.65;
 }
 
-*{
+{
   margin:0;
   padding:0;
   box-sizing:border-box;
@@ -14,69 +14,54 @@ body{
   display:flex;
   justify-content:center;
   align-items:center;
-  height:100vh;
+  min-height:100vh;
 
-  background-image:url("https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg");
   background-size:cover;
   background-position:center;
 }
 
-/* CARD */
+/ CARD /
 .card{
-  backdrop-filter:blur(calc(30px * var(--card-opacity)));
+  backdrop-filter:blur(30px);
   background:rgba(255,255,255,var(--card-opacity));
 
   border-radius:28px;
-  padding:28px;
+  padding:32px;
 
-  width:92%;
+  width:90%;
   max-width:420px;
 
   display:flex;
   flex-direction:column;
-  gap:16px;
-
+  gap:18px;
   text-align:center;
 }
 
 .dark .card{
   background:rgba(28,28,30,var(--card-opacity));
-  color:#fff;
+  color:white;
 }
 
-h1{
-  font-size:32px;
-}
-
-.sub-version{
-  font-size:13px;
-  opacity:0.6;
-}
-
-/* BUTTONS */
+/ BUTTONS /
 .main-btn{
   background:var(--accent);
   color:white;
   padding:16px;
   border-radius:16px;
-  text-decoration:none;
-}
-
-.main-btn.disabled{
-  background:#999;
+  font-size:18px;
 }
 
 .sub-buttons{
   display:flex;
   justify-content:center;
-  gap:10px;
+  gap:12px;
 }
 
 .sub-buttons button{
   background:rgba(0,0,0,0.08);
   color:var(--accent);
   border:none;
-  padding:10px 14px;
+  padding:10px 16px;
   border-radius:12px;
 }
 
@@ -84,8 +69,8 @@ h1{
   background:rgba(255,255,255,0.08);
 }
 
-/* SETTINGS */
-#settingsPanel,#whatsNewUI,#urlPopup{
+/ SETTINGS PANEL /
+#settingsPanel{
   position:fixed;
   inset:0;
   display:none;
@@ -96,22 +81,59 @@ h1{
 
 .settings-card{
   backdrop-filter:blur(30px);
-  background:rgba(255,255,255,0.9);
-  padding:22px;
+  background:rgba(255,255,255,0.95);
+
   border-radius:24px;
+  padding:24px;
   width:92%;
   max-width:360px;
 
   display:flex;
   flex-direction:column;
-  gap:14px;
+  gap:16px;
 }
 
 .dark .settings-card{
-  background:rgba(28,28,30,0.9);
+  background:rgba(28,28,30,0.95);
+  color:white;
 }
 
-/* GRID */
+/ SWITCH /
+.switch{
+  position:relative;
+  width:52px;
+  height:30px;
+}
+.switch input{ display:none; }
+
+.slider{
+  position:absolute;
+  inset:0;
+  background:#ccc;
+  border-radius:30px;
+}
+
+.slider:before{
+  content:"";
+  position:absolute;
+  height:22px;
+  width:22px;
+  left:4px;
+  top:4px;
+  background:white;
+  border-radius:50%;
+  transition:0.2s;
+}
+
+input:checked + .slider{
+  background:var(--accent);
+}
+
+input:checked + .slider:before{
+  transform:translateX(22px);
+}
+
+/ GRID /
 .theme-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -121,17 +143,12 @@ h1{
 .theme-grid button{
   background:var(--accent);
   color:white;
-  border-radius:12px;
   border:none;
   padding:12px;
+  border-radius:12px;
 }
 
-.theme-grid button.active{
-  outline:3px solid white;
-  transform:scale(0.95);
-}
-
-/* FILE */
+/ FILE /
 .file-btn{
   background:var(--accent);
   color:white;
@@ -147,65 +164,32 @@ h1{
   opacity:0;
 }
 
-/* SLIDER */
+/ SLIDER /
 input[type="range"]{
   width:100%;
   height:6px;
-  border-radius:6px;
   accent-color:var(--accent);
 }
 
-/* POPUP */
-.popup-card{
-  background:white;
-  padding:20px;
-  border-radius:16px;
-  width:90%;
-  max-width:300px;
-  display:flex;
-  flex-direction:column;
-  gap:10px;
-}
-
-.dark .popup-card{
-  background:#1c1c1e;
-  color:white;
-}
-
-/* CENTER */
-.center{
-  display:flex;
-  justify-content:center;
-}
-
-/* CREDITS */
-.credits{
-  display:flex;
-  flex-direction:column;
-  gap:4px;
-}
-
-.credits a{
-  color:var(--accent);
-  text-decoration:none;
-}
-
-.version{
-  font-size:14px;
+.warning{
+  font-size:12px;
   opacity:0.6;
 }
 
-/* INFO BUTTON */
+/ INFO BUTTON */
 #infoButton{
   position:fixed;
   top:20px;
   right:20px;
+
+  width:30px;
+  height:30px;
+  border-radius:50%;
+
   background:black;
   color:white;
-  width:28px;
-  height:28px;
-  border-radius:50%;
-  display:flex;
+
+  display:none;
   justify-content:center;
   align-items:center;
 }
