@@ -22,17 +22,12 @@ body{
   background-position:center;
 }
 
-/* CONTAINER */
-.container{
-  width:100%;
-  display:flex;
-  justify-content:center;
-}
-
 /* CARD */
 .card{
-  backdrop-filter:blur(30px);
+  backdrop-filter:blur(calc(30px * var(--card-opacity)));
   background:rgba(255,255,255,var(--card-opacity));
+
+  opacity:var(--card-opacity);
 
   border-radius:28px;
   padding:32px;
@@ -51,22 +46,15 @@ body{
   color:white;
 }
 
-/* TITLE */
-h1{
-  font-size:32px;
-}
-
-/* MAIN BUTTON */
+/* BUTTONS */
 .main-btn{
   background:var(--accent);
   color:white;
   padding:16px;
   border-radius:16px;
   font-size:18px;
-  text-decoration:none;
 }
 
-/* SUB BUTTONS */
 .sub-buttons{
   display:flex;
   justify-content:center;
@@ -82,23 +70,10 @@ h1{
 }
 
 .dark .sub-buttons button{
-  background:rgba(255,255,255,0.1);
+  background:rgba(255,255,255,0.08);
 }
 
-/* CREDITS */
-.credits{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  margin-top:10px;
-}
-
-.credits a{
-  color:var(--accent);
-  text-decoration:none;
-}
-
-/* SETTINGS */
+/* SETTINGS PANEL */
 #settingsPanel{
   position:fixed;
   inset:0;
@@ -108,6 +83,7 @@ h1{
   background:rgba(0,0,0,0.4);
 }
 
+/* SETTINGS CARD */
 .settings-card{
   backdrop-filter:blur(30px);
   background:rgba(255,255,255,0.95);
@@ -127,31 +103,34 @@ h1{
   color:white;
 }
 
-/* SWITCH */
+/* SWITCH (iOS STYLE) */
 .switch{
   position:relative;
-  width:52px;
-  height:30px;
+  width:50px;
+  height:28px;
 }
-.switch input{ display:none; }
+
+.switch input{
+  opacity:0;
+}
 
 .slider{
   position:absolute;
   inset:0;
-  background:#ccc;
-  border-radius:30px;
+  background:#d1d1d6;
+  border-radius:999px;
 }
 
 .slider:before{
   content:"";
   position:absolute;
-  height:22px;
-  width:22px;
-  left:4px;
-  top:4px;
+  height:24px;
+  width:24px;
+  left:2px;
+  top:2px;
   background:white;
   border-radius:50%;
-  transition:0.2s;
+  transition:0.3s;
 }
 
 input:checked + .slider{
@@ -162,7 +141,7 @@ input:checked + .slider:before{
   transform:translateX(22px);
 }
 
-/* THEMES */
+/* GRID */
 .theme-grid{
   display:grid;
   grid-template-columns:1fr 1fr;
@@ -175,11 +154,6 @@ input:checked + .slider:before{
   border:none;
   padding:12px;
   border-radius:12px;
-}
-
-.theme-grid button.active{
-  outline:3px solid white;
-  transform:scale(0.95);
 }
 
 /* FILE */
@@ -201,7 +175,7 @@ input:checked + .slider:before{
 /* SLIDER */
 input[type="range"]{
   width:100%;
-  height:6px;
+  height:8px;
   accent-color:var(--accent);
 }
 
@@ -209,6 +183,7 @@ input[type="range"]{
 .warning{
   font-size:12px;
   opacity:0.6;
+  display:none;
 }
 
 /* INFO BUTTON */
