@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>Star</title>
 <link rel="stylesheet" href="style.css">
 </head>
@@ -19,16 +20,16 @@
 
     <div class="sub-buttons">
       <button onclick="openSettings()">Settings</button>
-      <button onclick="openWhatsNew()">What’s New</button>
+      <button onclick="alert('Whats new placeholder')">What’s New</button>
     </div>
 
     <div class="credits">
-      <a href="https://x.com/UseSkylark" target="_blank">© Skylark Inc</a>
-      <a href="https://x.com/terralinkslabs" target="_blank">© Terralinkslabs</a>
-      <a href="https://x.com/endlesspeteinc" target="_blank">© Endlesspete</a>
+      <a href="#">© Skylark Inc</a>
+      <a href="#">© Terralinkslabs</a>
+      <a href="#">© Endlesspete</a>
     </div>
 
-    <p class="version">v1.0 Beta 9.5</p>
+    <p class="version">v1.0 Beta 10</p>
 
   </div>
 </div>
@@ -50,6 +51,7 @@
       </label>
     </div>
 
+    <!-- HEX -->
     <div>
       <span>Custom Color</span>
       <input type="text" id="hexInput" placeholder="007aff or #007aff">
@@ -59,10 +61,10 @@
     <h3>Background</h3>
 
     <div class="theme-grid">
-      <button onclick="setTheme('default')" id="defaultBtn">Default</button>
-      <button onclick="setTheme('theme1')" id="t1">Theme 1</button>
-      <button onclick="setTheme('theme2')" id="t2">Theme 2</button>
-      <button onclick="setTheme('theme3')" id="t3">Theme 3</button>
+      <button onclick="setTheme('default')">Default</button>
+      <button onclick="setTheme('theme1')">Theme 1</button>
+      <button onclick="setTheme('theme2')">Theme 2</button>
+      <button onclick="setTheme('theme3')">Theme 3</button>
     </div>
 
     <button id="imageBtn" onclick="useSavedImage()" disabled>Image</button>
@@ -87,22 +89,17 @@
 
 <script>
 
+/* DEFAULT BG */
 const defaultBG = "https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
 
+/* APPLY BG */
 function applyBG(url){
   document.body.style.backgroundImage = `url('${url}')`;
 }
 
-function loadBG(){
-  const bg = localStorage.getItem("bg");
-  if(bg){
-    applyBG(bg);
-    imageBtn.disabled = false;
-  } else {
-    applyBG(defaultBG);
-  }
-}
-loadBG();
+/* INIT BG */
+const savedBG = localStorage.getItem("bg");
+applyBG(savedBG || defaultBG);
 
 /* THEMES */
 function setTheme(name){
@@ -119,7 +116,6 @@ function setTheme(name){
 
   applyBG(bg);
   updateInfoButton(name);
-  highlight(name);
 }
 
 /* FILE */
@@ -134,7 +130,6 @@ fileInput.onchange = e=>{
     applyBG(reader.result);
     imageBtn.disabled=false;
     updateInfoButton(null);
-    clearHighlight();
   };
 
   reader.readAsDataURL(file);
@@ -143,10 +138,7 @@ fileInput.onchange = e=>{
 /* IMAGE BUTTON */
 function useSavedImage(){
   const bg = localStorage.getItem("bg");
-  if(bg){
-    applyBG(bg);
-    updateInfoButton(null);
-  }
+  if(bg) applyBG(bg);
 }
 
 /* INFO BUTTON */
@@ -157,10 +149,12 @@ function updateInfoButton(theme){
 updateInfoButton(localStorage.getItem("theme"));
 
 function showInfo(){
-  alert("Theme artwork credit goes here");
+  alert("Theme credit here");
 }
 
 /* DARK MODE */
+const darkToggle = document.getElementById("darkToggle");
+
 if(localStorage.getItem("dark")==="true"){
   document.body.classList.add("dark");
   darkToggle.checked=true;
@@ -174,46 +168,52 @@ darkToggle.onchange = ()=>{
 /* OPACITY */
 const slider = document.getElementById("opacitySlider");
 const value = document.getElementById("opacityValue");
+const warning = document.querySelector(".warning");
 
 const savedOpacity = localStorage.getItem("opacity") || 65;
+
 slider.value = savedOpacity;
 value.innerText = savedOpacity+"%";
 
 document.documentElement.style.setProperty("--card-opacity", savedOpacity/100);
 
 slider.oninput = ()=>{
-  value.innerText = slider.value+"%";
-  document.documentElement.style.setProperty("--card-opacity", slider.value/100);
-  localStorage.setItem("opacity", slider.value);
+  const val = slider.value;
+
+  value.innerText = val+"%";
+
+  document.documentElement.style.setProperty("--card-opacity", val/100);
+  localStorage.setItem("opacity", val);
+
+  warning.style.display = val <= 40 ? "block" : "none";
 };
 
 /* HEX */
-setColorBtn.onclick = ()=>{
+const hexInput = document.getElementById("hexInput");
+const setBtn = document.getElementById("setColorBtn");
+
+setBtn.style.display = "none";
+
+hexInput.oninput = ()=>{
+  setBtn.style.display = hexInput.value ? "inline-block" : "none";
+};
+
+setBtn.onclick = ()=>{
   let val = hexInput.value.trim();
+  if(!val) return;
+
   if(!val.startsWith("#")) val = "#"+val;
+
+  if(!/^#[0-9A-Fa-f]{6}$/.test(val)){
+    alert("Invalid hex");
+    return;
+  }
 
   document.documentElement.style.setProperty("--accent", val);
   localStorage.setItem("accent", val);
+
+  setBtn.style.display="none";
 };
-
-/* LOAD COLOR */
-const savedColor = localStorage.getItem("accent");
-if(savedColor){
-  document.documentElement.style.setProperty("--accent", savedColor);
-}
-
-/* THEME HIGHLIGHT */
-function highlight(name){
-  clearHighlight();
-  if(name==="default") defaultBtn.classList.add("active");
-  if(name==="theme1") t1.classList.add("active");
-  if(name==="theme2") t2.classList.add("active");
-  if(name==="theme3") t3.classList.add("active");
-}
-
-function clearHighlight(){
-  document.querySelectorAll(".theme-grid button").forEach(b=>b.classList.remove("active"));
-}
 
 /* SETTINGS */
 function openSettings(){ settingsPanel.style.display="flex"; }
