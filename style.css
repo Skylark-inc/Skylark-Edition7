@@ -3,7 +3,6 @@
   --card-opacity:0.65;
 }
 
-/* RESET */
 *{
   margin:0;
   padding:0;
@@ -11,23 +10,27 @@
   font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 }
 
-/* BODY */
 body{
   display:flex;
   justify-content:center;
   align-items:center;
   min-height:100vh;
 
+  background-image:url("https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg");
   background-size:cover;
   background-position:center;
 }
 
+.container{
+  width:100%;
+  display:flex;
+  justify-content:center;
+}
+
 /* CARD */
 .card{
-  backdrop-filter:blur(calc(30px * var(--card-opacity)));
+  backdrop-filter:blur(30px);
   background:rgba(255,255,255,var(--card-opacity));
-
-  opacity:var(--card-opacity);
 
   border-radius:28px;
   padding:32px;
@@ -86,7 +89,7 @@ body{
 /* SETTINGS CARD */
 .settings-card{
   backdrop-filter:blur(30px);
-  background:rgba(255,255,255,0.95);
+  background:rgba(255,255,255,var(--card-opacity));
 
   border-radius:24px;
   padding:24px;
@@ -99,38 +102,35 @@ body{
 }
 
 .dark .settings-card{
-  background:rgba(28,28,30,0.95);
+  background:rgba(28,28,30,var(--card-opacity));
   color:white;
 }
 
-/* SWITCH (iOS STYLE) */
+/* SWITCH */
 .switch{
   position:relative;
-  width:50px;
-  height:28px;
+  width:52px;
+  height:30px;
 }
-
-.switch input{
-  opacity:0;
-}
+.switch input{ display:none; }
 
 .slider{
   position:absolute;
   inset:0;
-  background:#d1d1d6;
-  border-radius:999px;
+  background:#ccc;
+  border-radius:30px;
 }
 
 .slider:before{
   content:"";
   position:absolute;
-  height:24px;
-  width:24px;
-  left:2px;
-  top:2px;
+  height:22px;
+  width:22px;
+  left:4px;
+  top:4px;
   background:white;
   border-radius:50%;
-  transition:0.3s;
+  transition:0.2s;
 }
 
 input:checked + .slider{
@@ -175,31 +175,18 @@ input:checked + .slider:before{
 /* SLIDER */
 input[type="range"]{
   width:100%;
-  height:8px;
+  height:6px;
   accent-color:var(--accent);
 }
 
-/* WARNING */
+/* HEX ROW */
+.hex-row{
+  display:flex;
+  gap:8px;
+}
+
 .warning{
   font-size:12px;
   opacity:0.6;
   display:none;
-}
-
-/* INFO BUTTON */
-#infoButton{
-  position:fixed;
-  top:20px;
-  right:20px;
-
-  width:32px;
-  height:32px;
-  border-radius:50%;
-
-  background:black;
-  color:white;
-
-  display:none;
-  justify-content:center;
-  align-items:center;
 }
