@@ -3,8 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-
-<title>Star</title>
+<title>Skylark</title>
 <link rel="stylesheet" href="style.css">
 </head>
 
@@ -13,29 +12,26 @@
 <div class="container">
   <div class="card">
 
-    <h1>Star</h1>
+    <h1>Skylark (Edition 27)</h1>
     <p class="sub-version">v1.0 Beta 1</p>
 
-    <a id="mainBtn" class="main-btn">Get Star</a>
+    <a id="mainBtn" class="main-btn">Get Skylark</a>
 
     <div class="sub-buttons">
       <button onclick="openSettings()">Settings</button>
-      <button onclick="alert('Whats new placeholder')">What’s New</button>
+      <button onclick="openWhatsNew()">What’s New</button>
     </div>
 
     <div class="credits">
-      <a href="#">© Skylark Inc</a>
-      <a href="#">© Terralinkslabs</a>
-      <a href="#">© Endlesspete</a>
+      © Skylark Inc<br>
+      © Terralinkslabs<br>
+      © Endlesspete
     </div>
 
     <p class="version">v1.0 Beta 10</p>
 
   </div>
 </div>
-
-<!-- INFO BUTTON -->
-<div id="infoButton" onclick="showInfo()">i</div>
 
 <!-- SETTINGS -->
 <div id="settingsPanel">
@@ -54,8 +50,10 @@
     <!-- HEX -->
     <div>
       <span>Custom Color</span>
-      <input type="text" id="hexInput" placeholder="007aff or #007aff">
-      <button id="setColorBtn">Set</button>
+      <div class="hex-row">
+        <input type="text" id="hexInput" placeholder="007aff or #007aff">
+        <button id="setColorBtn">Set</button>
+      </div>
     </div>
 
     <h3>Background</h3>
@@ -67,8 +65,6 @@
       <button onclick="setTheme('theme3')">Theme 3</button>
     </div>
 
-    <button id="imageBtn" onclick="useSavedImage()" disabled>Image</button>
-
     <label class="file-btn">
       Your Photos
       <input type="file" id="fileInput">
@@ -79,7 +75,7 @@
     <div>
       <span>UI Opacity: <b id="opacityValue">65%</b></span>
       <input type="range" id="opacitySlider" min="0" max="100">
-      <p class="warning">Lower values may reduce readability</p>
+      <p id="opacityWarning" class="warning">Lower values may reduce readability</p>
     </div>
 
     <button onclick="closeSettings()">Close</button>
@@ -112,10 +108,7 @@ function setTheme(name){
   const bg = name==="default" ? defaultBG : map[name];
 
   localStorage.setItem("bg", bg);
-  localStorage.setItem("theme", name);
-
   applyBG(bg);
-  updateInfoButton(name);
 }
 
 /* FILE */
@@ -125,32 +118,11 @@ fileInput.onchange = e=>{
 
   reader.onload = ()=>{
     localStorage.setItem("bg", reader.result);
-    localStorage.removeItem("theme");
-
     applyBG(reader.result);
-    imageBtn.disabled=false;
-    updateInfoButton(null);
   };
 
   reader.readAsDataURL(file);
 };
-
-/* IMAGE BUTTON */
-function useSavedImage(){
-  const bg = localStorage.getItem("bg");
-  if(bg) applyBG(bg);
-}
-
-/* INFO BUTTON */
-function updateInfoButton(theme){
-  const btn = document.getElementById("infoButton");
-  btn.style.display = (theme && theme !== "default") ? "flex" : "none";
-}
-updateInfoButton(localStorage.getItem("theme"));
-
-function showInfo(){
-  alert("Theme credit here");
-}
 
 /* DARK MODE */
 const darkToggle = document.getElementById("darkToggle");
@@ -168,24 +140,24 @@ darkToggle.onchange = ()=>{
 /* OPACITY */
 const slider = document.getElementById("opacitySlider");
 const value = document.getElementById("opacityValue");
-const warning = document.querySelector(".warning");
+const warning = document.getElementById("opacityWarning");
 
-const savedOpacity = localStorage.getItem("opacity") || 65;
+let savedOpacity = localStorage.getItem("opacity") || 65;
 
 slider.value = savedOpacity;
-value.innerText = savedOpacity+"%";
+value.innerText = savedOpacity + "%";
 
 document.documentElement.style.setProperty("--card-opacity", savedOpacity/100);
 
+warning.style.display = savedOpacity < 50 ? "block" : "none";
+
 slider.oninput = ()=>{
-  const val = slider.value;
+  value.innerText = slider.value + "%";
 
-  value.innerText = val+"%";
+  document.documentElement.style.setProperty("--card-opacity", slider.value/100);
+  localStorage.setItem("opacity", slider.value);
 
-  document.documentElement.style.setProperty("--card-opacity", val/100);
-  localStorage.setItem("opacity", val);
-
-  warning.style.display = val <= 40 ? "block" : "none";
+  warning.style.display = slider.value < 50 ? "block" : "none";
 };
 
 /* HEX */
@@ -195,25 +167,28 @@ const setBtn = document.getElementById("setColorBtn");
 setBtn.style.display = "none";
 
 hexInput.oninput = ()=>{
-  setBtn.style.display = hexInput.value ? "inline-block" : "none";
+  setBtn.style.display = hexInput.value.trim() ? "block" : "none";
 };
 
 setBtn.onclick = ()=>{
   let val = hexInput.value.trim();
   if(!val) return;
 
-  if(!val.startsWith("#")) val = "#"+val;
+  if(!val.startsWith("#")) val = "#" + val;
 
-  if(!/^#[0-9A-Fa-f]{6}$/.test(val)){
-    alert("Invalid hex");
-    return;
+  if(/^#[0-9A-Fa-f]{6}$/.test(val)){
+    document.documentElement.style.setProperty("--accent", val);
+    localStorage.setItem("accent", val);
   }
 
-  document.documentElement.style.setProperty("--accent", val);
-  localStorage.setItem("accent", val);
-
-  setBtn.style.display="none";
+  setBtn.style.display = "none";
 };
+
+/* LOAD ACCENT */
+const savedAccent = localStorage.getItem("accent");
+if(savedAccent){
+  document.documentElement.style.setProperty("--accent", savedAccent);
+}
 
 /* SETTINGS */
 function openSettings(){ settingsPanel.style.display="flex"; }
