@@ -15,17 +15,18 @@
     <h1>Skylark (Edition 27)</h1>
     <p class="sub-version">v1.0 Beta 1</p>
 
-    <a id="mainBtn" class="main-btn">Get Skylark</a>
+    <a class="main-btn">Get Skylark</a>
 
     <div class="sub-buttons">
       <button onclick="openSettings()">Settings</button>
       <button onclick="openWhatsNew()">What’s New</button>
     </div>
 
+    <!-- ✅ FIXED: CLICKABLE LINKS -->
     <div class="credits">
-      © Skylark Inc<br>
-      © Terralinkslabs<br>
-      © Endlesspete
+      <a href="https://useskylark.github.io" target="_blank">© Skylark Inc</a>
+      <a href="https://terralinkslabs.github.io" target="_blank">© Terralinkslabs</a>
+      <a href="https://endlesspete.github.io" target="_blank">© Endlesspete</a>
     </div>
 
     <p class="version">v1.0 Beta 10</p>
@@ -47,7 +48,6 @@
       </label>
     </div>
 
-    <!-- HEX -->
     <div>
       <span>Custom Color</span>
       <div class="hex-row">
@@ -70,6 +70,7 @@
       <input type="file" id="fileInput">
     </label>
 
+    <!-- ✅ FIXED -->
     <button onclick="openURL()">Image URL</button>
 
     <div>
@@ -83,6 +84,27 @@
   </div>
 </div>
 
+<!-- WHAT'S NEW -->
+<div id="whatsNewPanel">
+  <div class="settings-card">
+    <h2>What’s New</h2>
+    <p>• UI Improvements</p>
+    <p>• Bug fixes</p>
+    <button onclick="closeWhatsNew()">Back</button>
+  </div>
+</div>
+
+<!-- IMAGE URL POPUP -->
+<div id="urlPopup">
+  <div class="popup-card">
+    <h3>Enter Image URL</h3>
+    <input type="text" id="urlInput" placeholder="Paste image URL">
+
+    <button onclick="applyURL()">Apply</button>
+    <button onclick="closeURL()">Cancel</button>
+  </div>
+</div>
+
 <script>
 
 /* DEFAULT BG */
@@ -93,7 +115,7 @@ function applyBG(url){
   document.body.style.backgroundImage = `url('${url}')`;
 }
 
-/* INIT BG */
+/* INIT */
 const savedBG = localStorage.getItem("bg");
 applyBG(savedBG || defaultBG);
 
@@ -106,7 +128,6 @@ function setTheme(name){
   };
 
   const bg = name==="default" ? defaultBG : map[name];
-
   localStorage.setItem("bg", bg);
   applyBG(bg);
 }
@@ -124,6 +145,32 @@ fileInput.onchange = e=>{
   reader.readAsDataURL(file);
 };
 
+/* 🔥 FIXED IMAGE URL */
+function openURL(){
+  urlPopup.style.display = "flex";
+}
+
+function closeURL(){
+  urlPopup.style.display = "none";
+}
+
+function applyURL(){
+  const url = document.getElementById("urlInput").value.trim();
+  if(!url) return;
+
+  localStorage.setItem("bg", url);
+  applyBG(url);
+  closeURL();
+}
+
+/* 🔥 WHAT’S NEW FIX */
+function openWhatsNew(){
+  whatsNewPanel.style.display = "flex";
+}
+function closeWhatsNew(){
+  whatsNewPanel.style.display = "none";
+}
+
 /* DARK MODE */
 const darkToggle = document.getElementById("darkToggle");
 
@@ -137,7 +184,7 @@ darkToggle.onchange = ()=>{
   localStorage.setItem("dark", darkToggle.checked);
 };
 
-/* OPACITY */
+/* 🔥 REAL OPACITY FIX */
 const slider = document.getElementById("opacitySlider");
 const value = document.getElementById("opacityValue");
 const warning = document.getElementById("opacityWarning");
@@ -147,14 +194,20 @@ let savedOpacity = localStorage.getItem("opacity") || 65;
 slider.value = savedOpacity;
 value.innerText = savedOpacity + "%";
 
-document.documentElement.style.setProperty("--card-opacity", savedOpacity/100);
+/* KEY FIX: TRUE ZERO */
+function setOpacity(v){
+  if(v == 0){
+    document.documentElement.style.setProperty("--card-opacity", 0);
+  } else {
+    document.documentElement.style.setProperty("--card-opacity", v/100);
+  }
+}
 
-warning.style.display = savedOpacity < 50 ? "block" : "none";
+setOpacity(savedOpacity);
 
 slider.oninput = ()=>{
   value.innerText = slider.value + "%";
-
-  document.documentElement.style.setProperty("--card-opacity", slider.value/100);
+  setOpacity(slider.value);
   localStorage.setItem("opacity", slider.value);
 
   warning.style.display = slider.value < 50 ? "block" : "none";
@@ -184,7 +237,6 @@ setBtn.onclick = ()=>{
   setBtn.style.display = "none";
 };
 
-/* LOAD ACCENT */
 const savedAccent = localStorage.getItem("accent");
 if(savedAccent){
   document.documentElement.style.setProperty("--accent", savedAccent);
