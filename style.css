@@ -11,29 +11,21 @@
   font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 }
 
+/* BODY */
 body{
   display:flex;
   justify-content:center;
   align-items:center;
   min-height:100vh;
 
-  background-image:url("https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg");
   background-size:cover;
   background-position:center;
 }
 
-.container{
-  width:100%;
-  display:flex;
-  justify-content:center;
-}
-
-/* 🧊 CARD — FIXED TRUE OPACITY */
+/* CARD */
 .card{
   backdrop-filter:blur(30px);
-
-  /* KEY FIX: TRUE TRANSPARENCY */
-  background-color:rgba(255,255,255,var(--card-opacity));
+  background:rgba(255,255,255,var(--card-opacity));
 
   border-radius:28px;
   padding:32px;
@@ -43,37 +35,35 @@ body{
 
   display:flex;
   flex-direction:column;
-  gap:18px;
+  gap:16px;
   text-align:center;
 }
 
-/* DARK MODE CARD */
 .dark .card{
-  background-color:rgba(28,28,30,var(--card-opacity));
+  background:rgba(28,28,30,var(--card-opacity));
   color:white;
 }
 
-/* 🎯 BUTTONS (NOT affected by opacity anymore) */
+/* BUTTONS */
 .main-btn{
   background:var(--accent);
   color:white;
   padding:16px;
   border-radius:16px;
-  font-size:18px;
   text-decoration:none;
+  font-size:18px;
 }
 
 .sub-buttons{
   display:flex;
+  gap:10px;
   justify-content:center;
-  gap:12px;
 }
 
 .sub-buttons button{
   background:rgba(0,0,0,0.08);
-  color:var(--accent);
   border:none;
-  padding:10px 16px;
+  padding:10px 14px;
   border-radius:12px;
 }
 
@@ -81,145 +71,8 @@ body{
   background:rgba(255,255,255,0.08);
 }
 
-/* 🔗 CREDITS FIX (CLICKABLE + CLEAN) */
-.credits{
-  display:flex;
-  flex-direction:column;
-  gap:6px;
-  margin-top:10px;
-}
-
-.credits a{
-  color:var(--accent);
-  text-decoration:none;
-  font-weight:500;
-}
-
-.credits a:hover{
-  opacity:0.7;
-}
-
-/* ⚙️ SETTINGS PANEL */
-#settingsPanel{
-  position:fixed;
-  inset:0;
-  display:none;
-  justify-content:center;
-  align-items:center;
-  background:rgba(0,0,0,0.4);
-}
-
-/* SETTINGS CARD */
-.settings-card{
-  backdrop-filter:blur(30px);
-
-  /* SAME FIX HERE */
-  background-color:rgba(255,255,255,var(--card-opacity));
-
-  border-radius:24px;
-  padding:24px;
-  width:92%;
-  max-width:360px;
-
-  display:flex;
-  flex-direction:column;
-  gap:16px;
-}
-
-.dark .settings-card{
-  background-color:rgba(28,28,30,var(--card-opacity));
-  color:white;
-}
-
-/* 🔄 SWITCH (cleaner iOS feel) */
-.switch{
-  position:relative;
-  width:50px;
-  height:28px;
-}
-.switch input{ display:none; }
-
-.slider{
-  position:absolute;
-  inset:0;
-  background:#d1d1d6;
-  border-radius:30px;
-  transition:0.2s;
-}
-
-.slider:before{
-  content:"";
-  position:absolute;
-  height:24px;
-  width:24px;
-  left:2px;
-  top:2px;
-  background:white;
-  border-radius:50%;
-  transition:0.2s;
-}
-
-input:checked + .slider{
-  background:var(--accent);
-}
-
-input:checked + .slider:before{
-  transform:translateX(22px);
-}
-
-/* 🎛 GRID */
-.theme-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
-}
-
-.theme-grid button{
-  background:var(--accent);
-  color:white;
-  border:none;
-  padding:12px;
-  border-radius:12px;
-}
-
-/* 📁 FILE */
-.file-btn{
-  background:var(--accent);
-  color:white;
-  padding:14px;
-  border-radius:14px;
-  text-align:center;
-  position:relative;
-}
-
-.file-btn input{
-  position:absolute;
-  inset:0;
-  opacity:0;
-}
-
-/* 🎚 SLIDER — FIXED USABILITY */
-input[type="range"]{
-  width:100%;
-  height:8px; /* bigger track */
-  border-radius:10px;
-  accent-color:var(--accent);
-}
-
-/* HEX ROW */
-.hex-row{
-  display:flex;
-  gap:8px;
-}
-
-/* ⚠️ WARNING TEXT */
-.warning{
-  font-size:12px;
-  opacity:0.6;
-  display:none;
-}
-
-/* 📦 WHAT'S NEW + URL POPUP (FIXED NOT SHOWING) */
+/* SETTINGS PANEL */
+#settingsPanel,
 #whatsNewPanel,
 #urlPopup{
   position:fixed;
@@ -230,19 +83,91 @@ input[type="range"]{
   background:rgba(0,0,0,0.4);
 }
 
+/* SETTINGS CARD */
+.settings-card,
 .popup-card{
-  background:white;
-  padding:20px;
-  border-radius:16px;
+  backdrop-filter:blur(30px);
+  background:rgba(255,255,255,var(--card-opacity));
+
+  padding:24px;
+  border-radius:20px;
   width:90%;
-  max-width:300px;
+  max-width:320px;
 
   display:flex;
   flex-direction:column;
+  gap:12px;
+}
+
+.dark .settings-card,
+.dark .popup-card{
+  background:rgba(28,28,30,var(--card-opacity));
+  color:white;
+}
+
+/* TOGGLE */
+.switch{
+  position:relative;
+  width:50px;
+  height:28px;
+}
+.switch input{display:none;}
+
+.slider{
+  position:absolute;
+  inset:0;
+  background:#ccc;
+  border-radius:30px;
+}
+.slider:before{
+  content:"";
+  position:absolute;
+  width:22px;
+  height:22px;
+  top:3px;
+  left:3px;
+  background:white;
+  border-radius:50%;
+  transition:0.2s;
+}
+input:checked + .slider{
+  background:var(--accent);
+}
+input:checked + .slider:before{
+  transform:translateX(22px);
+}
+
+/* GRID */
+.theme-grid{
+  display:grid;
+  grid-template-columns:1fr 1fr;
   gap:10px;
 }
 
-.dark .popup-card{
-  background:#1c1c1e;
+/* FILE */
+.file-btn{
+  background:var(--accent);
   color:white;
+  padding:12px;
+  border-radius:12px;
+  text-align:center;
+  position:relative;
+}
+.file-btn input{
+  position:absolute;
+  inset:0;
+  opacity:0;
+}
+
+/* SLIDER */
+input[type="range"]{
+  width:100%;
+  accent-color:var(--accent);
+}
+
+/* WARNING */
+.warning{
+  font-size:12px;
+  opacity:0.6;
+  display:none;
 }
