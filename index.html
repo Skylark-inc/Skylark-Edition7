@@ -2,9 +2,14 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+
 <title>Skylark</title>
+
 <link rel="stylesheet" href="style.css">
+
+<link rel="icon" href="https://endlesspete.github.io/Star/Favicon_use.jpeg">
+<link rel="apple-touch-icon" href="https://endlesspete.github.io/Star/Appicon_star_ed7.png">
 </head>
 
 <body>
@@ -15,21 +20,19 @@
     <h1>Skylark (Edition 27)</h1>
     <p class="sub-version">v1.0 Beta 1</p>
 
-    <a class="main-btn">Get Skylark</a>
+    <a href="#" class="main-btn" id="mainBtn">Get Skylark</a>
 
     <div class="sub-buttons">
       <button onclick="openSettings()">Settings</button>
       <button onclick="openWhatsNew()">What’s New</button>
     </div>
 
-    <!-- ✅ FIXED: CLICKABLE LINKS -->
-    <div class="credits">
-      <a href="https://useskylark.github.io" target="_blank">© Skylark Inc</a>
-      <a href="https://terralinkslabs.github.io" target="_blank">© Terralinkslabs</a>
-      <a href="https://endlesspete.github.io" target="_blank">© Endlesspete</a>
-    </div>
-
-    <p class="version">v1.0 Beta 10</p>
+    <p class="version">
+      v1.0 Beta 10<br>
+      © <a href="https://x.com/UseSkylark" target="_blank">Skylark Inc</a> |
+      © <a href="https://x.com/terralinkslabs" target="_blank">Terralinkslabs</a> |
+      © <a href="https://x.com/endlesspeteinc" target="_blank">Endlesspete</a>
+    </p>
 
   </div>
 </div>
@@ -40,7 +43,7 @@
 
     <h2>Settings</h2>
 
-    <div class="row">
+    <div class="toggle-row">
       <span>Dark Mode</span>
       <label class="switch">
         <input type="checkbox" id="darkToggle">
@@ -48,36 +51,26 @@
       </label>
     </div>
 
-    <div>
-      <span>Custom Color</span>
-      <div class="hex-row">
-        <input type="text" id="hexInput" placeholder="007aff or #007aff">
-        <button id="setColorBtn">Set</button>
-      </div>
-    </div>
-
     <h3>Background</h3>
 
     <div class="theme-grid">
-      <button onclick="setTheme('default')">Default</button>
-      <button onclick="setTheme('Ella')">Ella</button>
-      <button onclick="setTheme('Gliter')">Glitter</button>
-      <button onclick="setTheme('Car Wash')">Car Wash</button>
+      <button onclick="applyBackground('default')">Default</button>
+      <button onclick="applyBackground('Ella')">Ella</button>
+      <button onclick="applyBackground('Glitter')">Glitter</button>
+      <button onclick="applyBackground('Car Wash')">Car Wash</button>
     </div>
 
     <label class="file-btn">
       Your Photos
-      <input type="file" id="fileInput">
+      <input type="file" id="fileInput" accept="image/*">
     </label>
 
-    <!-- ✅ FIXED -->
     <button onclick="openURL()">Image URL</button>
 
-    <div>
-      <span>UI Opacity: <b id="opacityValue">65%</b></span>
-      <input type="range" id="opacitySlider" min="0" max="100">
-      <p id="opacityWarning" class="warning">Lower values may reduce readability</p>
-    </div>
+    <label>UI Opacity: <b id="opacityValue">65%</b></label>
+    <input type="range" id="opacitySlider" min="0" max="100">
+
+    <p id="opacityWarning" class="warning">Lower values may reduce readability</p>
 
     <button onclick="closeSettings()">Close</button>
 
@@ -88,18 +81,17 @@
 <div id="whatsNewPanel">
   <div class="settings-card">
     <h2>What’s New</h2>
-    <p>• UI Improvements</p>
-    <p>• Bug fixes</p>
+    <p>• Stable theme system restored</p>
+    <p>• UI fixes</p>
     <button onclick="closeWhatsNew()">Back</button>
   </div>
 </div>
 
-<!-- IMAGE URL POPUP -->
+<!-- URL POPUP -->
 <div id="urlPopup">
   <div class="popup-card">
     <h3>Enter Image URL</h3>
-    <input type="text" id="urlInput" placeholder="Paste image URL">
-
+    <input type="text" id="urlInput">
     <button onclick="applyURL()">Apply</button>
     <button onclick="closeURL()">Cancel</button>
   </div>
@@ -107,29 +99,45 @@
 
 <script>
 
-/* DEFAULT BG */
+/* DEFAULT */
 const defaultBG = "https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
 
-/* APPLY BG */
-function applyBG(url){
+/* THEMES */
+const themes = {
+  "Ella": "https://skylark-inc.github.io/Skylark-Edition7/Themes/Ella_202605_13.jpeg",
+  "Glitter": "https://skylark-inc.github.io/Skylark-Edition7/Themes/IMG_0065.jpeg",
+  "Car Wash": "https://skylark-inc.github.io/Skylark-Edition7/Themes/IMG_0144 202.JPG"
+};
+
+/* APPLY BACKGROUND */
+function applyBackground(name){
+  let url = defaultBG;
+
+  if(name === "default"){
+    localStorage.removeItem("bgTheme");
+    localStorage.removeItem("bgCustom");
+  }
+  else if(themes[name]){
+    url = themes[name];
+    localStorage.setItem("bgTheme", name);
+    localStorage.removeItem("bgCustom");
+  }
+
   document.body.style.backgroundImage = `url('${url}')`;
 }
 
-/* INIT */
-const savedBG = localStorage.getItem("bg");
-applyBG(savedBG || defaultBG);
+/* RESTORE */
+const savedTheme = localStorage.getItem("bgTheme");
+const savedCustom = localStorage.getItem("bgCustom");
 
-/* THEMES */
-function setTheme(name){
-  const map = {
-    theme1:"https://skylark-inc.github.io/Skylark-Edition7/Themes/Ella_202605_13.jpeg",
-    theme2:"PASTE_THEME2",
-    theme3:"PASTE_THEME3"
-  };
-
-  const bg = name==="default" ? defaultBG : map[name];
-  localStorage.setItem("bg", bg);
-  applyBG(bg);
+if(savedCustom){
+  document.body.style.backgroundImage = `url('${savedCustom}')`;
+}
+else if(savedTheme){
+  applyBackground(savedTheme);
+}
+else{
+  applyBackground("default");
 }
 
 /* FILE */
@@ -138,53 +146,50 @@ fileInput.onchange = e=>{
   const reader = new FileReader();
 
   reader.onload = ()=>{
-    localStorage.setItem("bg", reader.result);
-    applyBG(reader.result);
+    document.body.style.backgroundImage = `url('${reader.result}')`;
+    localStorage.setItem("bgCustom", reader.result);
+    localStorage.removeItem("bgTheme");
   };
 
   reader.readAsDataURL(file);
 };
 
-/* 🔥 FIXED IMAGE URL */
-function openURL(){
-  urlPopup.style.display = "flex";
-}
-
-function closeURL(){
-  urlPopup.style.display = "none";
-}
+/* URL */
+function openURL(){ urlPopup.style.display="flex"; }
+function closeURL(){ urlPopup.style.display="none"; }
 
 function applyURL(){
   const url = document.getElementById("urlInput").value.trim();
   if(!url) return;
 
-  localStorage.setItem("bg", url);
-  applyBG(url);
+  document.body.style.backgroundImage = `url('${url}')`;
+  localStorage.setItem("bgCustom", url);
+  localStorage.removeItem("bgTheme");
+
   closeURL();
 }
 
-/* 🔥 WHAT’S NEW FIX */
-function openWhatsNew(){
-  whatsNewPanel.style.display = "flex";
-}
-function closeWhatsNew(){
-  whatsNewPanel.style.display = "none";
-}
+/* SETTINGS */
+function openSettings(){ settingsPanel.style.display="flex"; }
+function closeSettings(){ settingsPanel.style.display="none"; }
+
+/* WHAT'S NEW */
+function openWhatsNew(){ whatsNewPanel.style.display="flex"; }
+function closeWhatsNew(){ whatsNewPanel.style.display="none"; }
 
 /* DARK MODE */
 const darkToggle = document.getElementById("darkToggle");
 
-if(localStorage.getItem("dark")==="true"){
-  document.body.classList.add("dark");
-  darkToggle.checked=true;
-}
+const savedDark = localStorage.getItem("dark") === "true";
+darkToggle.checked = savedDark;
+document.body.classList.toggle("dark", savedDark);
 
 darkToggle.onchange = ()=>{
   document.body.classList.toggle("dark");
   localStorage.setItem("dark", darkToggle.checked);
 };
 
-/* 🔥 REAL OPACITY FIX */
+/* OPACITY (CARD ONLY) */
 const slider = document.getElementById("opacitySlider");
 const value = document.getElementById("opacityValue");
 const warning = document.getElementById("opacityWarning");
@@ -194,13 +199,8 @@ let savedOpacity = localStorage.getItem("opacity") || 65;
 slider.value = savedOpacity;
 value.innerText = savedOpacity + "%";
 
-/* KEY FIX: TRUE ZERO */
 function setOpacity(v){
-  if(v == 0){
-    document.documentElement.style.setProperty("--card-opacity", 0);
-  } else {
-    document.documentElement.style.setProperty("--card-opacity", v/100);
-  }
+  document.documentElement.style.setProperty("--card-opacity", v/100);
 }
 
 setOpacity(savedOpacity);
@@ -213,38 +213,14 @@ slider.oninput = ()=>{
   warning.style.display = slider.value < 50 ? "block" : "none";
 };
 
-/* HEX */
-const hexInput = document.getElementById("hexInput");
-const setBtn = document.getElementById("setColorBtn");
+/* GET SKYLARK (Edition 7) */
+document.getElementById("mainBtn").onclick = async () => {
+  const res = await fetch("https://skylark-inc.github.io/Editions.json");
+  const data = await res.json();
 
-setBtn.style.display = "none";
-
-hexInput.oninput = ()=>{
-  setBtn.style.display = hexInput.value.trim() ? "block" : "none";
+  const edition = data["Edition 7"];
+  if(edition) window.location.href = edition.url;
 };
-
-setBtn.onclick = ()=>{
-  let val = hexInput.value.trim();
-  if(!val) return;
-
-  if(!val.startsWith("#")) val = "#" + val;
-
-  if(/^#[0-9A-Fa-f]{6}$/.test(val)){
-    document.documentElement.style.setProperty("--accent", val);
-    localStorage.setItem("accent", val);
-  }
-
-  setBtn.style.display = "none";
-};
-
-const savedAccent = localStorage.getItem("accent");
-if(savedAccent){
-  document.documentElement.style.setProperty("--accent", savedAccent);
-}
-
-/* SETTINGS */
-function openSettings(){ settingsPanel.style.display="flex"; }
-function closeSettings(){ settingsPanel.style.display="none"; }
 
 </script>
 
