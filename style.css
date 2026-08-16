@@ -1,174 +1,2128 @@
+/* ==========================================
+   SKYLARK (EDITION 27)
+=========================================== */
+
 :root{
+
   --accent:#007aff;
+
+  /*
+    ONLY the card surfaces use this.
+  */
   --card-opacity:0.65;
+
+  /*
+    JS changes this to 0px when
+    opacity reaches 0%.
+  */
+  --card-blur:30px;
+
+  --text:#1d1d1f;
+
+  --secondary-text:#6e6e73;
+
+  --control-bg:
+    rgba(118,118,128,0.12);
+
+  --control-bg-pressed:
+    rgba(118,118,128,0.20);
+
+  --separator:
+    rgba(60,60,67,0.16);
+
+  --danger:#ff3b30;
+
 }
+
+
+/* ==========================================
+   RESET
+=========================================== */
 
 *{
   margin:0;
   padding:0;
+
   box-sizing:border-box;
-  font-family:-apple-system,BlinkMacSystemFont,sans-serif;
 }
 
-html, body{
-  height:100%;
+
+html,
+body{
+  width:100%;
+
+  min-height:100%;
 }
+
 
 body{
-  display:flex;
-  justify-content:center;
-  align-items:center;
+
   min-height:100vh;
+  min-height:100dvh;
 
+  font-family:
+    -apple-system,
+    BlinkMacSystemFont,
+    "SF Pro Text",
+    "SF Pro Display",
+    Helvetica,
+    Arial,
+    sans-serif;
+
+  color:var(--text);
+
+  /*
+    DEFAULT WALLPAPER
+  */
+  background-image:
+    url(
+      "https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg"
+    );
+
+  /*
+    FIX:
+    The image MUST NOT repeat.
+  */
+  background-repeat:no-repeat;
+
+  /*
+    Keep it centered.
+  */
+  background-position:center center;
+
+  /*
+    Fill the entire viewport.
+  */
   background-size:cover;
-  background-position:center;
+
+  /*
+    Prevent accidental horizontal movement.
+  */
+  overflow-x:hidden;
+
+  -webkit-font-smoothing:
+    antialiased;
+
+  text-rendering:
+    optimizeLegibility;
+
 }
 
-/* CARD */
-.card{
-  backdrop-filter:blur(30px);
-  background:rgba(255,255,255,var(--card-opacity));
 
-  border-radius:28px;
-  padding:32px;
+/* ==========================================
+   MAIN CONTAINER
+=========================================== */
 
-  width:90%;
-  max-width:420px;
+.container{
+
+  width:100%;
+
+  min-height:100vh;
+  min-height:100dvh;
 
   display:flex;
+
+  align-items:center;
+  justify-content:center;
+
+  /*
+    Gives Safari safe-area room without
+    pushing the card off center.
+  */
+  padding:
+    max(
+      20px,
+      env(safe-area-inset-top)
+    )
+    18px
+    max(
+      20px,
+      env(safe-area-inset-bottom)
+    );
+
+  position:relative;
+
+  z-index:1;
+
+}
+
+
+/* ==========================================
+   MAIN CARD
+=========================================== */
+
+.card{
+
+  width:min(
+    100%,
+    420px
+  );
+
+  padding:
+    30px
+    26px
+    24px;
+
+  border-radius:
+    28px;
+
+  /*
+    THIS IS THE ONLY PART OF THE MAIN UI
+    AFFECTED BY THE OPACITY SLIDER.
+  */
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      var(--card-opacity)
+    );
+
+  /*
+    Glass effect.
+
+    At opacity 0%, JS changes
+    --card-blur to 0px.
+  */
+  -webkit-backdrop-filter:
+    blur(
+      var(--card-blur)
+    )
+    saturate(160%);
+
+  backdrop-filter:
+    blur(
+      var(--card-blur)
+    )
+    saturate(160%);
+
+  display:flex;
+
   flex-direction:column;
-  gap:16px;
+
+  gap:18px;
+
   text-align:center;
+
+  /*
+    IMPORTANT:
+
+    There is deliberately NO:
+    opacity: var(--card-opacity)
+
+    because that would fade every child.
+  */
+
+  transition:
+    background-color
+    180ms ease,
+    backdrop-filter
+    180ms ease,
+    -webkit-backdrop-filter
+    180ms ease;
+
 }
 
-.dark .card{
-  background:rgba(28,28,30,var(--card-opacity));
-  color:white;
+
+/* ==========================================
+   TITLE
+=========================================== */
+
+.card h1{
+
+  font-size:
+    clamp(
+      27px,
+      7vw,
+      34px
+    );
+
+  line-height:1.12;
+
+  letter-spacing:
+    -0.025em;
+
+  font-weight:700;
+
+  color:inherit;
+
 }
 
-/* BUTTONS */
+
+/* ==========================================
+   GET SKYLARK
+=========================================== */
+
 .main-btn{
-  background:var(--accent);
-  color:white;
-  padding:16px;
-  border-radius:16px;
-  font-size:18px;
+
+  appearance:none;
+
+  -webkit-appearance:none;
+
+  width:100%;
+
+  min-height:52px;
+
   border:none;
+
+  border-radius:15px;
+
+  padding:
+    14px
+    18px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  background:
+    var(--accent);
+
+  color:#ffffff;
+
+  font-family:inherit;
+
+  font-size:17px;
+
+  font-weight:600;
+
+  cursor:pointer;
+
+  -webkit-tap-highlight-color:
+    transparent;
+
+  transition:
+    transform 100ms ease,
+    filter 100ms ease,
+    background-color 120ms ease;
+
 }
+
+
+.main-btn:active:not(:disabled){
+
+  transform:
+    scale(0.98);
+
+  filter:
+    brightness(0.94);
+
+}
+
+
+.main-btn:disabled,
+.main-btn.disabled{
+
+  background:
+    rgba(
+      118,
+      118,
+      128,
+      0.42
+    );
+
+  color:
+    rgba(
+      255,
+      255,
+      255,
+      0.80
+    );
+
+  cursor:
+    not-allowed;
+
+}
+
+
+/* ==========================================
+   UNSUPPORTED MESSAGE
+=========================================== */
+
+.unsupported-message{
+
+  color:
+    var(--danger);
+
+  font-size:
+    13px;
+
+  font-weight:
+    500;
+
+  line-height:
+    1.4;
+
+  padding:
+    0 5px;
+
+}
+
+
+.unsupported-message[hidden]{
+
+  display:none;
+
+}
+
+
+/* ==========================================
+   SETTINGS / WHAT'S NEW BUTTONS
+=========================================== */
 
 .sub-buttons{
+
   display:flex;
-  gap:10px;
-  justify-content:center;
-}
 
-.sub-buttons button{
-  background:rgba(0,0,0,0.08);
-  border:none;
-  padding:10px 14px;
-  border-radius:12px;
-}
-
-.dark .sub-buttons button{
-  background:rgba(255,255,255,0.08);
-}
-
-/* PANELS */
-#settingsPanel,
-#whatsNewPanel,
-#urlPopup{
-  position:fixed;
-  inset:0;
-  display:none;
-  justify-content:center;
   align-items:center;
-  background:rgba(0,0,0,0.4);
+
+  justify-content:center;
+
+  flex-wrap:wrap;
+
+  gap:10px;
+
 }
 
-/* SETTINGS CARD */
-.settings-card,
-.popup-card{
-  backdrop-filter:blur(30px);
-  background:rgba(255,255,255,var(--card-opacity));
 
-  padding:24px;
-  border-radius:20px;
-  width:90%;
-  max-width:320px;
+.secondary-btn{
+
+  appearance:none;
+
+  -webkit-appearance:none;
+
+  min-height:40px;
+
+  border:none;
+
+  border-radius:12px;
+
+  padding:
+    9px
+    16px;
+
+  background:
+    var(--control-bg);
+
+  color:
+    var(--accent);
+
+  font-family:
+    inherit;
+
+  font-size:
+    15px;
+
+  font-weight:
+    600;
+
+  cursor:
+    pointer;
+
+  -webkit-tap-highlight-color:
+    transparent;
+
+  transition:
+    transform 100ms ease,
+    background-color 120ms ease;
+
+}
+
+
+.secondary-btn:active{
+
+  transform:
+    scale(0.96);
+
+  background:
+    var(--control-bg-pressed);
+
+}
+
+
+/* ==========================================
+   COPYRIGHT
+=========================================== */
+
+.credits{
+
+  margin-top:
+    2px;
 
   display:flex;
-  flex-direction:column;
-  gap:12px;
+
+  align-items:center;
+
+  justify-content:center;
+
+  flex-wrap:wrap;
+
+  gap:6px;
+
+  font-size:
+    12px;
+
+  line-height:
+    1.4;
+
+  color:
+    var(--secondary-text);
+
 }
 
-.dark .settings-card,
-.dark .popup-card{
-  background:rgba(28,28,30,var(--card-opacity));
-  color:white;
+
+.credits a{
+
+  color:
+    inherit;
+
+  text-decoration:
+    none;
+
+  font-weight:
+    500;
+
+  transition:
+    opacity 120ms ease;
+
 }
 
-/* TOGGLE */
-.switch{
-  position:relative;
-  width:50px;
-  height:28px;
-}
-.switch input{display:none;}
 
-.slider{
-  position:absolute;
+.credits a:active{
+
+  opacity:
+    0.55;
+
+}
+
+
+.credit-divider{
+
+  opacity:
+    0.45;
+
+}
+
+
+/* ==========================================
+   OVERLAYS
+=========================================== */
+
+.overlay{
+
+  position:fixed;
+
   inset:0;
-  background:#ccc;
-  border-radius:30px;
-}
-.slider:before{
-  content:"";
-  position:absolute;
-  width:22px;
-  height:22px;
-  top:3px;
-  left:3px;
-  background:white;
-  border-radius:50%;
-  transition:0.2s;
-}
-input:checked + .slider{
-  background:var(--accent);
-}
-input:checked + .slider:before{
-  transform:translateX(22px);
+
+  display:none;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:
+    max(
+      22px,
+      env(safe-area-inset-top)
+    )
+    18px
+    max(
+      22px,
+      env(safe-area-inset-bottom)
+    );
+
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      0.35
+    );
+
+  z-index:
+    1000;
+
+  overflow-y:
+    auto;
+
+  -webkit-overflow-scrolling:
+    touch;
+
 }
 
-/* GRID */
-.theme-grid{
-  display:grid;
-  grid-template-columns:1fr 1fr;
-  gap:10px;
+
+/* ==========================================
+   SETTINGS CARD
+=========================================== */
+
+.settings-card{
+
+  width:
+    min(
+      100%,
+      380px
+    );
+
+  max-height:
+    calc(
+      100dvh - 44px
+    );
+
+  overflow-y:
+    auto;
+
+  -webkit-overflow-scrolling:
+    touch;
+
+  padding:
+    24px;
+
+  border-radius:
+    26px;
+
+  /*
+    JUST LIKE THE MAIN CARD:
+
+    Only this surface changes opacity.
+  */
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      var(--card-opacity)
+    );
+
+  -webkit-backdrop-filter:
+    blur(
+      var(--card-blur)
+    )
+    saturate(160%);
+
+  backdrop-filter:
+    blur(
+      var(--card-blur)
+    )
+    saturate(160%);
+
+  display:flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    18px;
+
+  color:
+    var(--text);
+
+  transition:
+    background-color 180ms ease,
+    backdrop-filter 180ms ease,
+    -webkit-backdrop-filter 180ms ease;
+
 }
 
-/* FILE */
-.file-btn{
-  background:var(--accent);
-  color:white;
-  padding:12px;
-  border-radius:12px;
+
+/* ==========================================
+   HEADERS
+=========================================== */
+
+.panel-header{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
   text-align:center;
-  position:relative;
-}
-.file-btn input{
-  position:absolute;
-  inset:0;
-  opacity:0;
+
 }
 
-/* SLIDER */
-input[type="range"]{
-  width:100%;
-  accent-color:var(--accent);
+
+.panel-header h2{
+
+  font-size:
+    25px;
+
+  line-height:
+    1.2;
+
+  letter-spacing:
+    -0.02em;
+
+  font-weight:
+    700;
+
 }
+
+
+/* ==========================================
+   SETTING ROW
+=========================================== */
+
+.setting-row{
+
+  min-height:
+    48px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    16px;
+
+}
+
+
+.setting-title{
+
+  font-size:
+    16px;
+
+  font-weight:
+    500;
+
+}
+
+
+/* ==========================================
+   iOS DARK MODE TOGGLE
+=========================================== */
+
+.ios-switch{
+
+  position:
+    relative;
+
+  display:
+    inline-block;
+
+  flex:
+    0 0 auto;
+
+  width:
+    51px;
+
+  height:
+    31px;
+
+  cursor:
+    pointer;
+
+  -webkit-tap-highlight-color:
+    transparent;
+
+}
+
+
+.ios-switch input{
+
+  position:
+    absolute;
+
+  opacity:
+    0;
+
+  width:
+    1px;
+
+  height:
+    1px;
+
+  pointer-events:
+    none;
+
+}
+
+
+.ios-switch-track{
+
+  position:
+    absolute;
+
+  inset:
+    0;
+
+  border-radius:
+    999px;
+
+  background:
+    rgba(
+      120,
+      120,
+      128,
+      0.32
+    );
+
+  transition:
+    background-color
+    180ms ease;
+
+}
+
+
+.ios-switch-track::after{
+
+  content:
+    "";
+
+  position:
+    absolute;
+
+  width:
+    27px;
+
+  height:
+    27px;
+
+  left:
+    2px;
+
+  top:
+    2px;
+
+  border-radius:
+    50%;
+
+  background:
+    #ffffff;
+
+  box-shadow:
+    0 2px 5px
+    rgba(
+      0,
+      0,
+      0,
+      0.20
+    );
+
+  transition:
+    transform
+    180ms
+    cubic-bezier(
+      .25,
+      .8,
+      .25,
+      1
+    );
+
+}
+
+
+.ios-switch
+input:checked
++
+.ios-switch-track{
+
+  background:
+    #34c759;
+
+}
+
+
+.ios-switch
+input:checked
++
+.ios-switch-track::after{
+
+  transform:
+    translateX(
+      20px
+    );
+
+}
+
+
+/* ==========================================
+   SETTINGS SECTIONS
+=========================================== */
+
+.settings-section{
+
+  display:flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    10px;
+
+}
+
+
+.settings-section h3{
+
+  color:
+    var(--secondary-text);
+
+  font-size:
+    14px;
+
+  font-weight:
+    600;
+
+  line-height:
+    1.2;
+
+  text-align:
+    left;
+
+}
+
+
+/* ==========================================
+   BACKGROUND THEME GRID
+=========================================== */
+
+.theme-grid{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap:
+    10px;
+
+}
+
+
+.theme-button{
+
+  appearance:none;
+
+  -webkit-appearance:none;
+
+  width:100%;
+
+  min-height:
+    48px;
+
+  border:
+    1px solid
+    var(--separator);
+
+  border-radius:
+    14px;
+
+  padding:
+    11px
+    10px;
+
+  background:
+    var(--control-bg);
+
+  color:
+    var(--text);
+
+  font-family:
+    inherit;
+
+  font-size:
+    15px;
+
+  font-weight:
+    600;
+
+  cursor:
+    pointer;
+
+  -webkit-tap-highlight-color:
+    transparent;
+
+  transition:
+    transform 100ms ease,
+    background-color 120ms ease,
+    border-color 120ms ease,
+    box-shadow 120ms ease;
+
+}
+
+
+.theme-button:active{
+
+  transform:
+    scale(0.97);
+
+}
+
+
+/* SELECTED THEME */
+
+.theme-button.selected{
+
+  color:
+    var(--accent);
+
+  border-color:
+    var(--accent);
+
+  box-shadow:
+    inset
+    0
+    0
+    0
+    1px
+    var(--accent);
+
+  background:
+    rgba(
+      0,
+      122,
+      255,
+      0.10
+    );
+
+}
+
+
+/* ==========================================
+   YOUR PHOTOS
+=========================================== */
+
+.file-button{
+
+  position:
+    relative;
+
+  width:
+    100%;
+
+  min-height:
+    48px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  overflow:
+    hidden;
+
+  padding:
+    12px
+    16px;
+
+  border-radius:
+    14px;
+
+  background:
+    var(--accent);
+
+  color:
+    #ffffff;
+
+  font-size:
+    16px;
+
+  font-weight:
+    600;
+
+  text-align:
+    center;
+
+  cursor:
+    pointer;
+
+  -webkit-tap-highlight-color:
+    transparent;
+
+}
+
+
+.file-button input{
+
+  position:
+    absolute;
+
+  inset:
+    0;
+
+  width:
+    100%;
+
+  height:
+    100%;
+
+  opacity:
+    0;
+
+  cursor:
+    pointer;
+
+}
+
+
+/* ==========================================
+   SETTINGS BUTTONS
+=========================================== */
+
+.settings-button,
+.close-button,
+.popup-primary,
+.popup-secondary,
+.paste-button{
+
+  appearance:
+    none;
+
+  -webkit-appearance:
+    none;
+
+  border:
+    none;
+
+  border-radius:
+    14px;
+
+  min-height:
+    48px;
+
+  padding:
+    12px
+    16px;
+
+  font-family:
+    inherit;
+
+  font-size:
+    16px;
+
+  font-weight:
+    600;
+
+  cursor:
+    pointer;
+
+  -webkit-tap-highlight-color:
+    transparent;
+
+  transition:
+    transform 100ms ease,
+    background-color 120ms ease,
+    opacity 120ms ease;
+
+}
+
+
+.settings-button{
+
+  width:
+    100%;
+
+  background:
+    var(--control-bg);
+
+  color:
+    var(--accent);
+
+}
+
+
+.settings-button:active:not(:disabled),
+.close-button:active,
+.popup-primary:active,
+.popup-secondary:active,
+.paste-button:active{
+
+  transform:
+    scale(0.98);
+
+}
+
+
+.settings-button:disabled{
+
+  opacity:
+    0.45;
+
+  color:
+    var(--secondary-text);
+
+  cursor:
+    not-allowed;
+
+}
+
+
+/* ==========================================
+   UI OPACITY HEADER
+=========================================== */
+
+.opacity-heading{
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:
+    space-between;
+
+  gap:
+    12px;
+
+}
+
+
+.opacity-heading label{
+
+  font-size:
+    15px;
+
+  font-weight:
+    500;
+
+}
+
+
+.opacity-heading strong{
+
+  color:
+    var(--secondary-text);
+
+  font-size:
+    14px;
+
+  font-weight:
+    600;
+
+  font-variant-numeric:
+    tabular-nums;
+
+}
+
+
+/* ==========================================
+   OPACITY SLIDER
+=========================================== */
+
+input[type="range"]{
+
+  appearance:
+    none;
+
+  -webkit-appearance:
+    none;
+
+  width:
+    100%;
+
+  height:
+    36px;
+
+  margin:
+    0;
+
+  background:
+    transparent;
+
+  cursor:
+    pointer;
+
+  /*
+    Allows vertical page scrolling while
+    still making horizontal dragging work.
+  */
+  touch-action:
+    pan-y;
+
+}
+
+
+/* WEBKIT TRACK */
+
+input[type="range"]
+::-webkit-slider-runnable-track{
+
+  width:
+    100%;
+
+  height:
+    6px;
+
+  border-radius:
+    999px;
+
+  background:
+    rgba(
+      118,
+      118,
+      128,
+      0.28
+    );
+
+}
+
+
+/* WEBKIT THUMB */
+
+input[type="range"]
+::-webkit-slider-thumb{
+
+  appearance:
+    none;
+
+  -webkit-appearance:
+    none;
+
+  width:
+    26px;
+
+  height:
+    26px;
+
+  margin-top:
+    -10px;
+
+  border:
+    2px solid
+    var(--accent);
+
+  border-radius:
+    50%;
+
+  background:
+    #ffffff;
+
+  box-shadow:
+    0
+    1px
+    5px
+    rgba(
+      0,
+      0,
+      0,
+      0.22
+    );
+
+}
+
+
+/* FIREFOX TRACK */
+
+input[type="range"]
+::-moz-range-track{
+
+  height:
+    6px;
+
+  border:
+    none;
+
+  border-radius:
+    999px;
+
+  background:
+    rgba(
+      118,
+      118,
+      128,
+      0.28
+    );
+
+}
+
+
+/* FIREFOX PROGRESS */
+
+input[type="range"]
+::-moz-range-progress{
+
+  height:
+    6px;
+
+  border-radius:
+    999px;
+
+  background:
+    var(--accent);
+
+}
+
+
+/* FIREFOX THUMB */
+
+input[type="range"]
+::-moz-range-thumb{
+
+  width:
+    24px;
+
+  height:
+    24px;
+
+  border:
+    2px solid
+    var(--accent);
+
+  border-radius:
+    50%;
+
+  background:
+    #ffffff;
+
+}
+
+
+/* ==========================================
+   OPACITY WARNING
+=========================================== */
 
 .warning{
-  font-size:12px;
-  opacity:0.6;
-  display:none;
+
+  color:
+    var(--secondary-text);
+
+  font-size:
+    12px;
+
+  line-height:
+    1.4;
+
+  text-align:
+    left;
+
+}
+
+
+.warning[hidden]{
+
+  display:
+    none;
+
+}
+
+
+/* ==========================================
+   CLOSE BUTTON
+=========================================== */
+
+.close-button{
+
+  width:
+    100%;
+
+  background:
+    var(--control-bg);
+
+  color:
+    var(--accent);
+
+}
+
+
+/* ==========================================
+   POPUP CARD
+=========================================== */
+
+.popup-card{
+
+  width:
+    min(
+      100%,
+      350px
+    );
+
+  padding:
+    22px;
+
+  border-radius:
+    24px;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.94
+    );
+
+  -webkit-backdrop-filter:
+    blur(30px)
+    saturate(160%);
+
+  backdrop-filter:
+    blur(30px)
+    saturate(160%);
+
+  display:flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    14px;
+
+  color:
+    var(--text);
+
+}
+
+
+.popup-description{
+
+  color:
+    var(--secondary-text);
+
+  font-size:
+    13px;
+
+  line-height:
+    1.4;
+
+  text-align:
+    center;
+
+}
+
+
+/* ==========================================
+   URL INPUT ROW
+=========================================== */
+
+.url-input-row{
+
+  display:flex;
+
+  align-items:
+    stretch;
+
+  gap:
+    8px;
+
+}
+
+
+#urlInput{
+
+  flex:
+    1;
+
+  min-width:
+    0;
+
+  height:
+    46px;
+
+  border:
+    1px solid
+    var(--separator);
+
+  border-radius:
+    12px;
+
+  padding:
+    0
+    13px;
+
+  outline:
+    none;
+
+  background:
+    var(--control-bg);
+
+  color:
+    var(--text);
+
+  font-family:
+    inherit;
+
+  font-size:
+    16px;
+
+}
+
+
+#urlInput:focus{
+
+  border-color:
+    var(--accent);
+
+  box-shadow:
+    0
+    0
+    0
+    1px
+    var(--accent);
+
+}
+
+
+#urlInput::placeholder{
+
+  color:
+    var(--secondary-text);
+
+}
+
+
+.paste-button{
+
+  min-height:
+    46px;
+
+  padding:
+    0
+    14px;
+
+  background:
+    var(--control-bg);
+
+  color:
+    var(--accent);
+
+}
+
+
+/* ==========================================
+   URL ERROR
+=========================================== */
+
+.url-error{
+
+  color:
+    var(--danger);
+
+  font-size:
+    12px;
+
+  line-height:
+    1.4;
+
+}
+
+
+.url-error[hidden]{
+
+  display:
+    none;
+
+}
+
+
+/* ==========================================
+   POPUP ACTIONS
+=========================================== */
+
+.popup-actions{
+
+  display:grid;
+
+  grid-template-columns:
+    repeat(
+      2,
+      minmax(
+        0,
+        1fr
+      )
+    );
+
+  gap:
+    8px;
+
+}
+
+
+.popup-secondary{
+
+  background:
+    var(--control-bg);
+
+  color:
+    var(--accent);
+
+}
+
+
+.popup-primary{
+
+  background:
+    var(--accent);
+
+  color:
+    #ffffff;
+
+}
+
+
+/* ==========================================
+   WHAT'S NEW
+=========================================== */
+
+.whats-new-content{
+
+  display:flex;
+
+  flex-direction:
+    column;
+
+  gap:
+    10px;
+
+  font-size:
+    14px;
+
+  line-height:
+    1.5;
+
+}
+
+
+.whats-new-content ul{
+
+  padding-left:
+    20px;
+
+}
+
+
+.whats-new-content li + li{
+
+  margin-top:
+    5px;
+
+}
+
+
+/* ==========================================
+   THEME INFO BUTTON
+=========================================== */
+
+.info-button{
+
+  appearance:
+    none;
+
+  -webkit-appearance:
+    none;
+
+  position:
+    fixed;
+
+  top:
+    max(
+      16px,
+      env(safe-area-inset-top)
+    );
+
+  right:
+    max(
+      16px,
+      env(safe-area-inset-right)
+    );
+
+  z-index:
+    500;
+
+  width:
+    34px;
+
+  height:
+    34px;
+
+  padding:
+    0;
+
+  border:
+    none;
+
+  border-radius:
+    50%;
+
+  display:flex;
+
+  align-items:
+    center;
+
+  justify-content:
+    center;
+
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      0.55
+    );
+
+  color:
+    #ffffff;
+
+  font-family:
+    Georgia,
+    serif;
+
+  font-size:
+    20px;
+
+  font-weight:
+    700;
+
+  line-height:
+    1;
+
+  cursor:
+    pointer;
+
+  box-shadow:
+    0
+    2px
+    8px
+    rgba(
+      0,
+      0,
+      0,
+      0.18
+    );
+
+  -webkit-tap-highlight-color:
+    transparent;
+
+}
+
+
+.info-button[hidden]{
+
+  display:
+    none;
+
+}
+
+
+/* ==========================================
+   TOAST
+=========================================== */
+
+.toast{
+
+  position:
+    fixed;
+
+  left:
+    50%;
+
+  bottom:
+    max(
+      28px,
+      calc(
+        env(safe-area-inset-bottom)
+        +
+        18px
+      )
+    );
+
+  z-index:
+    5000;
+
+  max-width:
+    calc(
+      100% - 40px
+    );
+
+  padding:
+    11px
+    16px;
+
+  border-radius:
+    14px;
+
+  background:
+    rgba(
+      0,
+      0,
+      0,
+      0.84
+    );
+
+  color:
+    #ffffff;
+
+  font-size:
+    13px;
+
+  font-weight:
+    500;
+
+  text-align:
+    center;
+
+  opacity:
+    0;
+
+  pointer-events:
+    none;
+
+  transform:
+    translate(
+      -50%,
+      10px
+    );
+
+  transition:
+    opacity 180ms ease,
+    transform 180ms ease;
+
+}
+
+
+.toast.show{
+
+  opacity:
+    1;
+
+  transform:
+    translate(
+      -50%,
+      0
+    );
+
+}
+
+
+/* ==========================================
+   DARK MODE
+=========================================== */
+
+.dark{
+
+  --text:
+    #f5f5f7;
+
+  --secondary-text:
+    #aeaeb2;
+
+  --control-bg:
+    rgba(
+      255,
+      255,
+      255,
+      0.12
+    );
+
+  --control-bg-pressed:
+    rgba(
+      255,
+      255,
+      255,
+      0.20
+    );
+
+  --separator:
+    rgba(
+      255,
+      255,
+      255,
+      0.18
+    );
+
+}
+
+
+/*
+  DARK MAIN CARD
+
+  Again, only the BACKGROUND changes opacity.
+*/
+
+.dark .card{
+
+  background:
+    rgba(
+      28,
+      28,
+      30,
+      var(--card-opacity)
+    );
+
+  color:
+    var(--text);
+
+}
+
+
+/*
+  DARK SETTINGS CARD
+
+  Again, only the BACKGROUND changes opacity.
+*/
+
+.dark .settings-card{
+
+  background:
+    rgba(
+      28,
+      28,
+      30,
+      var(--card-opacity)
+    );
+
+  color:
+    var(--text);
+
+}
+
+
+.dark .popup-card{
+
+  background:
+    rgba(
+      28,
+      28,
+      30,
+      0.94
+    );
+
+  color:
+    var(--text);
+
+}
+
+
+.dark #urlInput{
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      0.10
+    );
+
+  color:
+    var(--text);
+
+}
+
+
+/* ==========================================
+   SMALL iPHONES
+=========================================== */
+
+@media (
+  max-width:
+  360px
+){
+
+  .container{
+
+    padding-left:
+      14px;
+
+    padding-right:
+      14px;
+
+  }
+
+
+  .card{
+
+    padding:
+      26px
+      20px
+      22px;
+
+  }
+
+
+  .settings-card{
+
+    padding:
+      20px;
+
+  }
+
+
+  .theme-grid{
+
+    gap:
+      8px;
+
+  }
+
+
+  .theme-button{
+
+    font-size:
+      14px;
+
+  }
+
+
+  .credits{
+
+    font-size:
+      11px;
+
+  }
+
+}
+
+
+/* ==========================================
+   SHORT SCREENS
+=========================================== */
+
+@media (
+  max-height:
+  650px
+){
+
+  .overlay{
+
+    align-items:
+      flex-start;
+
+  }
+
+
+  .settings-card,
+  .popup-card{
+
+    margin:
+      auto 0;
+
+  }
+
+}
+
+
+/* ==========================================
+   REDUCED MOTION
+=========================================== */
+
+@media (
+  prefers-reduced-motion:
+  reduce
+){
+
+  *,
+  *::before,
+  *::after{
+
+    transition-duration:
+      0.01ms !important;
+
+    animation-duration:
+      0.01ms !important;
+
+    animation-iteration-count:
+      1 !important;
+
+  }
+
 }
