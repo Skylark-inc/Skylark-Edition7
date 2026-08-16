@@ -2,245 +2,1945 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
 
-<title>Skylark</title>
+<meta
+  name="viewport"
+  content="width=device-width, initial-scale=1.0, viewport-fit=cover"
+>
+
+<title>Skylark (Edition 27)</title>
 
 <link rel="stylesheet" href="style.css">
 </head>
 
 <body>
 
-<div class="container">
-  <div class="card">
+<!-- ==========================================
+     MAIN UI
+=========================================== -->
+
+<main class="container">
+
+  <section class="card">
 
     <h1>Skylark (Edition 27)</h1>
-    <p class="sub-version">v1.0 Beta 1</p>
 
-    <button class="main-btn" id="mainBtn">Get Skylark</button>
+    <button
+      type="button"
+      class="main-btn"
+      id="mainBtn"
+    >
+      Get Skylark
+    </button>
 
-    <div class="sub-buttons">
-      <button onclick="openSettings()">Settings</button>
-      <button onclick="openWhatsNew()">What’s New</button>
-    </div>
-
-    <p class="version">
-      v1.0 Beta 10<br>
-      © <a href="https://x.com/UseSkylark" target="_blank">Skylark Inc</a> |
-      © <a href="https://x.com/terralinkslabs" target="_blank">Terralinkslabs</a> |
-      © <a href="https://x.com/endlesspeteinc" target="_blank">Endlesspete</a>
+    <p
+      id="unsupportedMessage"
+      class="unsupported-message"
+      hidden
+    >
+      Skylark is not supported on this device.
+      You can still use this website and its customization features.
     </p>
 
-  </div>
-</div>
+    <div class="sub-buttons">
 
-<!-- SETTINGS -->
-<div id="settingsPanel">
-  <div class="settings-card">
+      <button
+        type="button"
+        class="secondary-btn"
+        onclick="openSettings()"
+      >
+        Settings
+      </button>
 
-    <h2>Settings</h2>
+      <button
+        type="button"
+        class="secondary-btn"
+        onclick="openWhatsNew()"
+      >
+        What’s New
+      </button>
 
-    <div class="toggle-row">
-      <span>Dark Mode</span>
-      <label class="switch">
-        <input type="checkbox" id="darkToggle">
-        <span class="slider"></span>
+    </div>
+
+    <footer class="credits">
+
+      <a
+        href="https://x.com/UseSkylark"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        © Skylark Inc
+      </a>
+
+      <span class="credit-divider">•</span>
+
+      <a
+        href="https://x.com/terralinkslabs"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        © Terralinkslabs
+      </a>
+
+    </footer>
+
+  </section>
+
+</main>
+
+
+<!-- ==========================================
+     THEME INFO BUTTON
+=========================================== -->
+
+<button
+  type="button"
+  id="infoButton"
+  class="info-button"
+  aria-label="Theme information"
+  onclick="openInfo()"
+  hidden
+>
+  i
+</button>
+
+
+<!-- ==========================================
+     SETTINGS
+=========================================== -->
+
+<div
+  id="settingsPanel"
+  class="overlay"
+  aria-hidden="true"
+>
+
+  <section class="settings-card">
+
+    <div class="panel-header">
+      <h2>Settings</h2>
+    </div>
+
+
+    <!-- DARK MODE -->
+
+    <div class="setting-row">
+
+      <span class="setting-title">
+        Dark Mode
+      </span>
+
+      <label class="ios-switch">
+
+        <input
+          type="checkbox"
+          id="darkToggle"
+          aria-label="Dark Mode"
+        >
+
+        <span class="ios-switch-track"></span>
+
       </label>
+
     </div>
 
-    <h3>Background</h3>
 
-    <div class="theme-grid">
-      <button onclick="applyBackground('default')">Default</button>
-      <button onclick="applyBackground('Ella')">Ella</button>
-      <button onclick="applyBackground('Glitter')">Glitter</button>
-      <button onclick="applyBackground('Car Wash')">Car Wash</button>
+    <!-- BACKGROUND -->
+
+    <div class="settings-section">
+
+      <h3>Background</h3>
+
+      <div class="theme-grid">
+
+        <button
+          type="button"
+          class="theme-button"
+          data-theme="default"
+          onclick="selectBackground('default')"
+        >
+          Default
+        </button>
+
+        <button
+          type="button"
+          class="theme-button"
+          data-theme="Ella"
+          onclick="selectBackground('Ella')"
+        >
+          Ella
+        </button>
+
+        <button
+          type="button"
+          class="theme-button"
+          data-theme="Glitter"
+          onclick="selectBackground('Glitter')"
+        >
+          Glitter
+        </button>
+
+        <button
+          type="button"
+          class="theme-button"
+          data-theme="Car Wash"
+          onclick="selectBackground('Car Wash')"
+        >
+          Car Wash
+        </button>
+
+      </div>
+
     </div>
 
-    <label class="file-btn">
-      Your Photos
-      <input type="file" id="fileInput" accept="image/*">
-    </label>
 
-    <button onclick="openURL()">Image URL</button>
+    <!-- CUSTOM BACKGROUND -->
 
-    <label>UI Opacity: <b id="opacityValue">65%</b></label>
-    <input type="range" id="opacitySlider" min="0" max="100">
+    <div class="settings-section">
 
-    <p id="opacityWarning" class="warning">Lower values may reduce readability</p>
+      <h3>Custom Background</h3>
 
-    <button onclick="closeSettings()">Close</button>
+      <label class="file-button">
 
-  </div>
+        Your Photos
+
+        <input
+          type="file"
+          id="fileInput"
+          accept="image/*"
+        >
+
+      </label>
+
+      <button
+        type="button"
+        id="savedImageButton"
+        class="settings-button"
+        onclick="useSavedImage()"
+        disabled
+      >
+        Image
+      </button>
+
+      <button
+        type="button"
+        class="settings-button"
+        onclick="openURL()"
+      >
+        Image URL
+      </button>
+
+    </div>
+
+
+    <!-- UI OPACITY -->
+
+    <div class="settings-section opacity-section">
+
+      <div class="opacity-heading">
+
+        <label for="opacitySlider">
+          UI Opacity
+        </label>
+
+        <strong id="opacityValue">
+          65%
+        </strong>
+
+      </div>
+
+      <input
+        type="range"
+        id="opacitySlider"
+        min="0"
+        max="100"
+        step="1"
+        value="65"
+      >
+
+      <p
+        id="opacityWarning"
+        class="warning"
+        hidden
+      >
+        Lower opacity may make some text harder to read.
+      </p>
+
+    </div>
+
+
+    <button
+      type="button"
+      class="close-button"
+      onclick="closeSettings()"
+    >
+      Close
+    </button>
+
+  </section>
+
 </div>
 
-<!-- WHAT’S NEW -->
-<div id="whatsNewPanel">
-  <div class="settings-card">
-    <h2>What’s New</h2>
-    <p>• Stable system restored</p>
-    <p>• Theme fixes</p>
-    <button onclick="closeWhatsNew()">Back</button>
-  </div>
+
+<!-- ==========================================
+     WHAT'S NEW
+=========================================== -->
+
+<div
+  id="whatsNewPanel"
+  class="overlay"
+  aria-hidden="true"
+>
+
+  <section class="settings-card">
+
+    <div class="panel-header">
+      <h2>What’s New</h2>
+    </div>
+
+    <div class="whats-new-content">
+
+      <p>
+        Skylark (Edition 27)
+      </p>
+
+      <ul>
+        <li>Updated release page.</li>
+        <li>Improved theme controls.</li>
+        <li>Improved UI opacity behavior.</li>
+        <li>Interface fixes and refinements.</li>
+      </ul>
+
+    </div>
+
+    <button
+      type="button"
+      class="close-button"
+      onclick="closeWhatsNew()"
+    >
+      Back
+    </button>
+
+  </section>
+
 </div>
 
-<!-- URL POPUP -->
-<div id="urlPopup">
-  <div class="popup-card">
-    <h3>Enter Image URL</h3>
-    <input type="text" id="urlInput">
-    <button onclick="applyURL()">Apply</button>
-    <button onclick="closeURL()">Cancel</button>
-  </div>
+
+<!-- ==========================================
+     IMAGE URL POPUP
+=========================================== -->
+
+<div
+  id="urlPopup"
+  class="overlay"
+  aria-hidden="true"
+>
+
+  <section class="popup-card">
+
+    <div class="panel-header">
+      <h2>Image URL</h2>
+    </div>
+
+    <p class="popup-description">
+      Enter a direct image URL.
+    </p>
+
+    <div class="url-input-row">
+
+      <input
+        type="url"
+        id="urlInput"
+        placeholder="Paste image URL"
+        autocomplete="off"
+        autocapitalize="off"
+        spellcheck="false"
+      >
+
+      <button
+        type="button"
+        class="paste-button"
+        onclick="pasteURL()"
+      >
+        Paste
+      </button>
+
+    </div>
+
+    <p
+      id="urlError"
+      class="url-error"
+      hidden
+    ></p>
+
+    <div class="popup-actions">
+
+      <button
+        type="button"
+        class="popup-secondary"
+        onclick="closeURL()"
+      >
+        Cancel
+      </button>
+
+      <button
+        type="button"
+        class="popup-primary"
+        onclick="applyURL()"
+      >
+        Apply
+      </button>
+
+    </div>
+
+  </section>
+
 </div>
+
+
+<!-- ==========================================
+     THEME INFO POPUP
+=========================================== -->
+
+<div
+  id="infoPopup"
+  class="overlay"
+  aria-hidden="true"
+>
+
+  <section class="popup-card">
+
+    <div class="panel-header">
+      <h2>Image Credit</h2>
+    </div>
+
+    <p id="infoText">
+      Theme credit information.
+    </p>
+
+    <button
+      type="button"
+      class="close-button"
+      onclick="closeInfo()"
+    >
+      Close
+    </button>
+
+  </section>
+
+</div>
+
+
+<!-- ==========================================
+     TOAST
+=========================================== -->
+
+<div
+  id="toast"
+  class="toast"
+  role="status"
+  aria-live="polite"
+></div>
+
 
 <script>
 
-/* ==========================
-   DEVICE CHECK
-========================== */
-const supported = /iPhone|iPad|Macintosh/.test(navigator.userAgent);
+/* ==========================================
+   CONFIGURATION
+=========================================== */
 
-/* ==========================
-   DEFAULT
-========================== */
-const defaultBG = "https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
+const DEFAULT_BACKGROUND =
+  "https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
 
-/* ==========================
+const EDITIONS_JSON =
+  "https://skylark-inc.github.io/editions.json";
+
+
+/* ==========================================
    THEMES
-========================== */
-const themes = {
-  "Ella": "https://skylark-inc.github.io/Skylark-Edition7/Themes/Ella_202605_13.jpeg",
-  "Car Wash": "https://skylark-inc.github.io/Skylark-Edition7/Themes/IMG_0065.jpeg",
-  "Glitter": "https://skylark-inc.github.io/Skylark-Edition7/Themes/IMG_0144 2.JPG"
-};
+=========================================== */
 
-/* APPLY BG */
-function applyBackground(name){
-  let url = defaultBG;
+const THEMES = {
 
-  if(name === "default"){
-    localStorage.removeItem("bgTheme");
-    localStorage.removeItem("bgCustom");
-  } else if(themes[name]){
-    url = themes[name];
-    localStorage.setItem("bgTheme", name);
-    localStorage.removeItem("bgCustom");
+  "Ella": {
+    url:
+      "https://skylark-inc.github.io/Skylark-Edition7/Themes/Ella_202605_13.jpeg",
+
+    credit:
+      "Ella theme image credit."
+  },
+
+  "Glitter": {
+    url:
+      "https://skylark-inc.github.io/Skylark-Edition7/Themes/IMG_0065.jpeg",
+
+    credit:
+      "Glitter theme image credit."
+  },
+
+  "Car Wash": {
+    url:
+      "https://skylark-inc.github.io/Skylark-Edition7/Themes/IMG_0144%202.JPG",
+
+    credit:
+      "Car Wash theme image credit."
   }
 
-  document.body.style.backgroundImage = `url('${url}')`;
-}
-
-/* RESTORE */
-const savedTheme = localStorage.getItem("bgTheme");
-const savedCustom = localStorage.getItem("bgCustom");
-
-if(savedCustom){
-  document.body.style.backgroundImage = `url('${savedCustom}')`;
-} else if(savedTheme){
-  applyBackground(savedTheme);
-} else {
-  applyBackground("default");
-}
-
-/* FILE */
-fileInput.onchange = e=>{
-  const file = e.target.files[0];
-  const reader = new FileReader();
-
-  reader.onload = ()=>{
-    document.body.style.backgroundImage = `url('${reader.result}')`;
-    localStorage.setItem("bgCustom", reader.result);
-    localStorage.removeItem("bgTheme");
-  };
-
-  reader.readAsDataURL(file);
 };
 
-/* URL */
-function openURL(){ urlPopup.style.display="flex"; }
-function closeURL(){ urlPopup.style.display="none"; }
 
-function applyURL(){
-  const url = document.getElementById("urlInput").value.trim();
-  if(!url) return;
+/* ==========================================
+   ELEMENT REFERENCES
+=========================================== */
 
-  document.body.style.backgroundImage = `url('${url}')`;
-  localStorage.setItem("bgCustom", url);
-  localStorage.removeItem("bgTheme");
+const mainButton =
+  document.getElementById("mainBtn");
 
-  closeURL();
+const unsupportedMessage =
+  document.getElementById("unsupportedMessage");
+
+const settingsPanel =
+  document.getElementById("settingsPanel");
+
+const whatsNewPanel =
+  document.getElementById("whatsNewPanel");
+
+const urlPopup =
+  document.getElementById("urlPopup");
+
+const infoPopup =
+  document.getElementById("infoPopup");
+
+const infoButton =
+  document.getElementById("infoButton");
+
+const infoText =
+  document.getElementById("infoText");
+
+const darkToggle =
+  document.getElementById("darkToggle");
+
+const fileInput =
+  document.getElementById("fileInput");
+
+const savedImageButton =
+  document.getElementById("savedImageButton");
+
+const opacitySlider =
+  document.getElementById("opacitySlider");
+
+const opacityValue =
+  document.getElementById("opacityValue");
+
+const opacityWarning =
+  document.getElementById("opacityWarning");
+
+const urlInput =
+  document.getElementById("urlInput");
+
+const urlError =
+  document.getElementById("urlError");
+
+const toast =
+  document.getElementById("toast");
+
+
+/* ==========================================
+   DEVICE SUPPORT
+=========================================== */
+
+function isSupportedDevice() {
+
+  const userAgent =
+    navigator.userAgent || "";
+
+  const platform =
+    navigator.platform || "";
+
+  const touchPoints =
+    navigator.maxTouchPoints || 0;
+
+
+  const iPhoneOrIPad =
+    /iPhone|iPad|iPod/i.test(userAgent);
+
+
+  /*
+    Modern iPads can identify themselves
+    as MacIntel.
+  */
+
+  const modernIPad =
+    platform === "MacIntel" &&
+    touchPoints > 1;
+
+
+  const mac =
+    /Macintosh|Mac OS X/i.test(userAgent) ||
+    (
+      platform === "MacIntel" &&
+      touchPoints <= 1
+    );
+
+
+  return (
+    iPhoneOrIPad ||
+    modernIPad ||
+    mac
+  );
+
 }
 
-/* SETTINGS */
-function openSettings(){ settingsPanel.style.display="flex"; }
-function closeSettings(){ settingsPanel.style.display="none"; }
 
-/* WHAT’S NEW */
-function openWhatsNew(){ whatsNewPanel.style.display="flex"; }
-function closeWhatsNew(){ whatsNewPanel.style.display="none"; }
+const supportedDevice =
+  isSupportedDevice();
 
-/* DARK MODE */
-const darkToggle = document.getElementById("darkToggle");
-const savedDark = localStorage.getItem("dark") === "true";
 
-darkToggle.checked = savedDark;
-document.body.classList.toggle("dark", savedDark);
+function updateDeviceSupport() {
 
-darkToggle.onchange = ()=>{
-  document.body.classList.toggle("dark");
-  localStorage.setItem("dark", darkToggle.checked);
-};
+  if (supportedDevice) {
 
-/* OPACITY */
-const slider = document.getElementById("opacitySlider");
-const value = document.getElementById("opacityValue");
-const warning = document.getElementById("opacityWarning");
+    mainButton.disabled = false;
 
-let savedOpacity = localStorage.getItem("opacity") || 65;
+    mainButton.classList.remove(
+      "disabled"
+    );
 
-slider.value = savedOpacity;
-value.innerText = savedOpacity + "%";
+    unsupportedMessage.hidden = true;
 
-function setOpacity(v){
-  document.documentElement.style.setProperty("--card-opacity", v/100);
+  } else {
+
+    mainButton.disabled = true;
+
+    mainButton.classList.add(
+      "disabled"
+    );
+
+    unsupportedMessage.hidden = false;
+
+  }
+
 }
 
-setOpacity(savedOpacity);
 
-slider.oninput = ()=>{
-  value.innerText = slider.value + "%";
-  setOpacity(slider.value);
-  localStorage.setItem("opacity", slider.value);
+/* ==========================================
+   TOAST
+=========================================== */
 
-  warning.style.display = slider.value < 50 ? "block" : "none";
-};
+let toastTimer;
 
-/* 🔥 GET SKYLARK (Edition 7 ONLY) */
-document.getElementById("mainBtn").onclick = async () => {
 
-  if(!supported){
-    alert("Skylark is not supported on this device");
+function showToast(message) {
+
+  clearTimeout(toastTimer);
+
+  toast.textContent =
+    message;
+
+  toast.classList.add(
+    "show"
+  );
+
+
+  toastTimer =
+    setTimeout(() => {
+
+      toast.classList.remove(
+        "show"
+      );
+
+    }, 2200);
+
+}
+
+
+/* ==========================================
+   SET BODY BACKGROUND
+=========================================== */
+
+function setBodyBackground(url) {
+
+  document.body.style.backgroundImage =
+    `url("${url}")`;
+
+}
+
+
+/* ==========================================
+   THEME BUTTON SELECTION
+=========================================== */
+
+function updateThemeSelection(name) {
+
+  const buttons =
+    document.querySelectorAll(
+      ".theme-button"
+    );
+
+
+  buttons.forEach(button => {
+
+    button.classList.toggle(
+      "selected",
+      button.dataset.theme === name
+    );
+
+  });
+
+}
+
+
+/* ==========================================
+   THEME INFO
+=========================================== */
+
+function updateThemeInfo(name) {
+
+  if (
+    name &&
+    THEMES[name]
+  ) {
+
+    infoText.textContent =
+      THEMES[name].credit;
+
+    infoButton.hidden = false;
+
+  } else {
+
+    infoButton.hidden = true;
+
+  }
+
+}
+
+
+function openInfo() {
+
+  if (infoButton.hidden) {
     return;
   }
 
-  try{
-    const res = await fetch("https://skylark-inc.github.io/editions.json");
-    const data = await res.json();
+  infoPopup.style.display =
+    "flex";
 
-    const edition = data["Edition 7"];
+  infoPopup.setAttribute(
+    "aria-hidden",
+    "false"
+  );
 
-    if(edition && edition.url){
-      window.location.href = edition.url;
-    } else {
-      alert("Edition 7 not found");
-    }
+}
 
-  } catch {
-    alert("Failed to load Skylark");
+
+function closeInfo() {
+
+  infoPopup.style.display =
+    "none";
+
+  infoPopup.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+}
+
+
+/* ==========================================
+   SELECT BACKGROUND
+=========================================== */
+
+function selectBackground(name) {
+
+  if (name === "default") {
+
+    setBodyBackground(
+      DEFAULT_BACKGROUND
+    );
+
+    localStorage.setItem(
+      "selectedBackground",
+      "default"
+    );
+
+    updateThemeSelection(
+      "default"
+    );
+
+    updateThemeInfo(null);
+
+    return;
+
   }
 
-};
+
+  const theme =
+    THEMES[name];
+
+
+  if (!theme) {
+    return;
+  }
+
+
+  setBodyBackground(
+    theme.url
+  );
+
+  localStorage.setItem(
+    "selectedBackground",
+    name
+  );
+
+  updateThemeSelection(
+    name
+  );
+
+  updateThemeInfo(
+    name
+  );
+
+}
+
+
+/* ==========================================
+   CUSTOM IMAGE MEMORY
+=========================================== */
+
+function updateSavedImageButton() {
+
+  const savedImage =
+    localStorage.getItem(
+      "customBackground"
+    );
+
+
+  savedImageButton.disabled =
+    !savedImage;
+
+}
+
+
+function useSavedImage() {
+
+  const savedImage =
+    localStorage.getItem(
+      "customBackground"
+    );
+
+
+  if (!savedImage) {
+
+    showToast(
+      "No saved image is available."
+    );
+
+    return;
+
+  }
+
+
+  setBodyBackground(
+    savedImage
+  );
+
+
+  localStorage.setItem(
+    "selectedBackground",
+    "custom"
+  );
+
+
+  updateThemeSelection(null);
+
+  updateThemeInfo(null);
+
+}
+
+
+/* ==========================================
+   YOUR PHOTOS
+=========================================== */
+
+fileInput.addEventListener(
+  "change",
+  event => {
+
+    const file =
+      event.target.files[0];
+
+
+    if (!file) {
+      return;
+    }
+
+
+    if (
+      !file.type.startsWith("image/")
+    ) {
+
+      showToast(
+        "Please choose an image."
+      );
+
+      return;
+
+    }
+
+
+    const reader =
+      new FileReader();
+
+
+    reader.onload =
+      event => {
+
+        const image =
+          event.target.result;
+
+
+        /*
+          Apply immediately.
+        */
+
+        setBodyBackground(
+          image
+        );
+
+
+        /*
+          Save separately so the Image button
+          can restore it after choosing a theme.
+        */
+
+        try {
+
+          localStorage.setItem(
+            "customBackground",
+            image
+          );
+
+        } catch (error) {
+
+          console.warn(
+            "Custom image could not be saved:",
+            error
+          );
+
+
+          showToast(
+            "Image applied, but it may be too large to save."
+          );
+
+        }
+
+
+        localStorage.setItem(
+          "selectedBackground",
+          "custom"
+        );
+
+
+        updateThemeSelection(null);
+
+        updateThemeInfo(null);
+
+        updateSavedImageButton();
+
+    };
+
+
+    reader.readAsDataURL(
+      file
+    );
+
+  }
+);
+
+
+/* ==========================================
+   IMAGE URL
+=========================================== */
+
+function openURL() {
+
+  urlError.hidden = true;
+
+  urlError.textContent = "";
+
+
+  urlPopup.style.display =
+    "flex";
+
+
+  urlPopup.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+
+  setTimeout(() => {
+
+    urlInput.focus();
+
+  }, 100);
+
+}
+
+
+function closeURL() {
+
+  urlPopup.style.display =
+    "none";
+
+
+  urlPopup.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+}
+
+
+/* ==========================================
+   PASTE IMAGE URL
+=========================================== */
+
+async function pasteURL() {
+
+  try {
+
+    const text =
+      await navigator.clipboard.readText();
+
+
+    if (text) {
+
+      urlInput.value =
+        text.trim();
+
+      urlError.hidden =
+        true;
+
+    }
+
+  } catch (error) {
+
+    showURLError(
+      "Paste permission is unavailable. Paste the URL manually."
+    );
+
+  }
+
+}
+
+
+/* ==========================================
+   URL ERROR
+=========================================== */
+
+function showURLError(message) {
+
+  urlError.textContent =
+    message;
+
+  urlError.hidden =
+    false;
+
+}
+
+
+urlInput.addEventListener(
+  "input",
+  () => {
+
+    urlError.hidden =
+      true;
+
+  }
+);
+
+
+/* ==========================================
+   IMAGE URL VALIDATION
+=========================================== */
+
+function validateImageURL(url) {
+
+  return new Promise(
+    (resolve, reject) => {
+
+      const image =
+        new Image();
+
+
+      const timeout =
+        setTimeout(() => {
+
+          image.src = "";
+
+          reject(
+            new Error(
+              "Image timed out"
+            )
+          );
+
+        }, 12000);
+
+
+      image.onload =
+        () => {
+
+          clearTimeout(
+            timeout
+          );
+
+          resolve();
+
+        };
+
+
+      image.onerror =
+        () => {
+
+          clearTimeout(
+            timeout
+          );
+
+          reject(
+            new Error(
+              "Invalid image"
+            )
+          );
+
+        };
+
+
+      image.src =
+        url;
+
+    }
+  );
+
+}
+
+
+/* ==========================================
+   APPLY IMAGE URL
+=========================================== */
+
+async function applyURL() {
+
+  const url =
+    urlInput.value.trim();
+
+
+  if (!url) {
+
+    showURLError(
+      "Enter an image URL."
+    );
+
+    return;
+
+  }
+
+
+  let parsed;
+
+
+  try {
+
+    parsed =
+      new URL(url);
+
+  } catch {
+
+    showURLError(
+      "Enter a valid URL."
+    );
+
+    return;
+
+  }
+
+
+  if (
+    parsed.protocol !== "https:" &&
+    parsed.protocol !== "http:"
+  ) {
+
+    showURLError(
+      "The URL must use HTTP or HTTPS."
+    );
+
+    return;
+
+  }
+
+
+  showURLError(
+    "Checking image…"
+  );
+
+
+  try {
+
+    await validateImageURL(
+      url
+    );
+
+
+    localStorage.setItem(
+      "customBackground",
+      url
+    );
+
+
+    localStorage.setItem(
+      "selectedBackground",
+      "custom"
+    );
+
+
+    setBodyBackground(
+      url
+    );
+
+
+    updateThemeSelection(null);
+
+    updateThemeInfo(null);
+
+    updateSavedImageButton();
+
+
+    urlError.hidden =
+      true;
+
+
+    closeURL();
+
+
+  } catch {
+
+    showURLError(
+      "That URL could not be loaded as an image."
+    );
+
+  }
+
+}
+
+
+/* ==========================================
+   RESTORE BACKGROUND
+=========================================== */
+
+function restoreBackground() {
+
+  const selected =
+    localStorage.getItem(
+      "selectedBackground"
+    );
+
+
+  /*
+    CUSTOM
+  */
+
+  if (selected === "custom") {
+
+    const custom =
+      localStorage.getItem(
+        "customBackground"
+      );
+
+
+    if (custom) {
+
+      setBodyBackground(
+        custom
+      );
+
+      updateThemeSelection(
+        null
+      );
+
+      updateThemeInfo(
+        null
+      );
+
+      return;
+
+    }
+
+  }
+
+
+  /*
+    OFFICIAL THEME
+  */
+
+  if (
+    selected &&
+    THEMES[selected]
+  ) {
+
+    setBodyBackground(
+      THEMES[selected].url
+    );
+
+
+    updateThemeSelection(
+      selected
+    );
+
+
+    updateThemeInfo(
+      selected
+    );
+
+
+    return;
+
+  }
+
+
+  /*
+    DEFAULT
+  */
+
+  setBodyBackground(
+    DEFAULT_BACKGROUND
+  );
+
+
+  localStorage.setItem(
+    "selectedBackground",
+    "default"
+  );
+
+
+  updateThemeSelection(
+    "default"
+  );
+
+
+  updateThemeInfo(
+    null
+  );
+
+}
+
+
+/* ==========================================
+   SETTINGS
+=========================================== */
+
+function openSettings() {
+
+  settingsPanel.style.display =
+    "flex";
+
+
+  settingsPanel.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+}
+
+
+function closeSettings() {
+
+  settingsPanel.style.display =
+    "none";
+
+
+  settingsPanel.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+}
+
+
+/* ==========================================
+   WHAT'S NEW
+=========================================== */
+
+function openWhatsNew() {
+
+  whatsNewPanel.style.display =
+    "flex";
+
+
+  whatsNewPanel.setAttribute(
+    "aria-hidden",
+    "false"
+  );
+
+}
+
+
+function closeWhatsNew() {
+
+  whatsNewPanel.style.display =
+    "none";
+
+
+  whatsNewPanel.setAttribute(
+    "aria-hidden",
+    "true"
+  );
+
+}
+
+
+/* ==========================================
+   DARK MODE
+=========================================== */
+
+function applyDarkMode(enabled) {
+
+  document.body.classList.toggle(
+    "dark",
+    enabled
+  );
+
+
+  darkToggle.checked =
+    enabled;
+
+
+  localStorage.setItem(
+    "darkMode",
+    enabled
+      ? "true"
+      : "false"
+  );
+
+}
+
+
+const savedDarkMode =
+  localStorage.getItem(
+    "darkMode"
+  ) === "true";
+
+
+applyDarkMode(
+  savedDarkMode
+);
+
+
+darkToggle.addEventListener(
+  "change",
+  () => {
+
+    applyDarkMode(
+      darkToggle.checked
+    );
+
+  }
+);
+
+
+/* ==========================================
+   UI OPACITY
+=========================================== */
+
+/*
+  VERY IMPORTANT:
+
+  This does NOT apply CSS opacity to the card.
+
+  CSS opacity would also fade:
+  - titles
+  - text
+  - buttons
+  - slider
+  - toggle
+  - links
+
+  Instead, only the RGBA background of the
+  card and settings card is changed.
+*/
+
+function applyCardOpacity(value) {
+
+  let percentage =
+    Number(value);
+
+
+  if (
+    Number.isNaN(
+      percentage
+    )
+  ) {
+
+    percentage = 65;
+
+  }
+
+
+  percentage =
+    Math.max(
+      0,
+      Math.min(
+        100,
+        percentage
+      )
+    );
+
+
+  const decimal =
+    percentage / 100;
+
+
+  document.documentElement
+    .style
+    .setProperty(
+      "--card-opacity",
+      decimal
+    );
+
+
+  /*
+    At 0%, remove backdrop blur as well.
+
+    Otherwise Safari can still show a
+    frosted rectangle even with alpha 0.
+  */
+
+  document.documentElement
+    .style
+    .setProperty(
+      "--card-blur",
+      percentage === 0
+        ? "0px"
+        : "30px"
+    );
+
+
+  opacitySlider.value =
+    percentage;
+
+
+  opacityValue.textContent =
+    percentage + "%";
+
+
+  /*
+    Warning appears ONLY at lower values.
+  */
+
+  opacityWarning.hidden =
+    percentage >= 50;
+
+
+  localStorage.setItem(
+    "cardOpacity",
+    String(percentage)
+  );
+
+}
+
+
+const storedOpacity =
+  localStorage.getItem(
+    "cardOpacity"
+  );
+
+
+const startingOpacity =
+  storedOpacity === null
+    ? 65
+    : Number(storedOpacity);
+
+
+applyCardOpacity(
+  startingOpacity
+);
+
+
+opacitySlider.addEventListener(
+  "input",
+  () => {
+
+    applyCardOpacity(
+      opacitySlider.value
+    );
+
+  }
+);
+
+
+/* ==========================================
+   EDITION 7 LOOKUP
+=========================================== */
+
+function findEdition7(data) {
+
+  /*
+    POSSIBLE FORMAT:
+
+    {
+      "Edition 7": {
+        "url": "..."
+      }
+    }
+  */
+
+  if (
+    data &&
+    data["Edition 7"]
+  ) {
+
+    return data[
+      "Edition 7"
+    ];
+
+  }
+
+
+  /*
+    POSSIBLE FORMAT:
+
+    {
+      "editions": {
+        "Edition 7": {
+          "url": "..."
+        }
+      }
+    }
+  */
+
+  if (
+    data &&
+    data.editions &&
+    !Array.isArray(
+      data.editions
+    ) &&
+    data.editions[
+      "Edition 7"
+    ]
+  ) {
+
+    return data.editions[
+      "Edition 7"
+    ];
+
+  }
+
+
+  /*
+    POSSIBLE ARRAY FORMAT
+  */
+
+  const list =
+    Array.isArray(data)
+      ? data
+      : (
+          Array.isArray(
+            data?.editions
+          )
+            ? data.editions
+            : null
+        );
+
+
+  if (list) {
+
+    return (
+      list.find(
+        item => {
+
+          const identity =
+            String(
+              item?.name ??
+              item?.edition ??
+              item?.title ??
+              item?.id ??
+              ""
+            )
+            .trim()
+            .toLowerCase();
+
+
+          return (
+            identity ===
+            "edition 7"
+          );
+
+        }
+      ) || null
+    );
+
+  }
+
+
+  return null;
+
+}
+
+
+/* ==========================================
+   EXTRACT EDITION URL
+=========================================== */
+
+function extractEditionURL(
+  edition
+) {
+
+  if (!edition) {
+    return null;
+  }
+
+
+  /*
+    Example:
+    "Edition 7": "https://..."
+  */
+
+  if (
+    typeof edition ===
+    "string"
+  ) {
+
+    return edition;
+
+  }
+
+
+  /*
+    Support common field names without
+    selecting a different edition.
+  */
+
+  return (
+    edition.url ??
+    edition.URL ??
+    edition.link ??
+    edition.download ??
+    edition.downloadURL ??
+    edition.shortcut ??
+    null
+  );
+
+}
+
+
+/* ==========================================
+   GET SKYLARK
+=========================================== */
+
+async function getSkylark() {
+
+  /*
+    Unsupported devices can use the WEBSITE,
+    but cannot retrieve Skylark.
+  */
+
+  if (!supportedDevice) {
+
+    showToast(
+      "Skylark is not supported on this device."
+    );
+
+    return;
+
+  }
+
+
+  const originalText =
+    mainButton.textContent;
+
+
+  mainButton.disabled =
+    true;
+
+
+  mainButton.textContent =
+    "Loading…";
+
+
+  try {
+
+    const response =
+      await fetch(
+        EDITIONS_JSON,
+        {
+          cache:
+            "no-store"
+        }
+      );
+
+
+    if (!response.ok) {
+
+      throw new Error(
+        "Could not load editions.json"
+      );
+
+    }
+
+
+    const data =
+      await response.json();
+
+
+    /*
+      IMPORTANT:
+      We request Edition 7 ONLY.
+    */
+
+    const edition =
+      findEdition7(
+        data
+      );
+
+
+    if (!edition) {
+
+      throw new Error(
+        "Edition 7 was not found."
+      );
+
+    }
+
+
+    const url =
+      extractEditionURL(
+        edition
+      );
+
+
+    if (!url) {
+
+      throw new Error(
+        "Edition 7 does not contain a usable URL."
+      );
+
+    }
+
+
+    window.location.href =
+      url;
+
+
+  } catch (error) {
+
+    console.error(
+      "Skylark Edition 7 error:",
+      error
+    );
+
+
+    showToast(
+      "Edition 7 could not be loaded."
+    );
+
+
+    mainButton.disabled =
+      false;
+
+
+    mainButton.textContent =
+      originalText;
+
+  }
+
+}
+
+
+mainButton.addEventListener(
+  "click",
+  getSkylark
+);
+
+
+/* ==========================================
+   TAP OUTSIDE POPUPS TO CLOSE
+=========================================== */
+
+settingsPanel.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target ===
+      settingsPanel
+    ) {
+
+      closeSettings();
+
+    }
+
+  }
+);
+
+
+whatsNewPanel.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target ===
+      whatsNewPanel
+    ) {
+
+      closeWhatsNew();
+
+    }
+
+  }
+);
+
+
+urlPopup.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target ===
+      urlPopup
+    ) {
+
+      closeURL();
+
+    }
+
+  }
+);
+
+
+infoPopup.addEventListener(
+  "click",
+  event => {
+
+    if (
+      event.target ===
+      infoPopup
+    ) {
+
+      closeInfo();
+
+    }
+
+  }
+);
+
+
+/* ==========================================
+   INITIALIZE
+=========================================== */
+
+restoreBackground();
+
+updateSavedImageButton();
+
+updateDeviceSupport();
 
 </script>
 
