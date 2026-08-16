@@ -1,174 +1,126 @@
-/* ==========================================
-   SKYLARK (EDITION 27)
-=========================================== */
+/* ==========================================================
+   ROOT
+========================================================== */
 
 :root{
-
   --accent:#007aff;
 
   /*
-    ONLY the card surfaces use this.
+    Controls ONLY glass/card backgrounds.
+    0 = completely transparent
+    1 = completely opaque
   */
   --card-opacity:0.65;
 
-  /*
-    JS changes this to 0px when
-    opacity reaches 0%.
-  */
-  --card-blur:30px;
-
-  --text:#1d1d1f;
-
+  --text:#1c1c1e;
   --secondary-text:#6e6e73;
 
-  --control-bg:
-    rgba(118,118,128,0.12);
+  --control-bg:rgba(118,118,128,0.12);
+  --control-bg-pressed:rgba(118,118,128,0.20);
 
-  --control-bg-pressed:
-    rgba(118,118,128,0.20);
-
-  --separator:
-    rgba(60,60,67,0.16);
+  --separator:rgba(60,60,67,0.16);
 
   --danger:#ff3b30;
+  --warning:#ff9500;
 
+  color-scheme:light dark;
 }
 
 
-/* ==========================================
+
+/* ==========================================================
    RESET
-=========================================== */
+========================================================== */
 
 *{
   margin:0;
   padding:0;
-
   box-sizing:border-box;
+
+  -webkit-tap-highlight-color:transparent;
 }
 
 
 html,
 body{
   width:100%;
-
   min-height:100%;
 }
 
 
 body{
-
   min-height:100vh;
   min-height:100dvh;
 
   font-family:
     -apple-system,
     BlinkMacSystemFont,
-    "SF Pro Text",
     "SF Pro Display",
+    "SF Pro Text",
     Helvetica,
     Arial,
     sans-serif;
 
   color:var(--text);
 
-  /*
-    DEFAULT WALLPAPER
-  */
-  background-image:
-    url(
-      "https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg"
-    );
+  background-color:#000;
 
-  /*
-    FIX:
-    The image MUST NOT repeat.
-  */
-  background-repeat:no-repeat;
-
-  /*
-    Keep it centered.
-  */
-  background-position:center center;
-
-  /*
-    Fill the entire viewport.
-  */
   background-size:cover;
 
   /*
-    Prevent accidental horizontal movement.
+    Stops the wallpaper from tiling.
   */
+  background-repeat:no-repeat;
+
+  background-position:center center;
+
+  background-attachment:fixed;
+
   overflow-x:hidden;
-
-  -webkit-font-smoothing:
-    antialiased;
-
-  text-rendering:
-    optimizeLegibility;
-
 }
 
 
-/* ==========================================
+
+/* ==========================================================
    MAIN CONTAINER
-=========================================== */
+
+   Keeps the entire card centered horizontally AND vertically.
+========================================================== */
 
 .container{
-
   width:100%;
-
   min-height:100vh;
   min-height:100dvh;
 
   display:flex;
 
-  align-items:center;
   justify-content:center;
+  align-items:center;
 
-  /*
-    Gives Safari safe-area room without
-    pushing the card off center.
-  */
   padding:
-    max(
-      20px,
-      env(safe-area-inset-top)
-    )
-    18px
-    max(
-      20px,
-      env(safe-area-inset-bottom)
-    );
-
-  position:relative;
-
-  z-index:1;
-
+    max(24px, env(safe-area-inset-top))
+    max(18px, env(safe-area-inset-right))
+    max(24px, env(safe-area-inset-bottom))
+    max(18px, env(safe-area-inset-left));
 }
 
 
-/* ==========================================
+
+/* ==========================================================
    MAIN CARD
-=========================================== */
+========================================================== */
 
 .card{
+  position:relative;
 
-  width:min(
-    100%,
-    420px
-  );
+  width:min(92vw, 420px);
 
-  padding:
-    30px
-    26px
-    24px;
+  padding:32px 28px;
 
-  border-radius:
-    28px;
+  border-radius:30px;
 
   /*
-    THIS IS THE ONLY PART OF THE MAIN UI
-    AFFECTED BY THE OPACITY SLIDER.
+    ONLY this background responds to UI opacity.
   */
   background:
     rgba(
@@ -179,277 +131,261 @@ body{
     );
 
   /*
-    Glass effect.
+    Blur is intentionally independent from opacity.
 
-    At opacity 0%, JS changes
-    --card-blur to 0px.
+    At 0%, the CARD BACKGROUND becomes completely
+    transparent while the actual controls/text remain visible.
   */
   -webkit-backdrop-filter:
-    blur(
-      var(--card-blur)
-    )
-    saturate(160%);
+    blur(28px)
+    saturate(180%);
 
   backdrop-filter:
-    blur(
-      var(--card-blur)
-    )
-    saturate(160%);
+    blur(28px)
+    saturate(180%);
 
   display:flex;
 
   flex-direction:column;
 
-  gap:18px;
+  align-items:stretch;
+
+  gap:14px;
 
   text-align:center;
 
-  /*
-    IMPORTANT:
-
-    There is deliberately NO:
-    opacity: var(--card-opacity)
-
-    because that would fade every child.
-  */
-
-  transition:
-    background-color
-    180ms ease,
-    backdrop-filter
-    180ms ease,
-    -webkit-backdrop-filter
-    180ms ease;
-
+  box-shadow:
+    0 18px 60px
+    rgba(0,0,0,0.14);
 }
 
 
-/* ==========================================
-   TITLE
-=========================================== */
-
-.card h1{
-
-  font-size:
-    clamp(
-      27px,
-      7vw,
-      34px
+.dark .card{
+  background:
+    rgba(
+      28,
+      28,
+      30,
+      var(--card-opacity)
     );
 
-  line-height:1.12;
-
-  letter-spacing:
-    -0.025em;
-
-  font-weight:700;
-
-  color:inherit;
-
+  color:#f5f5f7;
 }
 
 
-/* ==========================================
-   GET SKYLARK
-=========================================== */
+
+/* ==========================================================
+   MAIN TYPOGRAPHY
+========================================================== */
+
+.card h1{
+  font-size:30px;
+
+  line-height:1.1;
+
+  font-weight:750;
+
+  letter-spacing:-0.7px;
+
+  color:inherit;
+}
+
+
+.supported-version{
+  margin-top:-4px;
+
+  font-size:14px;
+
+  line-height:1.35;
+
+  font-weight:600;
+
+  color:var(--secondary-text);
+}
+
+
+.dark .supported-version{
+  color:#aeaeb2;
+}
+
+
+.skylark-version{
+  margin-top:-8px;
+
+  font-size:13px;
+
+  font-weight:500;
+
+  color:var(--secondary-text);
+}
+
+
+.dark .skylark-version{
+  color:#8e8e93;
+}
+
+
+
+/* ==========================================================
+   MAIN GET BUTTON
+========================================================== */
 
 .main-btn{
-
   appearance:none;
-
   -webkit-appearance:none;
 
   width:100%;
 
   min-height:52px;
 
-  border:none;
+  margin-top:4px;
 
-  border-radius:15px;
+  padding:14px 18px;
 
-  padding:
-    14px
-    18px;
+  border:0;
 
-  display:flex;
+  border-radius:16px;
 
-  align-items:center;
+  background:var(--accent);
 
-  justify-content:center;
-
-  background:
-    var(--accent);
-
-  color:#ffffff;
-
-  font-family:inherit;
+  color:#fff;
 
   font-size:17px;
 
-  font-weight:600;
+  font-weight:650;
 
   cursor:pointer;
 
-  -webkit-tap-highlight-color:
-    transparent;
-
   transition:
-    transform 100ms ease,
-    filter 100ms ease,
-    background-color 120ms ease;
-
+    transform 0.15s ease,
+    filter 0.15s ease,
+    background 0.2s ease;
 }
 
 
 .main-btn:active:not(:disabled){
+  transform:scale(0.975);
 
-  transform:
-    scale(0.98);
-
-  filter:
-    brightness(0.94);
-
+  filter:brightness(0.92);
 }
 
 
-.main-btn:disabled,
-.main-btn.disabled{
 
-  background:
-    rgba(
-      118,
-      118,
-      128,
-      0.42
-    );
+/*
+  Unsupported remains visually obvious
+  while still looking like part of the UI.
+*/
+.main-btn.unsupported,
+.main-btn:disabled{
+  background:#8e8e93;
 
-  color:
-    rgba(
-      255,
-      255,
-      255,
-      0.80
-    );
+  color:#fff;
 
-  cursor:
-    not-allowed;
+  cursor:default;
 
+  opacity:1;
 }
 
 
-/* ==========================================
-   UNSUPPORTED MESSAGE
-=========================================== */
 
-.unsupported-message{
+/* ==========================================================
+   FIND EDITION
+========================================================== */
 
-  color:
-    var(--danger);
+.find-edition{
+  margin-top:-5px;
 
-  font-size:
-    13px;
+  font-size:13px;
 
-  font-weight:
-    500;
-
-  line-height:
-    1.4;
-
-  padding:
-    0 5px;
-
+  color:var(--secondary-text);
 }
 
 
-.unsupported-message[hidden]{
-
-  display:none;
-
+.dark .find-edition{
+  color:#aeaeb2;
 }
 
 
-/* ==========================================
-   SETTINGS / WHAT'S NEW BUTTONS
-=========================================== */
+.find-edition a{
+  color:var(--accent);
+
+  font-weight:600;
+
+  text-decoration:none;
+}
+
+
+.find-edition a:active{
+  opacity:0.55;
+}
+
+
+
+/* ==========================================================
+   SUB BUTTONS
+========================================================== */
 
 .sub-buttons{
+  width:100%;
 
-  display:flex;
+  display:grid;
 
-  align-items:center;
-
-  justify-content:center;
-
-  flex-wrap:wrap;
+  grid-template-columns:
+    repeat(2, minmax(0,1fr));
 
   gap:10px;
 
+  margin-top:2px;
 }
 
 
-.secondary-btn{
-
+.sub-buttons button{
   appearance:none;
-
   -webkit-appearance:none;
 
-  min-height:40px;
+  min-height:42px;
 
-  border:none;
+  padding:10px 12px;
 
-  border-radius:12px;
+  border:0;
 
-  padding:
-    9px
-    16px;
+  border-radius:13px;
 
-  background:
-    var(--control-bg);
+  background:var(--control-bg);
 
-  color:
-    var(--accent);
+  color:var(--accent);
 
-  font-family:
-    inherit;
+  font-size:14px;
 
-  font-size:
-    15px;
+  font-weight:650;
 
-  font-weight:
-    600;
-
-  cursor:
-    pointer;
-
-  -webkit-tap-highlight-color:
-    transparent;
+  cursor:pointer;
 
   transition:
-    transform 100ms ease,
-    background-color 120ms ease;
-
+    transform 0.15s ease,
+    background 0.15s ease;
 }
 
 
-.secondary-btn:active{
+.sub-buttons button:active{
+  transform:scale(0.97);
 
-  transform:
-    scale(0.96);
-
-  background:
-    var(--control-bg-pressed);
-
+  background:var(--control-bg-pressed);
 }
 
 
-/* ==========================================
+.dark .sub-buttons button{
+  background:rgba(118,118,128,0.24);
+}
+
+
+
+/* ==========================================================
    COPYRIGHT
-=========================================== */
+========================================================== */
 
 .credits{
-
-  margin-top:
-    2px;
+  margin-top:6px;
 
   display:flex;
 
@@ -459,134 +395,170 @@ body{
 
   flex-wrap:wrap;
 
-  gap:6px;
+  gap:5px;
 
-  font-size:
-    12px;
+  font-size:12px;
 
-  line-height:
-    1.4;
+  line-height:1.5;
 
-  color:
-    var(--secondary-text);
+  color:var(--secondary-text);
+}
 
+
+.dark .credits{
+  color:#8e8e93;
 }
 
 
 .credits a{
+  color:inherit;
 
-  color:
-    inherit;
-
-  text-decoration:
-    none;
-
-  font-weight:
-    500;
-
-  transition:
-    opacity 120ms ease;
-
+  text-decoration:none;
 }
 
 
 .credits a:active{
-
-  opacity:
-    0.55;
-
+  opacity:0.5;
 }
 
 
-.credit-divider{
 
-  opacity:
-    0.45;
+/* ==========================================================
+   NOTICES
+========================================================== */
 
+.notice{
+  width:100%;
+
+  padding:12px 14px;
+
+  border-radius:14px;
+
+  text-align:left;
+
+  font-size:13px;
+
+  line-height:1.4;
 }
 
 
-/* ==========================================
-   OVERLAYS
-=========================================== */
+.notice strong{
+  display:block;
+
+  margin-bottom:3px;
+
+  font-size:13px;
+}
+
+
+.notice[hidden]{
+  display:none !important;
+}
+
+
+.beta-notice{
+  background:
+    rgba(255,149,0,0.14);
+
+  color:#8a4b00;
+}
+
+
+.dark .beta-notice{
+  background:
+    rgba(255,159,10,0.18);
+
+  color:#ffd7a3;
+}
+
+
+.alert-notice{
+  background:
+    rgba(0,122,255,0.12);
+
+  color:#004d9f;
+}
+
+
+.dark .alert-notice{
+  background:
+    rgba(10,132,255,0.18);
+
+  color:#b9dcff;
+}
+
+
+.eol-notice{
+  background:
+    rgba(255,59,48,0.13);
+
+  color:#a51d17;
+}
+
+
+.dark .eol-notice{
+  background:
+    rgba(255,69,58,0.18);
+
+  color:#ffb5b0;
+}
+
+
+
+/* ==========================================================
+   OVERLAY
+========================================================== */
 
 .overlay{
-
   position:fixed;
 
   inset:0;
 
-  display:none;
+  z-index:1000;
 
-  align-items:center;
+  display:none;
 
   justify-content:center;
 
+  align-items:center;
+
   padding:
-    max(
-      22px,
-      env(safe-area-inset-top)
-    )
-    18px
-    max(
-      22px,
-      env(safe-area-inset-bottom)
-    );
+    max(20px, env(safe-area-inset-top))
+    max(18px, env(safe-area-inset-right))
+    max(20px, env(safe-area-inset-bottom))
+    max(18px, env(safe-area-inset-left));
 
   background:
-    rgba(
-      0,
-      0,
-      0,
-      0.35
-    );
+    rgba(0,0,0,0.35);
 
-  z-index:
-    1000;
+  -webkit-backdrop-filter:
+    blur(5px);
 
-  overflow-y:
-    auto;
-
-  -webkit-overflow-scrolling:
-    touch;
-
+  backdrop-filter:
+    blur(5px);
 }
 
 
-/* ==========================================
+
+/* ==========================================================
    SETTINGS CARD
-=========================================== */
 
-.settings-card{
+   Uses SAME opacity variable as main card.
+========================================================== */
 
-  width:
-    min(
-      100%,
-      380px
-    );
+.settings-card,
+.popup-card{
+  width:min(92vw, 370px);
 
   max-height:
-    calc(
-      100dvh - 44px
-    );
+    calc(100dvh - 40px);
 
-  overflow-y:
-    auto;
+  overflow-y:auto;
 
-  -webkit-overflow-scrolling:
-    touch;
+  padding:24px;
 
-  padding:
-    24px;
+  border-radius:28px;
 
-  border-radius:
-    26px;
-
-  /*
-    JUST LIKE THE MAIN CARD:
-
-    Only this surface changes opacity.
-  */
   background:
     rgba(
       255,
@@ -596,41 +568,343 @@ body{
     );
 
   -webkit-backdrop-filter:
-    blur(
-      var(--card-blur)
-    )
-    saturate(160%);
+    blur(30px)
+    saturate(180%);
 
   backdrop-filter:
-    blur(
-      var(--card-blur)
-    )
-    saturate(160%);
+    blur(30px)
+    saturate(180%);
+
+  color:var(--text);
+
+  box-shadow:
+    0 24px 70px
+    rgba(0,0,0,0.22);
 
   display:flex;
 
-  flex-direction:
-    column;
+  flex-direction:column;
 
-  gap:
-    18px;
-
-  color:
-    var(--text);
-
-  transition:
-    background-color 180ms ease,
-    backdrop-filter 180ms ease,
-    -webkit-backdrop-filter 180ms ease;
-
+  gap:16px;
 }
 
 
-/* ==========================================
-   HEADERS
-=========================================== */
+.dark .settings-card,
+.dark .popup-card{
+  background:
+    rgba(
+      28,
+      28,
+      30,
+      var(--card-opacity)
+    );
 
-.panel-header{
+  color:#f5f5f7;
+}
+
+
+.settings-card h2{
+  font-size:25px;
+
+  line-height:1.1;
+
+  font-weight:750;
+
+  letter-spacing:-0.5px;
+
+  text-align:center;
+}
+
+
+.settings-card h3{
+  font-size:15px;
+
+  font-weight:650;
+
+  color:inherit;
+}
+
+
+
+/* ==========================================================
+   SETTINGS SECTIONS
+========================================================== */
+
+.settings-section{
+  display:flex;
+
+  flex-direction:column;
+
+  gap:11px;
+}
+
+
+.setting-row{
+  min-height:44px;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:space-between;
+
+  gap:16px;
+}
+
+
+.setting-text{
+  font-size:16px;
+}
+
+
+.divider{
+  width:100%;
+
+  height:1px;
+
+  background:var(--separator);
+}
+
+
+.dark .divider{
+  background:rgba(84,84,88,0.55);
+}
+
+
+
+/* ==========================================================
+   iOS-STYLE TOGGLE
+========================================================== */
+
+.switch{
+  position:relative;
+
+  flex:0 0 auto;
+
+  width:51px;
+
+  height:31px;
+
+  cursor:pointer;
+}
+
+
+.switch input{
+  position:absolute;
+
+  opacity:0;
+
+  pointer-events:none;
+}
+
+
+.toggle-slider{
+  position:absolute;
+
+  inset:0;
+
+  border-radius:999px;
+
+  background:#e9e9ea;
+
+  transition:
+    background 0.2s ease;
+}
+
+
+.toggle-slider::before{
+  content:"";
+
+  position:absolute;
+
+  width:27px;
+
+  height:27px;
+
+  top:2px;
+
+  left:2px;
+
+  border-radius:50%;
+
+  background:#fff;
+
+  box-shadow:
+    0 2px 5px
+    rgba(0,0,0,0.22);
+
+  transition:
+    transform 0.22s
+    cubic-bezier(
+      0.25,
+      0.8,
+      0.25,
+      1
+    );
+}
+
+
+.switch input:checked +
+.toggle-slider{
+  background:#34c759;
+}
+
+
+.switch input:checked +
+.toggle-slider::before{
+  transform:
+    translateX(20px);
+}
+
+
+.dark .toggle-slider{
+  background:#39393d;
+}
+
+
+
+/* ==========================================================
+   BACKGROUND BUTTON GRID
+========================================================== */
+
+.theme-grid{
+  display:grid;
+
+  grid-template-columns:
+    repeat(2,minmax(0,1fr));
+
+  gap:10px;
+}
+
+
+.theme-grid button{
+  appearance:none;
+  -webkit-appearance:none;
+
+  min-height:46px;
+
+  padding:11px 10px;
+
+  border:2px solid transparent;
+
+  border-radius:14px;
+
+  background:var(--control-bg);
+
+  color:inherit;
+
+  font-size:14px;
+
+  font-weight:600;
+
+  cursor:pointer;
+
+  transition:
+    transform 0.15s ease,
+    background 0.15s ease,
+    border-color 0.15s ease;
+}
+
+
+.theme-grid button:active{
+  transform:scale(0.97);
+}
+
+
+.theme-grid button.selected{
+  border-color:var(--accent);
+
+  color:var(--accent);
+
+  background:
+    rgba(0,122,255,0.09);
+}
+
+
+.dark .theme-grid button{
+  background:
+    rgba(118,118,128,0.22);
+}
+
+
+.dark .theme-grid button.selected{
+  background:
+    rgba(0,122,255,0.16);
+}
+
+
+
+/* ==========================================================
+   GENERAL SETTINGS BUTTONS
+========================================================== */
+
+.settings-button,
+.close-button,
+.primary-button,
+.secondary-button,
+#pasteButton{
+  appearance:none;
+  -webkit-appearance:none;
+
+  min-height:46px;
+
+  padding:12px 15px;
+
+  border:0;
+
+  border-radius:14px;
+
+  font-size:15px;
+
+  font-weight:650;
+
+  cursor:pointer;
+
+  transition:
+    transform 0.15s ease,
+    filter 0.15s ease,
+    background 0.15s ease;
+}
+
+
+.settings-button,
+.close-button,
+.primary-button{
+  background:var(--accent);
+
+  color:#fff;
+}
+
+
+.settings-button:active,
+.close-button:active,
+.primary-button:active,
+.secondary-button:active,
+#pasteButton:active{
+  transform:scale(0.975);
+}
+
+
+.secondary-button{
+  background:var(--control-bg);
+
+  color:var(--accent);
+}
+
+
+.dark .secondary-button{
+  background:
+    rgba(118,118,128,0.24);
+}
+
+
+
+/* ==========================================================
+   FILE BUTTON
+========================================================== */
+
+.file-btn{
+  position:relative;
 
   display:flex;
 
@@ -638,1474 +912,465 @@ body{
 
   justify-content:center;
 
-  text-align:center;
+  min-height:46px;
 
+  padding:12px 15px;
+
+  border-radius:14px;
+
+  background:var(--accent);
+
+  color:#fff;
+
+  font-size:15px;
+
+  font-weight:650;
+
+  cursor:pointer;
+
+  overflow:hidden;
 }
 
 
-.panel-header h2{
+.file-btn input{
+  position:absolute;
 
-  font-size:
-    25px;
+  inset:0;
 
-  line-height:
-    1.2;
+  width:100%;
 
-  letter-spacing:
-    -0.02em;
+  height:100%;
 
-  font-weight:
-    700;
+  opacity:0;
 
+  cursor:pointer;
 }
 
 
-/* ==========================================
-   SETTING ROW
-=========================================== */
 
-.setting-row{
+/* ==========================================================
+   OPACITY
+========================================================== */
 
-  min-height:
-    48px;
-
+.opacity-header{
   display:flex;
 
   align-items:center;
 
-  justify-content:
-    space-between;
+  justify-content:space-between;
 
-  gap:
-    16px;
+  gap:12px;
 
+  font-size:15px;
 }
 
 
-.setting-title{
+.opacity-header strong{
+  color:var(--accent);
 
-  font-size:
-    16px;
-
-  font-weight:
-    500;
-
+  font-variant-numeric:
+    tabular-nums;
 }
 
 
-/* ==========================================
-   iOS DARK MODE TOGGLE
-=========================================== */
 
-.ios-switch{
-
-  position:
-    relative;
-
-  display:
-    inline-block;
-
-  flex:
-    0 0 auto;
-
-  width:
-    51px;
-
-  height:
-    31px;
-
-  cursor:
-    pointer;
-
-  -webkit-tap-highlight-color:
-    transparent;
-
-}
-
-
-.ios-switch input{
-
-  position:
-    absolute;
-
-  opacity:
-    0;
-
-  width:
-    1px;
-
-  height:
-    1px;
-
-  pointer-events:
-    none;
-
-}
-
-
-.ios-switch-track{
-
-  position:
-    absolute;
-
-  inset:
-    0;
-
-  border-radius:
-    999px;
-
-  background:
-    rgba(
-      120,
-      120,
-      128,
-      0.32
-    );
-
-  transition:
-    background-color
-    180ms ease;
-
-}
-
-
-.ios-switch-track::after{
-
-  content:
-    "";
-
-  position:
-    absolute;
-
-  width:
-    27px;
-
-  height:
-    27px;
-
-  left:
-    2px;
-
-  top:
-    2px;
-
-  border-radius:
-    50%;
-
-  background:
-    #ffffff;
-
-  box-shadow:
-    0 2px 5px
-    rgba(
-      0,
-      0,
-      0,
-      0.20
-    );
-
-  transition:
-    transform
-    180ms
-    cubic-bezier(
-      .25,
-      .8,
-      .25,
-      1
-    );
-
-}
-
-
-.ios-switch
-input:checked
-+
-.ios-switch-track{
-
-  background:
-    #34c759;
-
-}
-
-
-.ios-switch
-input:checked
-+
-.ios-switch-track::after{
-
-  transform:
-    translateX(
-      20px
-    );
-
-}
-
-
-/* ==========================================
-   SETTINGS SECTIONS
-=========================================== */
-
-.settings-section{
-
-  display:flex;
-
-  flex-direction:
-    column;
-
-  gap:
-    10px;
-
-}
-
-
-.settings-section h3{
-
-  color:
-    var(--secondary-text);
-
-  font-size:
-    14px;
-
-  font-weight:
-    600;
-
-  line-height:
-    1.2;
-
-  text-align:
-    left;
-
-}
-
-
-/* ==========================================
-   BACKGROUND THEME GRID
-=========================================== */
-
-.theme-grid{
-
-  display:grid;
-
-  grid-template-columns:
-    repeat(
-      2,
-      minmax(
-        0,
-        1fr
-      )
-    );
-
-  gap:
-    10px;
-
-}
-
-
-.theme-button{
-
+/*
+   Larger invisible/touchable area.
+*/
+input[type="range"]{
   appearance:none;
-
   -webkit-appearance:none;
 
   width:100%;
 
-  min-height:
-    48px;
+  height:30px;
 
-  border:
-    1px solid
-    var(--separator);
+  margin:0;
 
-  border-radius:
-    14px;
+  background:transparent;
 
-  padding:
-    11px
-    10px;
+  cursor:pointer;
+}
+
+
+
+/* TRACK */
+input[type="range"]::-webkit-slider-runnable-track{
+  width:100%;
+
+  height:6px;
+
+  border-radius:999px;
 
   background:
-    var(--control-bg);
-
-  color:
-    var(--text);
-
-  font-family:
-    inherit;
-
-  font-size:
-    15px;
-
-  font-weight:
-    600;
-
-  cursor:
-    pointer;
-
-  -webkit-tap-highlight-color:
-    transparent;
-
-  transition:
-    transform 100ms ease,
-    background-color 120ms ease,
-    border-color 120ms ease,
-    box-shadow 120ms ease;
-
+    rgba(118,118,128,0.28);
 }
 
 
-.theme-button:active{
 
-  transform:
-    scale(0.97);
+/* THUMB */
+input[type="range"]::-webkit-slider-thumb{
+  appearance:none;
+  -webkit-appearance:none;
 
-}
+  width:24px;
 
+  height:24px;
 
-/* SELECTED THEME */
+  margin-top:-9px;
 
-.theme-button.selected{
+  border:0;
 
-  color:
-    var(--accent);
+  border-radius:50%;
 
-  border-color:
-    var(--accent);
+  background:var(--accent);
 
   box-shadow:
-    inset
-    0
-    0
-    0
-    1px
-    var(--accent);
+    0 2px 6px
+    rgba(0,0,0,0.20);
+}
+
+
+
+/* Firefox */
+input[type="range"]::-moz-range-track{
+  height:6px;
+
+  border-radius:999px;
 
   background:
-    rgba(
-      0,
-      122,
-      255,
-      0.10
-    );
-
+    rgba(118,118,128,0.28);
 }
 
 
-/* ==========================================
-   YOUR PHOTOS
-=========================================== */
+input[type="range"]::-moz-range-thumb{
+  width:24px;
 
-.file-button{
+  height:24px;
 
-  position:
-    relative;
+  border:0;
 
-  width:
-    100%;
+  border-radius:50%;
 
-  min-height:
-    48px;
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:center;
-
-  overflow:
-    hidden;
-
-  padding:
-    12px
-    16px;
-
-  border-radius:
-    14px;
-
-  background:
-    var(--accent);
-
-  color:
-    #ffffff;
-
-  font-size:
-    16px;
-
-  font-weight:
-    600;
-
-  text-align:
-    center;
-
-  cursor:
-    pointer;
-
-  -webkit-tap-highlight-color:
-    transparent;
-
+  background:var(--accent);
 }
 
 
-.file-button input{
 
-  position:
-    absolute;
-
-  inset:
-    0;
-
-  width:
-    100%;
-
-  height:
-    100%;
-
-  opacity:
-    0;
-
-  cursor:
-    pointer;
-
-}
-
-
-/* ==========================================
-   SETTINGS BUTTONS
-=========================================== */
-
-.settings-button,
-.close-button,
-.popup-primary,
-.popup-secondary,
-.paste-button{
-
-  appearance:
-    none;
-
-  -webkit-appearance:
-    none;
-
-  border:
-    none;
-
-  border-radius:
-    14px;
-
-  min-height:
-    48px;
-
-  padding:
-    12px
-    16px;
-
-  font-family:
-    inherit;
-
-  font-size:
-    16px;
-
-  font-weight:
-    600;
-
-  cursor:
-    pointer;
-
-  -webkit-tap-highlight-color:
-    transparent;
-
-  transition:
-    transform 100ms ease,
-    background-color 120ms ease,
-    opacity 120ms ease;
-
-}
-
-
-.settings-button{
-
-  width:
-    100%;
-
-  background:
-    var(--control-bg);
-
-  color:
-    var(--accent);
-
-}
-
-
-.settings-button:active:not(:disabled),
-.close-button:active,
-.popup-primary:active,
-.popup-secondary:active,
-.paste-button:active{
-
-  transform:
-    scale(0.98);
-
-}
-
-
-.settings-button:disabled{
-
-  opacity:
-    0.45;
-
-  color:
-    var(--secondary-text);
-
-  cursor:
-    not-allowed;
-
-}
-
-
-/* ==========================================
-   UI OPACITY HEADER
-=========================================== */
-
-.opacity-heading{
-
-  display:flex;
-
-  align-items:center;
-
-  justify-content:
-    space-between;
-
-  gap:
-    12px;
-
-}
-
-
-.opacity-heading label{
-
-  font-size:
-    15px;
-
-  font-weight:
-    500;
-
-}
-
-
-.opacity-heading strong{
-
-  color:
-    var(--secondary-text);
-
-  font-size:
-    14px;
-
-  font-weight:
-    600;
-
-  font-variant-numeric:
-    tabular-nums;
-
-}
-
-
-/* ==========================================
-   OPACITY SLIDER
-=========================================== */
-
-input[type="range"]{
-
-  appearance:
-    none;
-
-  -webkit-appearance:
-    none;
-
-  width:
-    100%;
-
-  height:
-    36px;
-
-  margin:
-    0;
-
-  background:
-    transparent;
-
-  cursor:
-    pointer;
-
-  /*
-    Allows vertical page scrolling while
-    still making horizontal dragging work.
-  */
-  touch-action:
-    pan-y;
-
-}
-
-
-/* WEBKIT TRACK */
-
-input[type="range"]
-::-webkit-slider-runnable-track{
-
-  width:
-    100%;
-
-  height:
-    6px;
-
-  border-radius:
-    999px;
-
-  background:
-    rgba(
-      118,
-      118,
-      128,
-      0.28
-    );
-
-}
-
-
-/* WEBKIT THUMB */
-
-input[type="range"]
-::-webkit-slider-thumb{
-
-  appearance:
-    none;
-
-  -webkit-appearance:
-    none;
-
-  width:
-    26px;
-
-  height:
-    26px;
-
-  margin-top:
-    -10px;
-
-  border:
-    2px solid
-    var(--accent);
-
-  border-radius:
-    50%;
-
-  background:
-    #ffffff;
-
-  box-shadow:
-    0
-    1px
-    5px
-    rgba(
-      0,
-      0,
-      0,
-      0.22
-    );
-
-}
-
-
-/* FIREFOX TRACK */
-
-input[type="range"]
-::-moz-range-track{
-
-  height:
-    6px;
-
-  border:
-    none;
-
-  border-radius:
-    999px;
-
-  background:
-    rgba(
-      118,
-      118,
-      128,
-      0.28
-    );
-
-}
-
-
-/* FIREFOX PROGRESS */
-
-input[type="range"]
-::-moz-range-progress{
-
-  height:
-    6px;
-
-  border-radius:
-    999px;
-
-  background:
-    var(--accent);
-
-}
-
-
-/* FIREFOX THUMB */
-
-input[type="range"]
-::-moz-range-thumb{
-
-  width:
-    24px;
-
-  height:
-    24px;
-
-  border:
-    2px solid
-    var(--accent);
-
-  border-radius:
-    50%;
-
-  background:
-    #ffffff;
-
-}
-
-
-/* ==========================================
+/* ==========================================================
    OPACITY WARNING
-=========================================== */
+========================================================== */
 
 .warning{
+  padding:9px 11px;
 
-  color:
-    var(--secondary-text);
+  border-radius:11px;
 
-  font-size:
-    12px;
+  background:
+    rgba(255,149,0,0.13);
 
-  line-height:
-    1.4;
+  color:#9a5600;
 
-  text-align:
-    left;
+  font-size:12px;
 
+  line-height:1.35;
 }
 
 
 .warning[hidden]{
-
-  display:
-    none;
-
+  display:none !important;
 }
 
 
-/* ==========================================
-   CLOSE BUTTON
-=========================================== */
-
-.close-button{
-
-  width:
-    100%;
-
+.dark .warning{
   background:
-    var(--control-bg);
+    rgba(255,159,10,0.17);
 
-  color:
-    var(--accent);
-
+  color:#ffd29a;
 }
 
 
-/* ==========================================
-   POPUP CARD
-=========================================== */
 
-.popup-card{
+/* ==========================================================
+   WHAT'S NEW
+========================================================== */
 
-  width:
-    min(
-      100%,
-      350px
-    );
-
-  padding:
-    22px;
-
-  border-radius:
-    24px;
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      0.94
-    );
-
-  -webkit-backdrop-filter:
-    blur(30px)
-    saturate(160%);
-
-  backdrop-filter:
-    blur(30px)
-    saturate(160%);
-
+.whats-new-content{
   display:flex;
 
-  flex-direction:
-    column;
+  flex-direction:column;
 
-  gap:
-    14px;
+  gap:12px;
+}
 
-  color:
-    var(--text);
 
+.whats-new-item{
+  padding:13px 14px;
+
+  border-radius:14px;
+
+  background:var(--control-bg);
+
+  text-align:left;
+}
+
+
+.dark .whats-new-item{
+  background:
+    rgba(118,118,128,0.22);
+}
+
+
+.whats-new-item strong{
+  display:block;
+
+  margin-bottom:4px;
+
+  font-size:14px;
+}
+
+
+.whats-new-item p{
+  color:var(--secondary-text);
+
+  font-size:13px;
+
+  line-height:1.4;
+}
+
+
+.dark .whats-new-item p{
+  color:#aeaeb2;
+}
+
+
+
+/* ==========================================================
+   URL POPUP
+========================================================== */
+
+.popup-card h3{
+  font-size:21px;
+
+  text-align:center;
 }
 
 
 .popup-description{
+  margin-top:-8px;
 
-  color:
-    var(--secondary-text);
+  color:var(--secondary-text);
 
-  font-size:
-    13px;
+  font-size:13px;
 
-  line-height:
-    1.4;
-
-  text-align:
-    center;
-
+  text-align:center;
 }
 
 
-/* ==========================================
-   URL INPUT ROW
-=========================================== */
+.dark .popup-description{
+  color:#aeaeb2;
+}
+
 
 .url-input-row{
-
   display:flex;
 
-  align-items:
-    stretch;
+  align-items:stretch;
 
-  gap:
-    8px;
-
+  gap:8px;
 }
 
 
-#urlInput{
+.url-input-row input{
+  min-width:0;
 
-  flex:
-    1;
+  flex:1;
 
-  min-width:
-    0;
+  height:44px;
 
-  height:
-    46px;
+  padding:0 12px;
 
-  border:
-    1px solid
-    var(--separator);
+  border:0;
 
-  border-radius:
-    12px;
+  outline:none;
 
-  padding:
-    0
-    13px;
-
-  outline:
-    none;
+  border-radius:12px;
 
   background:
-    var(--control-bg);
+    rgba(118,118,128,0.12);
 
-  color:
-    var(--text);
+  color:var(--text);
 
-  font-family:
-    inherit;
-
-  font-size:
-    16px;
-
+  font-size:14px;
 }
 
 
-#urlInput:focus{
-
-  border-color:
-    var(--accent);
-
-  box-shadow:
-    0
-    0
-    0
-    1px
-    var(--accent);
-
-}
-
-
-#urlInput::placeholder{
-
-  color:
-    var(--secondary-text);
-
-}
-
-
-.paste-button{
-
-  min-height:
-    46px;
-
-  padding:
-    0
-    14px;
-
+.dark .url-input-row input{
   background:
-    var(--control-bg);
+    rgba(118,118,128,0.24);
 
-  color:
-    var(--accent);
-
+  color:#fff;
 }
 
 
-/* ==========================================
-   URL ERROR
-=========================================== */
+.url-input-row input::placeholder{
+  color:#8e8e93;
+}
+
+
+#pasteButton{
+  min-height:44px;
+
+  padding-left:13px;
+
+  padding-right:13px;
+
+  background:var(--control-bg);
+
+  color:var(--accent);
+}
+
+
+.dark #pasteButton{
+  background:
+    rgba(118,118,128,0.24);
+}
+
 
 .url-error{
+  padding:8px 10px;
 
-  color:
-    var(--danger);
+  border-radius:10px;
 
-  font-size:
-    12px;
+  background:
+    rgba(255,59,48,0.12);
 
-  line-height:
-    1.4;
+  color:var(--danger);
 
+  font-size:12px;
 }
 
 
 .url-error[hidden]{
-
-  display:
-    none;
-
+  display:none !important;
 }
 
 
-/* ==========================================
-   POPUP ACTIONS
-=========================================== */
-
 .popup-actions{
-
   display:grid;
 
   grid-template-columns:
-    repeat(
-      2,
-      minmax(
-        0,
-        1fr
-      )
-    );
+    repeat(2,minmax(0,1fr));
 
-  gap:
-    8px;
-
+  gap:9px;
 }
 
 
-.popup-secondary{
 
-  background:
-    var(--control-bg);
-
-  color:
-    var(--accent);
-
-}
-
-
-.popup-primary{
-
-  background:
-    var(--accent);
-
-  color:
-    #ffffff;
-
-}
-
-
-/* ==========================================
-   WHAT'S NEW
-=========================================== */
-
-.whats-new-content{
-
-  display:flex;
-
-  flex-direction:
-    column;
-
-  gap:
-    10px;
-
-  font-size:
-    14px;
-
-  line-height:
-    1.5;
-
-}
-
-
-.whats-new-content ul{
-
-  padding-left:
-    20px;
-
-}
-
-
-.whats-new-content li + li{
-
-  margin-top:
-    5px;
-
-}
-
-
-/* ==========================================
-   THEME INFO BUTTON
-=========================================== */
-
-.info-button{
-
-  appearance:
-    none;
-
-  -webkit-appearance:
-    none;
-
-  position:
-    fixed;
-
-  top:
-    max(
-      16px,
-      env(safe-area-inset-top)
-    );
-
-  right:
-    max(
-      16px,
-      env(safe-area-inset-right)
-    );
-
-  z-index:
-    500;
-
-  width:
-    34px;
-
-  height:
-    34px;
-
-  padding:
-    0;
-
-  border:
-    none;
-
-  border-radius:
-    50%;
-
-  display:flex;
-
-  align-items:
-    center;
-
-  justify-content:
-    center;
-
-  background:
-    rgba(
-      0,
-      0,
-      0,
-      0.55
-    );
-
-  color:
-    #ffffff;
-
-  font-family:
-    Georgia,
-    serif;
-
-  font-size:
-    20px;
-
-  font-weight:
-    700;
-
-  line-height:
-    1;
-
-  cursor:
-    pointer;
-
-  box-shadow:
-    0
-    2px
-    8px
-    rgba(
-      0,
-      0,
-      0,
-      0.18
-    );
-
-  -webkit-tap-highlight-color:
-    transparent;
-
-}
-
-
-.info-button[hidden]{
-
-  display:
-    none;
-
-}
-
-
-/* ==========================================
+/* ==========================================================
    TOAST
-=========================================== */
+========================================================== */
 
-.toast{
+#toast{
+  position:fixed;
 
-  position:
-    fixed;
+  z-index:9999;
 
-  left:
-    50%;
+  left:50%;
 
   bottom:
     max(
       28px,
       calc(
         env(safe-area-inset-bottom)
-        +
-        18px
+        + 18px
       )
     );
 
-  z-index:
-    5000;
-
   max-width:
-    calc(
-      100% - 40px
-    );
+    calc(100vw - 40px);
 
-  padding:
-    11px
-    16px;
+  padding:11px 15px;
 
-  border-radius:
-    14px;
+  border-radius:13px;
 
   background:
-    rgba(
-      0,
-      0,
-      0,
-      0.84
-    );
+    rgba(28,28,30,0.90);
 
-  color:
-    #ffffff;
+  color:#fff;
 
-  font-size:
-    13px;
+  font-size:13px;
 
-  font-weight:
-    500;
+  font-weight:550;
 
-  text-align:
-    center;
+  text-align:center;
 
-  opacity:
-    0;
+  pointer-events:none;
 
-  pointer-events:
-    none;
+  opacity:0;
 
   transform:
-    translate(
-      -50%,
-      10px
-    );
+    translate(-50%, 12px)
+    scale(0.98);
 
   transition:
-    opacity 180ms ease,
-    transform 180ms ease;
+    opacity 0.2s ease,
+    transform 0.2s ease;
 
+  -webkit-backdrop-filter:
+    blur(20px);
+
+  backdrop-filter:
+    blur(20px);
 }
 
 
-.toast.show{
-
-  opacity:
-    1;
+#toast.show{
+  opacity:1;
 
   transform:
-    translate(
-      -50%,
-      0
-    );
-
+    translate(-50%, 0)
+    scale(1);
 }
 
 
-/* ==========================================
-   DARK MODE
-=========================================== */
 
-.dark{
+/* ==========================================================
+   SMALL DEVICES
+========================================================== */
 
-  --text:
-    #f5f5f7;
-
-  --secondary-text:
-    #aeaeb2;
-
-  --control-bg:
-    rgba(
-      255,
-      255,
-      255,
-      0.12
-    );
-
-  --control-bg-pressed:
-    rgba(
-      255,
-      255,
-      255,
-      0.20
-    );
-
-  --separator:
-    rgba(
-      255,
-      255,
-      255,
-      0.18
-    );
-
-}
-
-
-/*
-  DARK MAIN CARD
-
-  Again, only the BACKGROUND changes opacity.
-*/
-
-.dark .card{
-
-  background:
-    rgba(
-      28,
-      28,
-      30,
-      var(--card-opacity)
-    );
-
-  color:
-    var(--text);
-
-}
-
-
-/*
-  DARK SETTINGS CARD
-
-  Again, only the BACKGROUND changes opacity.
-*/
-
-.dark .settings-card{
-
-  background:
-    rgba(
-      28,
-      28,
-      30,
-      var(--card-opacity)
-    );
-
-  color:
-    var(--text);
-
-}
-
-
-.dark .popup-card{
-
-  background:
-    rgba(
-      28,
-      28,
-      30,
-      0.94
-    );
-
-  color:
-    var(--text);
-
-}
-
-
-.dark #urlInput{
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      0.10
-    );
-
-  color:
-    var(--text);
-
-}
-
-
-/* ==========================================
-   SMALL iPHONES
-=========================================== */
-
-@media (
-  max-width:
-  360px
-){
-
-  .container{
-
-    padding-left:
-      14px;
-
-    padding-right:
-      14px;
-
-  }
-
+@media(max-width:380px){
 
   .card{
+    width:94vw;
 
-    padding:
-      26px
-      20px
-      22px;
+    padding:26px 20px;
 
+    border-radius:26px;
   }
 
 
-  .settings-card{
-
-    padding:
-      20px;
-
-  }
-
-
-  .theme-grid{
-
-    gap:
-      8px;
-
-  }
-
-
-  .theme-button{
-
-    font-size:
-      14px;
-
-  }
-
-
-  .credits{
-
-    font-size:
-      11px;
-
-  }
-
-}
-
-
-/* ==========================================
-   SHORT SCREENS
-=========================================== */
-
-@media (
-  max-height:
-  650px
-){
-
-  .overlay{
-
-    align-items:
-      flex-start;
-
+  .card h1{
+    font-size:27px;
   }
 
 
   .settings-card,
   .popup-card{
+    width:94vw;
 
-    margin:
-      auto 0;
-
+    padding:20px;
   }
 
 }
 
 
-/* ==========================================
-   REDUCED MOTION
-=========================================== */
 
-@media (
+/* ==========================================================
+   REDUCED MOTION
+========================================================== */
+
+@media(
   prefers-reduced-motion:
   reduce
 ){
@@ -2113,16 +1378,11 @@ input[type="range"]
   *,
   *::before,
   *::after{
+    scroll-behavior:auto !important;
 
-    transition-duration:
-      0.01ms !important;
+    transition:none !important;
 
-    animation-duration:
-      0.01ms !important;
-
-    animation-iteration-count:
-      1 !important;
-
+    animation:none !important;
   }
 
 }
