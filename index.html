@@ -46,14 +46,12 @@
       class="notice beta-notice"
       hidden
     >
-
       <strong>Beta Software</strong>
 
       <p>
         This version of Skylark is currently in beta.
         Features may change and issues may occur.
       </p>
-
     </div>
 
 
@@ -63,11 +61,8 @@
       class="notice alert-notice"
       hidden
     >
-
       <strong>Notice</strong>
-
       <p id="editionAlertText"></p>
-
     </div>
 
 
@@ -77,13 +72,11 @@
       class="notice eol-notice"
       hidden
     >
-
       <strong>End of Life</strong>
 
       <p>
         This edition of Skylark is no longer supported.
       </p>
-
     </div>
 
 
@@ -98,9 +91,18 @@
     </button>
 
 
-    <!-- FIND EDITION -->
-    <p class="find-edition">
+    <!--
+      FIND EDITION
 
+      Hidden by default.
+      JavaScript ONLY shows this when the current device
+      is considered unsupported.
+    -->
+    <p
+      class="find-edition"
+      id="findEdition"
+      hidden
+    >
       Find your
 
       <a
@@ -110,7 +112,6 @@
       >
         supported edition
       </a>
-
     </p>
 
 
@@ -328,8 +329,7 @@
 <!-- =========================================================
      WHAT'S NEW
 
-     IMPORTANT:
-     This card intentionally ignores the UI opacity slider.
+     This card intentionally ignores UI opacity.
 ========================================================= -->
 
 <div
@@ -341,15 +341,7 @@
 
     <h2>What’s New</h2>
 
-    <!--
-      DO NOT manually edit changelog HTML here.
-
-      JavaScript automatically fills this area from
-      CHANGELOG below.
-    -->
-
     <div id="changelogContent"></div>
-
 
     <button
       class="close-button"
@@ -455,22 +447,7 @@
 /* ==========================================================
    EASY CHANGELOG
 
-   WHEN A NEW VERSION RELEASES:
-
-   ONLY EDIT THIS SECTION.
-
-   Example:
-
-   version: "v1.0 Beta 5"
-
-   items: [
-     {
-       title: "New Feature",
-       text: "Description here."
-     }
-   ]
-
-   You can add as many items as you want.
+   For future releases, edit ONLY this section.
 ========================================================== */
 
 const CHANGELOG = {
@@ -512,6 +489,10 @@ const EDITIONS_JSON =
   "https://skylark-inc.github.io/editions.json";
 
 
+const REQUIRED_IOS_MAJOR =
+  27;
+
+
 const DEFAULT_BG =
   "https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
 
@@ -550,6 +531,9 @@ let editionData = null;
 
 const mainBtn =
   document.getElementById("mainBtn");
+
+const findEdition =
+  document.getElementById("findEdition");
 
 const supportedVersion =
   document.getElementById("supportedVersion");
@@ -622,16 +606,12 @@ function showToast(message){
   const toast =
     document.getElementById("toast");
 
-
   toast.textContent =
     message;
 
-
   toast.classList.add("show");
 
-
   clearTimeout(toastTimer);
-
 
   toastTimer =
     setTimeout(() => {
@@ -645,68 +625,177 @@ function showToast(message){
 
 
 /* ==========================================================
-   DEVICE DETECTION
+   APPLE MOBILE CHECK
 
-   IMPORTANT:
-
-   We DO NOT attempt to read the exact iOS version.
-
-   Modern Safari user-agent information is not reliable
-   enough for that and caused supported devices to be
-   incorrectly blocked.
-
-   Instead:
-
-   iPhone / iPad = installation allowed
-
-   Other platforms = Unsupported
-
-   The actual supported iOS version is still displayed
-   from editions.json.
+   This is only used to make sure we're looking at an
+   iPhone/iPad-style device before accepting the version.
 ========================================================== */
 
 function isAppleMobileDevice(){
 
-  const userAgent =
+  const ua =
     navigator.userAgent || "";
-
 
   const platform =
     navigator.platform || "";
-
 
   const touchPoints =
     navigator.maxTouchPoints || 0;
 
 
-
-  /* Normal iPhone / iPad */
-
   if(
-    /iPhone|iPad|iPod/i.test(userAgent)
+    /iPhone|iPad|iPod/i.test(ua)
   ){
-
     return true;
+  }
+
+
+  /*
+    iPadOS can sometimes identify itself as Macintosh.
+  */
+  if(
+    platform === "MacIntel" &&
+    touchPoints > 1
+  ){
+    return true;
+  }
+
+
+  return false;
+
+}
+
+
+
+/* ==========================================================
+   READ iOS / iPadOS MAJOR VERSION
+
+   PRIMARY CHECK:
+
+   Example:
+   Version/18.7.5 Mobile/15E148
+
+   Returns:
+   18
+
+   FALLBACK:
+
+   Example:
+   CPU iPhone OS 18_7 like Mac OS X
+
+   Returns:
+   18
+
+   We intentionally care only about the FIRST number.
+
+   27.0   -> 27
+   27.1   -> 27
+   27.5.2 -> 27
+========================================================== */
+
+function getIOSMajorVersion(){
+
+  const ua =
+    navigator.userAgent || "";
+
+
+  /*
+    PRIMARY METHOD
+
+    Example:
+    Version/18.7.5 Mobile/
+  */
+
+  const versionMatch =
+    ua.match(
+      /Version\/(\d+)(?:\.\d+)*\s+Mobile\//i
+    );
+
+
+  if(versionMatch){
+
+    return parseInt(
+      versionMatch[1],
+      10
+    );
 
   }
 
 
 
   /*
-    Modern iPadOS can report itself as MacIntel.
+    FALLBACK METHOD
+
+    iPhone example:
+    CPU iPhone OS 18_7 like Mac OS X
+
+    iPad example:
+    CPU OS 18_7 like Mac OS X
   */
 
-  if(
-    platform === "MacIntel" &&
-    touchPoints > 1
-  ){
+  const osMatch =
+    ua.match(
+      /(?:iPhone\s+)?OS\s+(\d+)(?:[_\.]\d+)*/i
+    );
 
-    return true;
+
+  if(osMatch){
+
+    return parseInt(
+      osMatch[1],
+      10
+    );
 
   }
 
 
-  return false;
+  return null;
+
+}
+
+
+
+/* ==========================================================
+   SUPPORT CHECK
+
+   Edition 27 accepts ONLY major version 27.
+
+   Examples:
+
+   iOS 18.7  -> unsupported
+   iOS 26.x  -> unsupported
+   iOS 27.0  -> supported
+   iOS 27.1  -> supported
+   iOS 27.9  -> supported
+   iOS 28.x  -> unsupported
+
+   This is a compatibility hint, not a security mechanism.
+========================================================== */
+
+function isSupportedDevice(){
+
+  if(
+    !isAppleMobileDevice()
+  ){
+    return false;
+  }
+
+
+  const majorVersion =
+    getIOSMajorVersion();
+
+
+  if(
+    majorVersion === null
+  ){
+    return false;
+  }
+
+
+  return (
+    majorVersion ===
+    REQUIRED_IOS_MAJOR
+  );
 
 }
 
@@ -724,7 +813,7 @@ async function loadEdition(){
       await fetch(
         EDITIONS_JSON,
         {
-          cache: "no-store"
+          cache:"no-store"
         }
       );
 
@@ -732,7 +821,8 @@ async function loadEdition(){
     if(!response.ok){
 
       throw new Error(
-        "HTTP " + response.status
+        "HTTP " +
+        response.status
       );
 
     }
@@ -742,17 +832,15 @@ async function loadEdition(){
       await response.json();
 
 
-
     /*
-      editions.json is an ARRAY.
-
-      Find Edition 27.
+      editions.json is expected to be an array.
     */
 
     editionData =
       data.find(
         item =>
-          item.edition === EDITION_NAME
+          item.edition ===
+          EDITION_NAME
       );
 
 
@@ -798,6 +886,15 @@ async function loadEdition(){
     );
 
 
+    /*
+      If the release data itself failed,
+      offer Find Edition as a fallback.
+    */
+
+    findEdition.hidden =
+      false;
+
+
     showToast(
       "Could not load Edition 27"
     );
@@ -835,7 +932,7 @@ function applyEditionData(){
   else{
 
     supportedVersion.textContent =
-      "";
+      "Supported: iOS 27.0";
 
   }
 
@@ -893,7 +990,9 @@ function applyEditionData(){
 function updateInstallButton(){
 
 
-  /* No edition data */
+  /* --------------------------------
+     NO EDITION DATA
+  -------------------------------- */
 
   if(!editionData){
 
@@ -910,15 +1009,23 @@ function updateInstallButton(){
     );
 
 
+    findEdition.hidden =
+      false;
+
+
     return;
 
   }
 
 
 
-  /* End of life */
+  /* --------------------------------
+     END OF LIFE
+  -------------------------------- */
 
-  if(editionData.eol === true){
+  if(
+    editionData.eol === true
+  ){
 
     mainBtn.textContent =
       "End of Life";
@@ -933,15 +1040,23 @@ function updateInstallButton(){
     );
 
 
+    findEdition.hidden =
+      false;
+
+
     return;
 
   }
 
 
 
-  /* Missing installation link */
+  /* --------------------------------
+     MISSING INSTALL LINK
+  -------------------------------- */
 
-  if(!editionData.link){
+  if(
+    !editionData.link
+  ){
 
     mainBtn.textContent =
       "Unavailable";
@@ -956,15 +1071,23 @@ function updateInstallButton(){
     );
 
 
+    findEdition.hidden =
+      false;
+
+
     return;
 
   }
 
 
 
-  /* Unsupported platform */
+  /* --------------------------------
+     DEVICE / VERSION UNSUPPORTED
+  -------------------------------- */
 
-  if(!isAppleMobileDevice()){
+  if(
+    !isSupportedDevice()
+  ){
 
     mainBtn.textContent =
       "Unsupported";
@@ -979,13 +1102,23 @@ function updateInstallButton(){
     );
 
 
+    /*
+      ONLY unsupported visitors see this.
+    */
+
+    findEdition.hidden =
+      false;
+
+
     return;
 
   }
 
 
 
-  /* Supported */
+  /* --------------------------------
+     SUPPORTED iOS/iPadOS 27.x
+  -------------------------------- */
 
   mainBtn.textContent =
     "Get Skylark";
@@ -999,6 +1132,15 @@ function updateInstallButton(){
     "unsupported"
   );
 
+
+  /*
+    Supported Edition 27 visitors don't
+    need the Find Edition message.
+  */
+
+  findEdition.hidden =
+    true;
+
 }
 
 
@@ -1006,7 +1148,7 @@ function updateInstallButton(){
 /* ==========================================================
    GET SKYLARK
 
-   Installation link ALWAYS comes from editions.json.
+   The installation URL still comes from editions.json.
 ========================================================== */
 
 mainBtn.addEventListener(
@@ -1018,25 +1160,23 @@ mainBtn.addEventListener(
       !editionData ||
       mainBtn.disabled
     ){
-
       return;
-
     }
-
 
 
     if(
       editionData.eol === true
     ){
-
       return;
-
     }
 
 
+    /*
+      Re-check compatibility at click time.
+    */
 
     if(
-      !isAppleMobileDevice()
+      !isSupportedDevice()
     ){
 
       updateInstallButton();
@@ -1046,8 +1186,9 @@ mainBtn.addEventListener(
     }
 
 
-
-    if(!editionData.link){
+    if(
+      !editionData.link
+    ){
 
       showToast(
         "Skylark is currently unavailable"
@@ -1056,7 +1197,6 @@ mainBtn.addEventListener(
       return;
 
     }
-
 
 
     window.location.href =
@@ -1070,9 +1210,7 @@ mainBtn.addEventListener(
 /* ==========================================================
    CHANGELOG RENDERER
 
-   DO NOT EDIT THIS WHEN UPDATING RELEASE NOTES.
-
-   Edit CHANGELOG at the top instead.
+   For new releases, edit CHANGELOG at the top.
 ========================================================== */
 
 function renderChangelog(){
@@ -1098,7 +1236,6 @@ function renderChangelog(){
   );
 
 
-
   CHANGELOG.items.forEach(
     item => {
 
@@ -1111,7 +1248,6 @@ function renderChangelog(){
         "whats-new-item";
 
 
-
       const title =
         document.createElement("strong");
 
@@ -1120,14 +1256,12 @@ function renderChangelog(){
         item.title;
 
 
-
       const text =
         document.createElement("p");
 
 
       text.textContent =
         item.text;
-
 
 
       block.appendChild(
@@ -1211,7 +1345,9 @@ function applyDarkMode(enabled){
 
   localStorage.setItem(
     "darkMode",
-    enabled ? "true" : "false"
+    enabled
+      ? "true"
+      : "false"
   );
 
 }
@@ -1290,7 +1426,9 @@ function applyBackground(name){
 
   /* DEFAULT */
 
-  if(name === "default"){
+  if(
+    name === "default"
+  ){
 
     setBodyBackground(
       DEFAULT_BG
@@ -1326,9 +1464,7 @@ function applyBackground(name){
 
 
   if(!url){
-
     return;
-
   }
 
 
@@ -1371,11 +1507,8 @@ fileInput.addEventListener(
 
 
     if(!file){
-
       return;
-
     }
-
 
 
     if(
@@ -1393,10 +1526,8 @@ fileInput.addEventListener(
     }
 
 
-
     const reader =
       new FileReader();
-
 
 
     reader.onload =
@@ -1540,7 +1671,6 @@ function applyURL(){
     urlInput.value.trim();
 
 
-
   if(!url){
 
     urlError.textContent =
@@ -1556,10 +1686,8 @@ function applyURL(){
   }
 
 
-
   const image =
     new Image();
-
 
 
   image.onload =
@@ -1594,8 +1722,7 @@ function applyURL(){
 
       closeURL();
 
-  };
-
+    };
 
 
   image.onerror =
@@ -1609,8 +1736,7 @@ function applyURL(){
       urlError.hidden =
         false;
 
-  };
-
+    };
 
 
   image.src =
@@ -1644,10 +1770,11 @@ function restoreBackground(){
     );
 
 
-
   /* CUSTOM */
 
-  if(type === "custom"){
+  if(
+    type === "custom"
+  ){
 
     const custom =
       localStorage.getItem(
@@ -1677,7 +1804,9 @@ function restoreBackground(){
 
   /* THEME */
 
-  if(type === "theme"){
+  if(
+    type === "theme"
+  ){
 
     const theme =
       localStorage.getItem(
@@ -1755,9 +1884,6 @@ function applyOpacity(value){
     numericValue / 100;
 
 
-
-  /* Save CSS variable */
-
   document.documentElement
     .style
     .setProperty(
@@ -1766,24 +1892,12 @@ function applyOpacity(value){
     );
 
 
-
-  /* Update percentage */
-
   opacityValue.textContent =
     numericValue + "%";
 
 
-
   /*
     TRUE ZERO MODE
-
-    At 0%:
-    - no background
-    - no blur
-    - no shadow
-    - no border/glass effect
-
-    Contents remain fully visible.
   */
 
   const zero =
@@ -1802,14 +1916,12 @@ function applyOpacity(value){
   );
 
 
-
   /*
-    Warning only at lower values.
+    Warning only at lower opacity.
   */
 
   opacityWarning.hidden =
     numericValue >= 50;
-
 
 
   localStorage.setItem(
