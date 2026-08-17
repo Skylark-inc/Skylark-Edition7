@@ -15,439 +15,512 @@
 
 <body>
 
-  <!-- =========================================
-       MAIN UI
-  ========================================== -->
-  <main class="container">
+<!-- =========================================================
+     MAIN UI
+========================================================= -->
 
-    <section class="card">
+<main class="container">
 
-      <h1>Skylark (Edition 27)</h1>
+  <section class="card" id="mainCard">
 
-      <!-- Filled automatically from editions.json -->
-      <p id="supportedVersion" class="supported-version">
-        Supported: iOS 27.0
+    <h1>Skylark (Edition 27)</h1>
+
+    <p
+      id="supportedVersion"
+      class="supported-version"
+    >
+      Supported: iOS 27.0
+    </p>
+
+    <p
+      id="skylarkVersion"
+      class="skylark-version"
+    >
+      Loading version…
+    </p>
+
+
+    <!-- BETA NOTICE -->
+    <div
+      id="betaNotice"
+      class="notice beta-notice"
+      hidden
+    >
+
+      <strong>Beta Software</strong>
+
+      <p>
+        This version of Skylark is currently in beta.
+        Features may change and issues may occur.
       </p>
 
-      <!-- Filled automatically from editions.json -->
-      <p id="skylarkVersion" class="skylark-version">
-        Loading version…
+    </div>
+
+
+    <!-- ALERT FROM editions.json -->
+    <div
+      id="editionAlert"
+      class="notice alert-notice"
+      hidden
+    >
+
+      <strong>Notice</strong>
+
+      <p id="editionAlertText"></p>
+
+    </div>
+
+
+    <!-- END OF LIFE -->
+    <div
+      id="eolNotice"
+      class="notice eol-notice"
+      hidden
+    >
+
+      <strong>End of Life</strong>
+
+      <p>
+        This edition of Skylark is no longer supported.
       </p>
 
-
-      <!-- =====================================
-           BETA NOTICE
-           Only shown if beta:true
-      ====================================== -->
-      <div id="betaNotice" class="notice beta-notice" hidden>
-        <strong>Beta Software</strong>
-
-        <p>
-          This version of Skylark is currently in beta.
-          Features may change and issues may occur.
-        </p>
-      </div>
+    </div>
 
 
-      <!-- =====================================
-           ALERT
-           Only shown if alert:true
-      ====================================== -->
-      <div id="editionAlert" class="notice alert-notice" hidden>
-        <strong>Notice</strong>
-        <p id="editionAlertText"></p>
-      </div>
+    <!-- GET SKYLARK -->
+    <button
+      class="main-btn"
+      id="mainBtn"
+      type="button"
+      disabled
+    >
+      Loading…
+    </button>
 
 
-      <!-- =====================================
-           EOL NOTICE
-           Only shown if eol:true
-      ====================================== -->
-      <div id="eolNotice" class="notice eol-notice" hidden>
-        <strong>End of Life</strong>
+    <!-- FIND EDITION -->
+    <p class="find-edition">
 
-        <p>
-          This edition of Skylark is no longer supported.
-        </p>
-      </div>
+      Find your
 
-
-      <!-- =====================================
-           INSTALL BUTTON
-      ====================================== -->
-      <button
-        class="main-btn"
-        id="mainBtn"
-        type="button"
-        disabled
+      <a
+        href="https://skylark-inc.github.io/FindEdition/"
+        target="_blank"
+        rel="noopener noreferrer"
       >
-        Checking Compatibility…
+        supported edition
+      </a>
+
+    </p>
+
+
+    <!-- SMALL BUTTONS -->
+    <div class="sub-buttons">
+
+      <button
+        type="button"
+        onclick="openSettings()"
+      >
+        Settings
       </button>
 
+      <button
+        type="button"
+        onclick="openWhatsNew()"
+      >
+        What’s New
+      </button>
 
-      <!-- =====================================
-           FIND EDITION
-      ====================================== -->
-      <p class="find-edition">
-        Find your
-        <a
-          href="https://skylark-inc.github.io/FindEdition/"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          supported edition
-        </a>
-      </p>
+    </div>
 
 
-      <!-- =====================================
-           SMALL BUTTONS
-      ====================================== -->
-      <div class="sub-buttons">
+    <!-- COPYRIGHT -->
+    <div class="credits">
 
-        <button
-          type="button"
-          onclick="openSettings()"
-        >
-          Settings
-        </button>
+      <a
+        href="https://x.com/UseSkylark"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        © Skylark Inc
+      </a>
 
-        <button
-          type="button"
-          onclick="openWhatsNew()"
-        >
-          What’s New
-        </button>
+      <span>•</span>
 
-      </div>
+      <a
+        href="https://x.com/terralinkslabs"
+        target="_blank"
+        rel="noopener noreferrer"
+      >
+        © Terralinkslabs
+      </a>
 
+    </div>
 
-      <!-- =====================================
-           COPYRIGHT
-      ====================================== -->
-      <div class="credits">
+  </section>
 
-        <a
-          href="https://x.com/UseSkylark"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          © Skylark Inc
-        </a>
-
-        <span>•</span>
-
-        <a
-          href="https://x.com/terralinkslabs"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          © Terralinkslabs
-        </a>
-
-      </div>
-
-    </section>
-
-  </main>
+</main>
 
 
 
-  <!-- =========================================
-       SETTINGS
-  ========================================== -->
-  <div id="settingsPanel" class="overlay">
+<!-- =========================================================
+     SETTINGS
+========================================================= -->
 
-    <section class="settings-card">
+<div
+  id="settingsPanel"
+  class="overlay"
+>
 
-      <h2>Settings</h2>
+  <section
+    class="settings-card opacity-card"
+    id="settingsCard"
+  >
 
-
-      <!-- DARK MODE -->
-      <div class="setting-row">
-
-        <div class="setting-text">
-          <strong>Dark Mode</strong>
-        </div>
-
-        <label class="switch">
-
-          <input
-            type="checkbox"
-            id="darkToggle"
-          >
-
-          <span class="toggle-slider"></span>
-
-        </label>
-
-      </div>
+    <h2>Settings</h2>
 
 
-      <div class="divider"></div>
+    <!-- DARK MODE -->
+    <div class="setting-row">
 
+      <strong>Dark Mode</strong>
 
-      <!-- BACKGROUND -->
-      <div class="settings-section">
-
-        <h3>Background</h3>
-
-        <div class="theme-grid">
-
-          <button
-            type="button"
-            data-theme="default"
-            onclick="applyBackground('default')"
-          >
-            Default
-          </button>
-
-          <button
-            type="button"
-            data-theme="Ella"
-            onclick="applyBackground('Ella')"
-          >
-            Ella
-          </button>
-
-          <button
-            type="button"
-            data-theme="Glitter"
-            onclick="applyBackground('Glitter')"
-          >
-            Glitter
-          </button>
-
-          <button
-            type="button"
-            data-theme="Car Wash"
-            onclick="applyBackground('Car Wash')"
-          >
-            Car Wash
-          </button>
-
-        </div>
-
-
-        <label class="file-btn">
-
-          <span>Your Photos</span>
-
-          <input
-            type="file"
-            id="fileInput"
-            accept="image/*"
-          >
-
-        </label>
-
-
-        <button
-          class="settings-button"
-          type="button"
-          onclick="openURL()"
-        >
-          Image URL
-        </button>
-
-      </div>
-
-
-      <div class="divider"></div>
-
-
-      <!-- UI OPACITY -->
-      <div class="settings-section">
-
-        <div class="opacity-header">
-
-          <span>UI Opacity</span>
-
-          <strong id="opacityValue">
-            65%
-          </strong>
-
-        </div>
+      <label class="switch">
 
         <input
-          type="range"
-          id="opacitySlider"
-          min="0"
-          max="100"
-          step="1"
-          value="65"
+          type="checkbox"
+          id="darkToggle"
         >
 
-        <p
-          id="opacityWarning"
-          class="warning"
-          hidden
-        >
-          Lower UI opacity may make some text difficult
-          to read against certain backgrounds.
-        </p>
+        <span class="toggle-slider"></span>
 
-      </div>
+      </label>
+
+    </div>
 
 
-      <button
-        class="close-button"
-        type="button"
-        onclick="closeSettings()"
-      >
-        Done
-      </button>
-
-    </section>
-
-  </div>
+    <div class="divider"></div>
 
 
+    <!-- BACKGROUND -->
+    <div class="settings-section">
 
-  <!-- =========================================
-       WHAT'S NEW
-  ========================================== -->
-  <div id="whatsNewPanel" class="overlay">
-
-    <section class="settings-card whats-new-card">
-
-      <h2>What’s New</h2>
-
-      <!--
-        Replace these placeholders whenever
-        you want to update the release notes.
-      -->
-
-      <div class="whats-new-content">
-
-        <div class="whats-new-item">
-          <strong>Skylark (Edition 27)</strong>
-          <p>
-            Release notes placeholder.
-          </p>
-        </div>
-
-        <div class="whats-new-item">
-          <strong>Improvements</strong>
-          <p>
-            Add your changes here.
-          </p>
-        </div>
-
-      </div>
-
-      <button
-        class="close-button"
-        type="button"
-        onclick="closeWhatsNew()"
-      >
-        Back
-      </button>
-
-    </section>
-
-  </div>
+      <h3>Background</h3>
 
 
-
-  <!-- =========================================
-       IMAGE URL POPUP
-  ========================================== -->
-  <div id="urlPopup" class="overlay">
-
-    <section class="popup-card">
-
-      <h3>Image URL</h3>
-
-      <p class="popup-description">
-        Enter a direct link to an image.
-      </p>
-
-
-      <div class="url-input-row">
-
-        <input
-          type="url"
-          id="urlInput"
-          placeholder="https://example.com/image.jpg"
-          autocomplete="off"
-        >
+      <div class="theme-grid">
 
         <button
           type="button"
-          id="pasteButton"
-          onclick="pasteURL()"
+          data-theme="default"
+          onclick="applyBackground('default')"
         >
-          Paste
+          Default
+        </button>
+
+
+        <button
+          type="button"
+          data-theme="Ella"
+          onclick="applyBackground('Ella')"
+        >
+          Ella
+        </button>
+
+
+        <button
+          type="button"
+          data-theme="Glitter"
+          onclick="applyBackground('Glitter')"
+        >
+          Glitter
+        </button>
+
+
+        <button
+          type="button"
+          data-theme="Car Wash"
+          onclick="applyBackground('Car Wash')"
+        >
+          Car Wash
         </button>
 
       </div>
+
+
+      <label class="file-btn">
+
+        Your Photos
+
+        <input
+          type="file"
+          id="fileInput"
+          accept="image/*"
+        >
+
+      </label>
+
+
+      <button
+        class="settings-button"
+        type="button"
+        onclick="openURL()"
+      >
+        Image URL
+      </button>
+
+    </div>
+
+
+    <div class="divider"></div>
+
+
+    <!-- OPACITY -->
+    <div class="settings-section">
+
+      <div class="opacity-header">
+
+        <span>UI Opacity</span>
+
+        <strong id="opacityValue">
+          65%
+        </strong>
+
+      </div>
+
+
+      <input
+        type="range"
+        id="opacitySlider"
+        min="0"
+        max="100"
+        step="1"
+        value="65"
+      >
 
 
       <p
-        id="urlError"
-        class="url-error"
+        id="opacityWarning"
+        class="warning"
         hidden
-      ></p>
+      >
+        Lower UI opacity may make some text difficult
+        to read against certain backgrounds.
+      </p>
+
+    </div>
 
 
-      <div class="popup-actions">
+    <button
+      class="close-button"
+      type="button"
+      onclick="closeSettings()"
+    >
+      Done
+    </button>
 
-        <button
-          class="secondary-button"
-          type="button"
-          onclick="closeURL()"
-        >
-          Cancel
-        </button>
+  </section>
 
-        <button
-          class="primary-button"
-          type="button"
-          onclick="applyURL()"
-        >
-          Apply
-        </button>
-
-      </div>
-
-    </section>
-
-  </div>
+</div>
 
 
 
-  <!-- =========================================
-       TOAST
-  ========================================== -->
-  <div
-    id="toast"
-    role="status"
-    aria-live="polite"
-  ></div>
+<!-- =========================================================
+     WHAT'S NEW
+
+     IMPORTANT:
+     This card intentionally ignores the UI opacity slider.
+========================================================= -->
+
+<div
+  id="whatsNewPanel"
+  class="overlay"
+>
+
+  <section class="whats-new-card">
+
+    <h2>What’s New</h2>
+
+    <!--
+      DO NOT manually edit changelog HTML here.
+
+      JavaScript automatically fills this area from
+      CHANGELOG below.
+    -->
+
+    <div id="changelogContent"></div>
+
+
+    <button
+      class="close-button"
+      type="button"
+      onclick="closeWhatsNew()"
+    >
+      Back
+    </button>
+
+  </section>
+
+</div>
+
+
+
+<!-- =========================================================
+     IMAGE URL POPUP
+========================================================= -->
+
+<div
+  id="urlPopup"
+  class="overlay"
+>
+
+  <section class="popup-card">
+
+    <h3>Image URL</h3>
+
+    <p class="popup-description">
+      Enter a direct link to an image.
+    </p>
+
+
+    <div class="url-input-row">
+
+      <input
+        type="url"
+        id="urlInput"
+        placeholder="https://example.com/image.jpg"
+        autocomplete="off"
+      >
+
+
+      <button
+        type="button"
+        id="pasteButton"
+        onclick="pasteURL()"
+      >
+        Paste
+      </button>
+
+    </div>
+
+
+    <p
+      id="urlError"
+      class="url-error"
+      hidden
+    ></p>
+
+
+    <div class="popup-actions">
+
+      <button
+        class="secondary-button"
+        type="button"
+        onclick="closeURL()"
+      >
+        Cancel
+      </button>
+
+
+      <button
+        class="primary-button"
+        type="button"
+        onclick="applyURL()"
+      >
+        Apply
+      </button>
+
+    </div>
+
+  </section>
+
+</div>
+
+
+
+<!-- =========================================================
+     TOAST
+========================================================= -->
+
+<div
+  id="toast"
+  role="status"
+  aria-live="polite"
+></div>
 
 
 
 <script>
 
 /* ==========================================================
+   EASY CHANGELOG
+
+   WHEN A NEW VERSION RELEASES:
+
+   ONLY EDIT THIS SECTION.
+
+   Example:
+
+   version: "v1.0 Beta 5"
+
+   items: [
+     {
+       title: "New Feature",
+       text: "Description here."
+     }
+   ]
+
+   You can add as many items as you want.
+========================================================== */
+
+const CHANGELOG = {
+
+  version: "Current Release",
+
+  items: [
+
+    {
+      title: "Skylark (Edition 27)",
+      text: "Release notes placeholder."
+    },
+
+    {
+      title: "Improvements",
+      text: "Add your changes here."
+    },
+
+    {
+      title: "Bug Fixes",
+      text: "Add fixed issues here."
+    }
+
+  ]
+
+};
+
+
+
+/* ==========================================================
    CONFIGURATION
 ========================================================== */
 
-const EDITION_NAME = "Edition 27";
+const EDITION_NAME =
+  "Edition 27";
+
 
 const EDITIONS_JSON =
   "https://skylark-inc.github.io/editions.json";
+
 
 const DEFAULT_BG =
   "https://media.idownloadblog.com/wp-content/uploads/2017/06/iOS-10-3-3-wallpaper-1-iPad-AR72014.jpg";
 
 
-/*
-   IMPORTANT:
-   These filenames correspond to the theme files
-   you provided earlier.
-*/
+
+/* ==========================================================
+   BUILT-IN THEMES
+========================================================== */
+
 const THEMES = {
 
   "Ella":
@@ -462,6 +535,10 @@ const THEMES = {
 };
 
 
+
+/* ==========================================================
+   GLOBAL EDITION DATA
+========================================================== */
 
 let editionData = null;
 
@@ -522,6 +599,15 @@ const opacityValue =
 const opacityWarning =
   document.getElementById("opacityWarning");
 
+const mainCard =
+  document.getElementById("mainCard");
+
+const settingsCard =
+  document.getElementById("settingsCard");
+
+const changelogContent =
+  document.getElementById("changelogContent");
+
 
 
 /* ==========================================================
@@ -530,331 +616,104 @@ const opacityWarning =
 
 let toastTimer = null;
 
+
 function showToast(message){
 
   const toast =
     document.getElementById("toast");
 
-  toast.textContent = message;
+
+  toast.textContent =
+    message;
+
 
   toast.classList.add("show");
 
+
   clearTimeout(toastTimer);
 
-  toastTimer = setTimeout(() => {
 
-    toast.classList.remove("show");
+  toastTimer =
+    setTimeout(() => {
 
-  }, 2600);
+      toast.classList.remove("show");
 
-}
-
-
-
-/* ==========================================================
-   VERSION HELPERS
-========================================================== */
-
-function versionParts(version){
-
-  return String(version)
-    .split(".")
-    .map(part => {
-
-      const number =
-        parseInt(part, 10);
-
-      return Number.isNaN(number)
-        ? 0
-        : number;
-
-    });
-
-}
-
-
-function compareVersions(a, b){
-
-  const aParts =
-    versionParts(a);
-
-  const bParts =
-    versionParts(b);
-
-  const length =
-    Math.max(
-      aParts.length,
-      bParts.length
-    );
-
-
-  for(let i = 0; i < length; i++){
-
-    const av =
-      aParts[i] || 0;
-
-    const bv =
-      bParts[i] || 0;
-
-
-    if(av > bv){
-      return 1;
-    }
-
-    if(av < bv){
-      return -1;
-    }
-
-  }
-
-
-  return 0;
+    }, 2600);
 
 }
 
 
 
 /* ==========================================================
-   DEVICE / OS DETECTION
+   DEVICE DETECTION
+
+   IMPORTANT:
+
+   We DO NOT attempt to read the exact iOS version.
+
+   Modern Safari user-agent information is not reliable
+   enough for that and caused supported devices to be
+   incorrectly blocked.
+
+   Instead:
+
+   iPhone / iPad = installation allowed
+
+   Other platforms = Unsupported
+
+   The actual supported iOS version is still displayed
+   from editions.json.
 ========================================================== */
 
-/*
-   Skylark Edition 27 installation is intended for
-   iOS / iPadOS.
+function isAppleMobileDevice(){
 
-   The webpage itself remains usable everywhere.
-*/
+  const userAgent =
+    navigator.userAgent || "";
 
-function getAppleMobileOSVersion(){
-
-  const ua =
-    navigator.userAgent;
 
   const platform =
     navigator.platform || "";
+
 
   const touchPoints =
     navigator.maxTouchPoints || 0;
 
 
-  /*
-     Standard iPhone / iPod UA
-  */
-  let match =
-    ua.match(
-      /OS (\d+)[._](\d+)(?:[._](\d+))?/
-    );
 
+  /* Normal iPhone / iPad */
 
-  if(match){
+  if(
+    /iPhone|iPad|iPod/i.test(userAgent)
+  ){
 
-    return [
-      match[1],
-      match[2],
-      match[3] || "0"
-    ].join(".");
+    return true;
 
   }
 
 
+
   /*
-     Modern iPads can identify themselves
-     as Macintosh.
+    Modern iPadOS can report itself as MacIntel.
   */
-  const iPadDesktopUA =
+
+  if(
     platform === "MacIntel" &&
-    touchPoints > 1;
-
-
-  if(iPadDesktopUA){
-
-    match =
-      ua.match(
-        /Version\/(\d+)(?:\.(\d+))?(?:\.(\d+))?/
-      );
-
-
-    if(match){
-
-      return [
-        match[1],
-        match[2] || "0",
-        match[3] || "0"
-      ].join(".");
-
-    }
-
-  }
-
-
-  return null;
-
-}
-
-
-
-/* ==========================================================
-   EDITION COMPATIBILITY
-========================================================== */
-
-function isCompatibleWithEdition(){
-
-  if(!editionData){
-    return false;
-  }
-
-
-  const osVersion =
-    getAppleMobileOSVersion();
-
-
-  /*
-     Android, Windows, Linux, desktop macOS,
-     and unidentified platforms cannot install.
-  */
-  if(!osVersion){
-    return false;
-  }
-
-
-  const minimum =
-    editionData.min;
-
-  const maximum =
-    editionData.max;
-
-
-  if(
-    minimum &&
-    compareVersions(
-      osVersion,
-      minimum
-    ) < 0
+    touchPoints > 1
   ){
-    return false;
+
+    return true;
+
   }
 
 
-  /*
-     Edition 27 currently lists 27.0 as both min/max.
-
-     We compare the major/minor compatibility range
-     supplied by editions.json.
-  */
-  if(
-    maximum &&
-    compareVersions(
-      osVersion,
-      maximum
-    ) > 0
-  ){
-    return false;
-  }
-
-
-  return true;
+  return false;
 
 }
 
 
 
 /* ==========================================================
-   INSTALL BUTTON STATE
-========================================================== */
-
-function updateInstallButton(){
-
-  if(!editionData){
-
-    mainBtn.textContent =
-      "Unavailable";
-
-    mainBtn.disabled = true;
-
-    mainBtn.classList.add(
-      "unsupported"
-    );
-
-    return;
-
-  }
-
-
-  /*
-     End-of-life always wins.
-  */
-  if(editionData.eol === true){
-
-    mainBtn.textContent =
-      "End of Life";
-
-    mainBtn.disabled = true;
-
-    mainBtn.classList.add(
-      "unsupported"
-    );
-
-    return;
-
-  }
-
-
-  /*
-     No installation link.
-  */
-  if(!editionData.link){
-
-    mainBtn.textContent =
-      "Unavailable";
-
-    mainBtn.disabled = true;
-
-    mainBtn.classList.add(
-      "unsupported"
-    );
-
-    return;
-
-  }
-
-
-  /*
-     Unsupported device/version.
-  */
-  if(!isCompatibleWithEdition()){
-
-    mainBtn.textContent =
-      "Unsupported";
-
-    mainBtn.disabled = true;
-
-    mainBtn.classList.add(
-      "unsupported"
-    );
-
-    return;
-
-  }
-
-
-  /*
-     Supported.
-  */
-  mainBtn.textContent =
-    "Get Skylark";
-
-  mainBtn.disabled = false;
-
-  mainBtn.classList.remove(
-    "unsupported"
-  );
-
-}
-
-
-
-/* ==========================================================
-   LOAD EDITION 27 FROM editions.json
+   LOAD EDITION DATA
 ========================================================== */
 
 async function loadEdition(){
@@ -883,11 +742,13 @@ async function loadEdition(){
       await response.json();
 
 
-    /*
-       editions.json is an ARRAY.
 
-       Find Edition 27 by its "edition" field.
+    /*
+      editions.json is an ARRAY.
+
+      Find Edition 27.
     */
+
     editionData =
       data.find(
         item =>
@@ -898,7 +759,7 @@ async function loadEdition(){
     if(!editionData){
 
       throw new Error(
-        "Edition 27 was not found."
+        "Edition 27 not found"
       );
 
     }
@@ -907,6 +768,7 @@ async function loadEdition(){
     applyEditionData();
 
   }
+
   catch(error){
 
     console.error(
@@ -918,6 +780,7 @@ async function loadEdition(){
     skylarkVersion.textContent =
       "Version unavailable";
 
+
     supportedVersion.textContent =
       "Compatibility unavailable";
 
@@ -925,7 +788,10 @@ async function loadEdition(){
     mainBtn.textContent =
       "Unavailable";
 
-    mainBtn.disabled = true;
+
+    mainBtn.disabled =
+      true;
+
 
     mainBtn.classList.add(
       "unsupported"
@@ -943,26 +809,21 @@ async function loadEdition(){
 
 
 /* ==========================================================
-   APPLY DATA FROM editions.json
+   APPLY EDITION DATA
 ========================================================== */
 
 function applyEditionData(){
 
-  /*
-     VERSION
-  */
+
+  /* VERSION */
+
   skylarkVersion.textContent =
     editionData.version || "";
 
 
-  /*
-     SUPPORTED VERSION
 
-     You requested that Edition 27 simply display:
-     Supported: iOS 27.0
+  /* SUPPORTED VERSION */
 
-     This value comes from the edition's min field.
-  */
   if(editionData.min){
 
     supportedVersion.textContent =
@@ -970,6 +831,7 @@ function applyEditionData(){
       editionData.min;
 
   }
+
   else{
 
     supportedVersion.textContent =
@@ -978,20 +840,16 @@ function applyEditionData(){
   }
 
 
-  /*
-     BETA
 
-     Automatically disappears once beta becomes false.
-  */
+  /* BETA NOTICE */
+
   betaNotice.hidden =
     editionData.beta !== true;
 
 
-  /*
-     ALERT
 
-     Automatically follows alert + alertMessage.
-  */
+  /* ALERT */
+
   if(
     editionData.alert === true &&
     editionData.alertMessage
@@ -1000,10 +858,12 @@ function applyEditionData(){
     editionAlertText.textContent =
       editionData.alertMessage;
 
+
     editionAlert.hidden =
       false;
 
   }
+
   else{
 
     editionAlert.hidden =
@@ -1012,11 +872,12 @@ function applyEditionData(){
   }
 
 
-  /*
-     END OF LIFE
-  */
+
+  /* END OF LIFE */
+
   eolNotice.hidden =
     editionData.eol !== true;
+
 
 
   updateInstallButton();
@@ -1026,33 +887,164 @@ function applyEditionData(){
 
 
 /* ==========================================================
+   INSTALL BUTTON
+========================================================== */
+
+function updateInstallButton(){
+
+
+  /* No edition data */
+
+  if(!editionData){
+
+    mainBtn.textContent =
+      "Unavailable";
+
+
+    mainBtn.disabled =
+      true;
+
+
+    mainBtn.classList.add(
+      "unsupported"
+    );
+
+
+    return;
+
+  }
+
+
+
+  /* End of life */
+
+  if(editionData.eol === true){
+
+    mainBtn.textContent =
+      "End of Life";
+
+
+    mainBtn.disabled =
+      true;
+
+
+    mainBtn.classList.add(
+      "unsupported"
+    );
+
+
+    return;
+
+  }
+
+
+
+  /* Missing installation link */
+
+  if(!editionData.link){
+
+    mainBtn.textContent =
+      "Unavailable";
+
+
+    mainBtn.disabled =
+      true;
+
+
+    mainBtn.classList.add(
+      "unsupported"
+    );
+
+
+    return;
+
+  }
+
+
+
+  /* Unsupported platform */
+
+  if(!isAppleMobileDevice()){
+
+    mainBtn.textContent =
+      "Unsupported";
+
+
+    mainBtn.disabled =
+      true;
+
+
+    mainBtn.classList.add(
+      "unsupported"
+    );
+
+
+    return;
+
+  }
+
+
+
+  /* Supported */
+
+  mainBtn.textContent =
+    "Get Skylark";
+
+
+  mainBtn.disabled =
+    false;
+
+
+  mainBtn.classList.remove(
+    "unsupported"
+  );
+
+}
+
+
+
+/* ==========================================================
    GET SKYLARK
+
+   Installation link ALWAYS comes from editions.json.
 ========================================================== */
 
 mainBtn.addEventListener(
   "click",
   () => {
 
+
     if(
-      mainBtn.disabled ||
-      !editionData
+      !editionData ||
+      mainBtn.disabled
     ){
+
       return;
+
     }
 
 
-    if(editionData.eol){
+
+    if(
+      editionData.eol === true
+    ){
+
       return;
+
     }
 
 
-    if(!isCompatibleWithEdition()){
+
+    if(
+      !isAppleMobileDevice()
+    ){
 
       updateInstallButton();
 
       return;
 
     }
+
 
 
     if(!editionData.link){
@@ -1066,15 +1058,96 @@ mainBtn.addEventListener(
     }
 
 
-    /*
-       Installation URL comes DIRECTLY
-       from editions.json.
-    */
+
     window.location.href =
       editionData.link;
 
   }
 );
+
+
+
+/* ==========================================================
+   CHANGELOG RENDERER
+
+   DO NOT EDIT THIS WHEN UPDATING RELEASE NOTES.
+
+   Edit CHANGELOG at the top instead.
+========================================================== */
+
+function renderChangelog(){
+
+  changelogContent.innerHTML =
+    "";
+
+
+  const version =
+    document.createElement("p");
+
+
+  version.className =
+    "changelog-version";
+
+
+  version.textContent =
+    CHANGELOG.version;
+
+
+  changelogContent.appendChild(
+    version
+  );
+
+
+
+  CHANGELOG.items.forEach(
+    item => {
+
+
+      const block =
+        document.createElement("div");
+
+
+      block.className =
+        "whats-new-item";
+
+
+
+      const title =
+        document.createElement("strong");
+
+
+      title.textContent =
+        item.title;
+
+
+
+      const text =
+        document.createElement("p");
+
+
+      text.textContent =
+        item.text;
+
+
+
+      block.appendChild(
+        title
+      );
+
+
+      block.appendChild(
+        text
+      );
+
+
+      changelogContent.appendChild(
+        block
+      );
+
+    }
+  );
+
+}
 
 
 
@@ -1144,6 +1217,7 @@ function applyDarkMode(enabled){
 }
 
 
+
 const savedDarkMode =
   localStorage.getItem(
     "darkMode"
@@ -1153,6 +1227,7 @@ const savedDarkMode =
 applyDarkMode(
   savedDarkMode
 );
+
 
 
 darkToggle.addEventListener(
@@ -1169,7 +1244,7 @@ darkToggle.addEventListener(
 
 
 /* ==========================================================
-   BACKGROUND SYSTEM
+   BACKGROUND HELPERS
 ========================================================== */
 
 function setBodyBackground(url){
@@ -1181,32 +1256,39 @@ function setBodyBackground(url){
 
 
 
-/*
-   Visually mark selected built-in theme.
-*/
+/* ==========================================================
+   THEME SELECTION INDICATOR
+========================================================== */
+
 function updateSelectedTheme(name){
 
   document
     .querySelectorAll(
       ".theme-grid button"
     )
-    .forEach(button => {
+    .forEach(
+      button => {
 
-      button.classList.toggle(
-        "selected",
-        button.dataset.theme === name
-      );
+        button.classList.toggle(
+          "selected",
+          button.dataset.theme === name
+        );
 
-    });
+      }
+    );
 
 }
 
 
 
-/*
-   Built-in background.
-*/
+/* ==========================================================
+   BUILT-IN BACKGROUNDS
+========================================================== */
+
 function applyBackground(name){
+
+
+  /* DEFAULT */
 
   if(name === "default"){
 
@@ -1236,12 +1318,17 @@ function applyBackground(name){
   }
 
 
+
+  /* BUILT-IN THEME */
+
   const url =
     THEMES[name];
 
 
   if(!url){
+
     return;
+
   }
 
 
@@ -1278,13 +1365,17 @@ fileInput.addEventListener(
   "change",
   event => {
 
+
     const file =
       event.target.files[0];
 
 
     if(!file){
+
       return;
+
     }
+
 
 
     if(
@@ -1302,12 +1393,15 @@ fileInput.addEventListener(
     }
 
 
+
     const reader =
       new FileReader();
 
 
+
     reader.onload =
       event => {
+
 
         const result =
           event.target.result;
@@ -1318,11 +1412,6 @@ fileInput.addEventListener(
         );
 
 
-        /*
-           Keep custom image so it can survive refresh.
-
-           Large images may exceed browser localStorage.
-        */
         try{
 
           localStorage.setItem(
@@ -1330,22 +1419,24 @@ fileInput.addEventListener(
             result
           );
 
+
           localStorage.setItem(
             "backgroundType",
             "custom"
           );
 
         }
+
         catch(error){
 
           console.warn(
-            "Image too large for localStorage.",
+            "Image too large to save:",
             error
           );
 
 
           showToast(
-            "Background applied, but this image is too large to save"
+            "Background applied, but the image is too large to save"
           );
 
         }
@@ -1368,24 +1459,30 @@ fileInput.addEventListener(
 
 
 /* ==========================================================
-   IMAGE URL
+   IMAGE URL POPUP
 ========================================================== */
 
 function openURL(){
 
-  urlError.hidden = true;
+  urlError.hidden =
+    true;
+
 
   urlPopup.style.display =
     "flex";
 
 
-  setTimeout(() => {
+  setTimeout(
+    () => {
 
-    urlInput.focus();
+      urlInput.focus();
 
-  }, 100);
+    },
+    100
+  );
 
 }
+
 
 
 function closeURL(){
@@ -1397,9 +1494,10 @@ function closeURL(){
 
 
 
-/*
-   Clipboard paste button.
-*/
+/* ==========================================================
+   PASTE IMAGE URL
+========================================================== */
+
 async function pasteURL(){
 
   try{
@@ -1416,10 +1514,12 @@ async function pasteURL(){
       true;
 
   }
+
   catch(error){
 
     urlError.textContent =
       "Clipboard access was not allowed.";
+
 
     urlError.hidden =
       false;
@@ -1430,13 +1530,15 @@ async function pasteURL(){
 
 
 
-/*
-   Validate URL as an image before saving.
-*/
+/* ==========================================================
+   APPLY IMAGE URL
+========================================================== */
+
 function applyURL(){
 
   const url =
     urlInput.value.trim();
+
 
 
   if(!url){
@@ -1444,20 +1546,25 @@ function applyURL(){
     urlError.textContent =
       "Enter an image URL.";
 
+
     urlError.hidden =
       false;
+
 
     return;
 
   }
 
 
+
   const image =
     new Image();
 
 
+
   image.onload =
     () => {
+
 
       setBodyBackground(
         url
@@ -1490,16 +1597,20 @@ function applyURL(){
   };
 
 
+
   image.onerror =
     () => {
 
+
       urlError.textContent =
         "That image could not be loaded.";
+
 
       urlError.hidden =
         false;
 
   };
+
 
 
   image.src =
@@ -1533,6 +1644,9 @@ function restoreBackground(){
     );
 
 
+
+  /* CUSTOM */
+
   if(type === "custom"){
 
     const custom =
@@ -1559,6 +1673,9 @@ function restoreBackground(){
 
   }
 
+
+
+  /* THEME */
 
   if(type === "theme"){
 
@@ -1590,6 +1707,9 @@ function restoreBackground(){
   }
 
 
+
+  /* DEFAULT */
+
   setBodyBackground(
     DEFAULT_BG
   );
@@ -1606,29 +1726,37 @@ function restoreBackground(){
 /* ==========================================================
    UI OPACITY
 
-   IMPORTANT:
-   This controls ONLY the glass background of:
-   - main card
-   - settings card
-   - popup card
+   AFFECTS:
+   ✓ Main UI card
+   ✓ Settings UI card
 
-   It does NOT change the opacity of:
-   - text
-   - buttons
-   - sliders
-   - titles
-   - links
+   DOES NOT AFFECT:
+   ✗ What's New card
+   ✗ Text
+   ✗ Buttons
+   ✗ Toggle
+   ✗ Slider
+   ✗ Controls
 ========================================================== */
 
 function applyOpacity(value){
 
   const numericValue =
-    Number(value);
+    Math.max(
+      0,
+      Math.min(
+        100,
+        Number(value)
+      )
+    );
 
 
   const normalized =
     numericValue / 100;
 
+
+
+  /* Save CSS variable */
 
   document.documentElement
     .style
@@ -1638,15 +1766,50 @@ function applyOpacity(value){
     );
 
 
+
+  /* Update percentage */
+
   opacityValue.textContent =
     numericValue + "%";
 
 
+
   /*
-     Warning appears only at lower values.
+    TRUE ZERO MODE
+
+    At 0%:
+    - no background
+    - no blur
+    - no shadow
+    - no border/glass effect
+
+    Contents remain fully visible.
   */
+
+  const zero =
+    numericValue === 0;
+
+
+  mainCard.classList.toggle(
+    "zero-opacity",
+    zero
+  );
+
+
+  settingsCard.classList.toggle(
+    "zero-opacity",
+    zero
+  );
+
+
+
+  /*
+    Warning only at lower values.
+  */
+
   opacityWarning.hidden =
     numericValue >= 50;
+
 
 
   localStorage.setItem(
@@ -1657,6 +1820,10 @@ function applyOpacity(value){
 }
 
 
+
+/* ==========================================================
+   RESTORE OPACITY
+========================================================== */
 
 const savedOpacity =
   localStorage.getItem(
@@ -1679,6 +1846,7 @@ applyOpacity(
 );
 
 
+
 opacitySlider.addEventListener(
   "input",
   () => {
@@ -1693,39 +1861,56 @@ opacitySlider.addEventListener(
 
 
 /* ==========================================================
-   CLOSE OVERLAYS BY TAPPING OUTSIDE CARD
+   CLOSE PANELS BY TAPPING OUTSIDE
 ========================================================== */
 
 settingsPanel.addEventListener(
   "click",
   event => {
 
-    if(event.target === settingsPanel){
+    if(
+      event.target ===
+      settingsPanel
+    ){
+
       closeSettings();
+
     }
 
   }
 );
+
 
 
 whatsNewPanel.addEventListener(
   "click",
   event => {
 
-    if(event.target === whatsNewPanel){
+    if(
+      event.target ===
+      whatsNewPanel
+    ){
+
       closeWhatsNew();
+
     }
 
   }
 );
 
 
+
 urlPopup.addEventListener(
   "click",
   event => {
 
-    if(event.target === urlPopup){
+    if(
+      event.target ===
+      urlPopup
+    ){
+
       closeURL();
+
     }
 
   }
@@ -1736,6 +1921,8 @@ urlPopup.addEventListener(
 /* ==========================================================
    INITIALIZE
 ========================================================== */
+
+renderChangelog();
 
 restoreBackground();
 
