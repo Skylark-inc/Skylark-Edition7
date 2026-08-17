@@ -3,27 +3,26 @@
 ========================================================== */
 
 :root{
+
   --accent:#007aff;
 
-  /*
-    Controls ONLY glass/card backgrounds.
-    0 = completely transparent
-    1 = completely opaque
-  */
   --card-opacity:0.65;
 
   --text:#1c1c1e;
+
   --secondary-text:#6e6e73;
 
-  --control-bg:rgba(118,118,128,0.12);
-  --control-bg-pressed:rgba(118,118,128,0.20);
+  --control-bg:
+    rgba(118,118,128,0.12);
 
-  --separator:rgba(60,60,67,0.16);
+  --control-bg-pressed:
+    rgba(118,118,128,0.20);
+
+  --separator:
+    rgba(60,60,67,0.16);
 
   --danger:#ff3b30;
-  --warning:#ff9500;
 
-  color-scheme:light dark;
 }
 
 
@@ -33,23 +32,35 @@
 ========================================================== */
 
 *{
+
   margin:0;
+
   padding:0;
+
   box-sizing:border-box;
 
-  -webkit-tap-highlight-color:transparent;
+  -webkit-tap-highlight-color:
+    transparent;
+
 }
+
 
 
 html,
 body{
+
   width:100%;
+
   min-height:100%;
+
 }
 
 
+
 body{
+
   min-height:100vh;
+
   min-height:100dvh;
 
   font-family:
@@ -67,9 +78,6 @@ body{
 
   background-size:cover;
 
-  /*
-    Stops the wallpaper from tiling.
-  */
   background-repeat:no-repeat;
 
   background-position:center center;
@@ -77,24 +85,27 @@ body{
   background-attachment:fixed;
 
   overflow-x:hidden;
+
 }
 
 
 
 /* ==========================================================
    MAIN CONTAINER
-
-   Keeps the entire card centered horizontally AND vertically.
 ========================================================== */
 
 .container{
+
   width:100%;
+
   min-height:100vh;
+
   min-height:100dvh;
 
   display:flex;
 
   justify-content:center;
+
   align-items:center;
 
   padding:
@@ -102,6 +113,7 @@ body{
     max(18px, env(safe-area-inset-right))
     max(24px, env(safe-area-inset-bottom))
     max(18px, env(safe-area-inset-left));
+
 }
 
 
@@ -111,17 +123,15 @@ body{
 ========================================================== */
 
 .card{
+
   position:relative;
 
-  width:min(92vw, 420px);
+  width:min(92vw,420px);
 
   padding:32px 28px;
 
   border-radius:30px;
 
-  /*
-    ONLY this background responds to UI opacity.
-  */
   background:
     rgba(
       255,
@@ -130,12 +140,6 @@ body{
       var(--card-opacity)
     );
 
-  /*
-    Blur is intentionally independent from opacity.
-
-    At 0%, the CARD BACKGROUND becomes completely
-    transparent while the actual controls/text remain visible.
-  */
   -webkit-backdrop-filter:
     blur(28px)
     saturate(180%);
@@ -157,10 +161,17 @@ body{
   box-shadow:
     0 18px 60px
     rgba(0,0,0,0.14);
+
+  transition:
+    background 0.15s ease,
+    box-shadow 0.15s ease;
+
 }
 
 
+
 .dark .card{
+
   background:
     rgba(
       28,
@@ -170,15 +181,46 @@ body{
     );
 
   color:#f5f5f7;
+
 }
 
 
 
 /* ==========================================================
-   MAIN TYPOGRAPHY
+   TRUE ZERO OPACITY
+
+   This removes ONLY the actual card.
+
+   Children remain completely visible.
+========================================================== */
+
+.card.zero-opacity,
+.settings-card.zero-opacity{
+
+  background:transparent !important;
+
+  -webkit-backdrop-filter:
+    none !important;
+
+  backdrop-filter:
+    none !important;
+
+  box-shadow:
+    none !important;
+
+  border-color:
+    transparent !important;
+
+}
+
+
+
+/* ==========================================================
+   TYPOGRAPHY
 ========================================================== */
 
 .card h1{
+
   font-size:30px;
 
   line-height:1.1;
@@ -187,29 +229,34 @@ body{
 
   letter-spacing:-0.7px;
 
-  color:inherit;
 }
 
 
+
 .supported-version{
+
   margin-top:-4px;
 
   font-size:14px;
 
-  line-height:1.35;
-
   font-weight:600;
 
   color:var(--secondary-text);
+
 }
+
 
 
 .dark .supported-version{
+
   color:#aeaeb2;
+
 }
 
 
+
 .skylark-version{
+
   margin-top:-8px;
 
   font-size:13px;
@@ -217,21 +264,27 @@ body{
   font-weight:500;
 
   color:var(--secondary-text);
+
 }
 
 
+
 .dark .skylark-version{
+
   color:#8e8e93;
+
 }
 
 
 
 /* ==========================================================
-   MAIN GET BUTTON
+   GET SKYLARK
 ========================================================== */
 
 .main-btn{
+
   appearance:none;
+
   -webkit-appearance:none;
 
   width:100%;
@@ -242,7 +295,7 @@ body{
 
   padding:14px 18px;
 
-  border:0;
+  border:none;
 
   border-radius:16px;
 
@@ -258,25 +311,25 @@ body{
 
   transition:
     transform 0.15s ease,
-    filter 0.15s ease,
-    background 0.2s ease;
+    filter 0.15s ease;
+
 }
+
 
 
 .main-btn:active:not(:disabled){
+
   transform:scale(0.975);
 
   filter:brightness(0.92);
+
 }
 
 
 
-/*
-  Unsupported remains visually obvious
-  while still looking like part of the UI.
-*/
 .main-btn.unsupported,
 .main-btn:disabled{
+
   background:#8e8e93;
 
   color:#fff;
@@ -284,6 +337,7 @@ body{
   cursor:default;
 
   opacity:1;
+
 }
 
 
@@ -293,30 +347,33 @@ body{
 ========================================================== */
 
 .find-edition{
+
   margin-top:-5px;
 
   font-size:13px;
 
   color:var(--secondary-text);
+
 }
+
 
 
 .dark .find-edition{
+
   color:#aeaeb2;
+
 }
 
 
+
 .find-edition a{
+
   color:var(--accent);
 
   font-weight:600;
 
   text-decoration:none;
-}
 
-
-.find-edition a:active{
-  opacity:0.55;
 }
 
 
@@ -326,28 +383,27 @@ body{
 ========================================================== */
 
 .sub-buttons{
-  width:100%;
 
   display:grid;
 
   grid-template-columns:
-    repeat(2, minmax(0,1fr));
+    repeat(2,minmax(0,1fr));
 
   gap:10px;
 
-  margin-top:2px;
 }
 
 
+
 .sub-buttons button{
+
   appearance:none;
-  -webkit-appearance:none;
+
+  border:none;
 
   min-height:42px;
 
   padding:10px 12px;
-
-  border:0;
 
   border-radius:13px;
 
@@ -359,23 +415,15 @@ body{
 
   font-weight:650;
 
-  cursor:pointer;
-
-  transition:
-    transform 0.15s ease,
-    background 0.15s ease;
 }
 
-
-.sub-buttons button:active{
-  transform:scale(0.97);
-
-  background:var(--control-bg-pressed);
-}
 
 
 .dark .sub-buttons button{
-  background:rgba(118,118,128,0.24);
+
+  background:
+    rgba(118,118,128,0.24);
+
 }
 
 
@@ -385,6 +433,7 @@ body{
 ========================================================== */
 
 .credits{
+
   margin-top:6px;
 
   display:flex;
@@ -399,26 +448,26 @@ body{
 
   font-size:12px;
 
-  line-height:1.5;
-
   color:var(--secondary-text);
+
 }
 
-
-.dark .credits{
-  color:#8e8e93;
-}
 
 
 .credits a{
+
   color:inherit;
 
   text-decoration:none;
+
 }
 
 
-.credits a:active{
-  opacity:0.5;
+
+.dark .credits{
+
+  color:#8e8e93;
+
 }
 
 
@@ -428,6 +477,7 @@ body{
 ========================================================== */
 
 .notice{
+
   width:100%;
 
   padding:12px 14px;
@@ -439,77 +489,87 @@ body{
   font-size:13px;
 
   line-height:1.4;
+
 }
 
 
+
 .notice strong{
+
   display:block;
 
   margin-bottom:3px;
 
-  font-size:13px;
 }
+
 
 
 .notice[hidden]{
+
   display:none !important;
+
 }
 
 
+
 .beta-notice{
+
   background:
     rgba(255,149,0,0.14);
 
   color:#8a4b00;
+
 }
 
 
+
 .dark .beta-notice{
+
   background:
     rgba(255,159,10,0.18);
 
   color:#ffd7a3;
+
 }
 
 
+
 .alert-notice{
+
   background:
     rgba(0,122,255,0.12);
 
   color:#004d9f;
+
 }
+
 
 
 .dark .alert-notice{
-  background:
-    rgba(10,132,255,0.18);
 
   color:#b9dcff;
+
 }
 
 
+
 .eol-notice{
+
   background:
     rgba(255,59,48,0.13);
 
   color:#a51d17;
-}
 
-
-.dark .eol-notice{
-  background:
-    rgba(255,69,58,0.18);
-
-  color:#ffb5b0;
 }
 
 
 
 /* ==========================================================
-   OVERLAY
+   OVERLAYS
 ========================================================== */
 
 .overlay{
+
   position:fixed;
 
   inset:0;
@@ -523,19 +583,14 @@ body{
   align-items:center;
 
   padding:
-    max(20px, env(safe-area-inset-top))
-    max(18px, env(safe-area-inset-right))
-    max(20px, env(safe-area-inset-bottom))
-    max(18px, env(safe-area-inset-left));
+    max(20px,env(safe-area-inset-top))
+    max(18px,env(safe-area-inset-right))
+    max(20px,env(safe-area-inset-bottom))
+    max(18px,env(safe-area-inset-left));
 
   background:
     rgba(0,0,0,0.35);
 
-  -webkit-backdrop-filter:
-    blur(5px);
-
-  backdrop-filter:
-    blur(5px);
 }
 
 
@@ -543,12 +598,12 @@ body{
 /* ==========================================================
    SETTINGS CARD
 
-   Uses SAME opacity variable as main card.
+   THIS IS AFFECTED BY OPACITY
 ========================================================== */
 
-.settings-card,
-.popup-card{
-  width:min(92vw, 370px);
+.settings-card{
+
+  width:min(92vw,370px);
 
   max-height:
     calc(100dvh - 40px);
@@ -586,11 +641,13 @@ body{
   flex-direction:column;
 
   gap:16px;
+
 }
 
 
-.dark .settings-card,
-.dark .popup-card{
+
+.dark .settings-card{
+
   background:
     rgba(
       28,
@@ -600,28 +657,180 @@ body{
     );
 
   color:#f5f5f7;
+
 }
+
 
 
 .settings-card h2{
+
   font-size:25px;
 
-  line-height:1.1;
-
-  font-weight:750;
-
-  letter-spacing:-0.5px;
-
   text-align:center;
+
 }
 
 
-.settings-card h3{
-  font-size:15px;
 
-  font-weight:650;
+/* ==========================================================
+   WHAT'S NEW CARD
 
-  color:inherit;
+   IMPORTANT:
+
+   THIS DOES NOT USE --card-opacity.
+
+   It ALWAYS stays readable.
+========================================================== */
+
+.whats-new-card{
+
+  width:min(92vw,370px);
+
+  max-height:
+    calc(100dvh - 40px);
+
+  overflow-y:auto;
+
+  padding:24px;
+
+  border-radius:28px;
+
+  background:
+    rgba(255,255,255,0.92);
+
+  -webkit-backdrop-filter:
+    blur(30px)
+    saturate(180%);
+
+  backdrop-filter:
+    blur(30px)
+    saturate(180%);
+
+  color:var(--text);
+
+  box-shadow:
+    0 24px 70px
+    rgba(0,0,0,0.22);
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:16px;
+
+}
+
+
+
+.dark .whats-new-card{
+
+  background:
+    rgba(28,28,30,0.92);
+
+  color:#f5f5f7;
+
+}
+
+
+
+.whats-new-card h2{
+
+  text-align:center;
+
+  font-size:25px;
+
+}
+
+
+
+/* ==========================================================
+   CHANGELOG
+========================================================== */
+
+#changelogContent{
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:11px;
+
+}
+
+
+
+.changelog-version{
+
+  text-align:center;
+
+  font-size:13px;
+
+  color:var(--secondary-text);
+
+}
+
+
+
+.dark .changelog-version{
+
+  color:#aeaeb2;
+
+}
+
+
+
+.whats-new-item{
+
+  padding:13px 14px;
+
+  border-radius:14px;
+
+  background:
+    rgba(118,118,128,0.12);
+
+  text-align:left;
+
+}
+
+
+
+.dark .whats-new-item{
+
+  background:
+    rgba(118,118,128,0.22);
+
+}
+
+
+
+.whats-new-item strong{
+
+  display:block;
+
+  margin-bottom:4px;
+
+  font-size:14px;
+
+}
+
+
+
+.whats-new-item p{
+
+  color:var(--secondary-text);
+
+  font-size:13px;
+
+  line-height:1.4;
+
+}
+
+
+
+.dark .whats-new-item p{
+
+  color:#aeaeb2;
+
 }
 
 
@@ -631,74 +840,69 @@ body{
 ========================================================== */
 
 .settings-section{
+
   display:flex;
 
   flex-direction:column;
 
   gap:11px;
+
 }
 
 
+
 .setting-row{
+
   min-height:44px;
 
   display:flex;
 
-  align-items:center;
-
   justify-content:space-between;
 
-  gap:16px;
+  align-items:center;
+
 }
 
-
-.setting-text{
-  font-size:16px;
-}
 
 
 .divider{
-  width:100%;
 
   height:1px;
 
   background:var(--separator);
-}
 
-
-.dark .divider{
-  background:rgba(84,84,88,0.55);
 }
 
 
 
 /* ==========================================================
-   iOS-STYLE TOGGLE
+   DARK MODE TOGGLE
 ========================================================== */
 
 .switch{
-  position:relative;
 
-  flex:0 0 auto;
+  position:relative;
 
   width:51px;
 
   height:31px;
 
-  cursor:pointer;
 }
 
 
+
 .switch input{
+
   position:absolute;
 
   opacity:0;
 
-  pointer-events:none;
 }
 
 
+
 .toggle-slider{
+
   position:absolute;
 
   inset:0;
@@ -707,12 +911,14 @@ body{
 
   background:#e9e9ea;
 
-  transition:
-    background 0.2s ease;
+  transition:0.2s;
+
 }
 
 
+
 .toggle-slider::before{
+
   content:"";
 
   position:absolute;
@@ -727,63 +933,59 @@ body{
 
   border-radius:50%;
 
-  background:#fff;
+  background:white;
 
   box-shadow:
     0 2px 5px
     rgba(0,0,0,0.22);
 
-  transition:
-    transform 0.22s
-    cubic-bezier(
-      0.25,
-      0.8,
-      0.25,
-      1
-    );
+  transition:0.2s;
+
 }
+
 
 
 .switch input:checked +
 .toggle-slider{
+
   background:#34c759;
+
 }
+
 
 
 .switch input:checked +
 .toggle-slider::before{
+
   transform:
     translateX(20px);
-}
 
-
-.dark .toggle-slider{
-  background:#39393d;
 }
 
 
 
 /* ==========================================================
-   BACKGROUND BUTTON GRID
+   THEMES
 ========================================================== */
 
 .theme-grid{
+
   display:grid;
 
   grid-template-columns:
     repeat(2,minmax(0,1fr));
 
   gap:10px;
+
 }
 
 
+
 .theme-grid button{
-  appearance:none;
-  -webkit-appearance:none;
 
   min-height:46px;
 
-  padding:11px 10px;
+  padding:11px;
 
   border:2px solid transparent;
 
@@ -797,45 +999,34 @@ body{
 
   font-weight:600;
 
-  cursor:pointer;
-
-  transition:
-    transform 0.15s ease,
-    background 0.15s ease,
-    border-color 0.15s ease;
 }
 
-
-.theme-grid button:active{
-  transform:scale(0.97);
-}
 
 
 .theme-grid button.selected{
+
   border-color:var(--accent);
 
   color:var(--accent);
 
   background:
     rgba(0,122,255,0.09);
+
 }
+
 
 
 .dark .theme-grid button{
+
   background:
     rgba(118,118,128,0.22);
-}
 
-
-.dark .theme-grid button.selected{
-  background:
-    rgba(0,122,255,0.16);
 }
 
 
 
 /* ==========================================================
-   GENERAL SETTINGS BUTTONS
+   GENERAL BUTTONS
 ========================================================== */
 
 .settings-button,
@@ -843,14 +1034,14 @@ body{
 .primary-button,
 .secondary-button,
 #pasteButton{
+
   appearance:none;
-  -webkit-appearance:none;
+
+  border:none;
 
   min-height:46px;
 
   padding:12px 15px;
-
-  border:0;
 
   border-radius:14px;
 
@@ -858,43 +1049,29 @@ body{
 
   font-weight:650;
 
-  cursor:pointer;
-
-  transition:
-    transform 0.15s ease,
-    filter 0.15s ease,
-    background 0.15s ease;
 }
+
 
 
 .settings-button,
 .close-button,
 .primary-button{
+
   background:var(--accent);
 
-  color:#fff;
+  color:white;
+
 }
 
 
-.settings-button:active,
-.close-button:active,
-.primary-button:active,
-.secondary-button:active,
-#pasteButton:active{
-  transform:scale(0.975);
-}
 
+.secondary-button,
+#pasteButton{
 
-.secondary-button{
   background:var(--control-bg);
 
   color:var(--accent);
-}
 
-
-.dark .secondary-button{
-  background:
-    rgba(118,118,128,0.24);
 }
 
 
@@ -904,99 +1081,89 @@ body{
 ========================================================== */
 
 .file-btn{
+
   position:relative;
 
   display:flex;
 
-  align-items:center;
-
   justify-content:center;
+
+  align-items:center;
 
   min-height:46px;
 
-  padding:12px 15px;
+  padding:12px;
 
   border-radius:14px;
 
   background:var(--accent);
 
-  color:#fff;
+  color:white;
 
   font-size:15px;
 
   font-weight:650;
 
-  cursor:pointer;
-
   overflow:hidden;
+
 }
 
 
+
 .file-btn input{
+
   position:absolute;
 
   inset:0;
 
-  width:100%;
-
-  height:100%;
-
   opacity:0;
 
-  cursor:pointer;
 }
 
 
 
 /* ==========================================================
-   OPACITY
+   OPACITY SLIDER
 ========================================================== */
 
 .opacity-header{
-  display:flex;
 
-  align-items:center;
+  display:flex;
 
   justify-content:space-between;
 
-  gap:12px;
+  align-items:center;
 
-  font-size:15px;
 }
+
 
 
 .opacity-header strong{
+
   color:var(--accent);
 
-  font-variant-numeric:
-    tabular-nums;
 }
 
 
 
-/*
-   Larger invisible/touchable area.
-*/
 input[type="range"]{
+
   appearance:none;
+
   -webkit-appearance:none;
 
   width:100%;
 
   height:30px;
 
-  margin:0;
-
   background:transparent;
 
-  cursor:pointer;
 }
 
 
 
-/* TRACK */
-input[type="range"]::-webkit-slider-runnable-track{
-  width:100%;
+input[type="range"]
+::-webkit-slider-runnable-track{
 
   height:6px;
 
@@ -1004,13 +1171,16 @@ input[type="range"]::-webkit-slider-runnable-track{
 
   background:
     rgba(118,118,128,0.28);
+
 }
 
 
 
-/* THUMB */
-input[type="range"]::-webkit-slider-thumb{
+input[type="range"]
+::-webkit-slider-thumb{
+
   appearance:none;
+
   -webkit-appearance:none;
 
   width:24px;
@@ -1019,7 +1189,7 @@ input[type="range"]::-webkit-slider-thumb{
 
   margin-top:-9px;
 
-  border:0;
+  border:none;
 
   border-radius:50%;
 
@@ -1028,40 +1198,48 @@ input[type="range"]::-webkit-slider-thumb{
   box-shadow:
     0 2px 6px
     rgba(0,0,0,0.20);
+
 }
 
 
 
-/* Firefox */
-input[type="range"]::-moz-range-track{
+input[type="range"]
+::-moz-range-track{
+
   height:6px;
 
   border-radius:999px;
 
   background:
     rgba(118,118,128,0.28);
+
 }
 
 
-input[type="range"]::-moz-range-thumb{
+
+input[type="range"]
+::-moz-range-thumb{
+
   width:24px;
 
   height:24px;
 
-  border:0;
+  border:none;
 
   border-radius:50%;
 
   background:var(--accent);
+
 }
 
 
 
 /* ==========================================================
-   OPACITY WARNING
+   WARNING
 ========================================================== */
 
 .warning{
+
   padding:9px 11px;
 
   border-radius:11px;
@@ -1073,196 +1251,148 @@ input[type="range"]::-moz-range-thumb{
 
   font-size:12px;
 
-  line-height:1.35;
 }
+
 
 
 .warning[hidden]{
+
   display:none !important;
-}
 
-
-.dark .warning{
-  background:
-    rgba(255,159,10,0.17);
-
-  color:#ffd29a;
-}
-
-
-
-/* ==========================================================
-   WHAT'S NEW
-========================================================== */
-
-.whats-new-content{
-  display:flex;
-
-  flex-direction:column;
-
-  gap:12px;
-}
-
-
-.whats-new-item{
-  padding:13px 14px;
-
-  border-radius:14px;
-
-  background:var(--control-bg);
-
-  text-align:left;
-}
-
-
-.dark .whats-new-item{
-  background:
-    rgba(118,118,128,0.22);
-}
-
-
-.whats-new-item strong{
-  display:block;
-
-  margin-bottom:4px;
-
-  font-size:14px;
-}
-
-
-.whats-new-item p{
-  color:var(--secondary-text);
-
-  font-size:13px;
-
-  line-height:1.4;
-}
-
-
-.dark .whats-new-item p{
-  color:#aeaeb2;
 }
 
 
 
 /* ==========================================================
    URL POPUP
+
+   This popup is intentionally NOT controlled by UI opacity.
 ========================================================== */
 
+.popup-card{
+
+  width:min(92vw,350px);
+
+  padding:24px;
+
+  border-radius:28px;
+
+  background:
+    rgba(255,255,255,0.92);
+
+  -webkit-backdrop-filter:
+    blur(30px);
+
+  backdrop-filter:
+    blur(30px);
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:14px;
+
+  box-shadow:
+    0 24px 70px
+    rgba(0,0,0,0.22);
+
+}
+
+
+
+.dark .popup-card{
+
+  background:
+    rgba(28,28,30,0.92);
+
+  color:white;
+
+}
+
+
+
 .popup-card h3{
-  font-size:21px;
 
   text-align:center;
+
+  font-size:21px;
+
 }
+
 
 
 .popup-description{
-  margin-top:-8px;
 
-  color:var(--secondary-text);
+  text-align:center;
 
   font-size:13px;
 
-  text-align:center;
+  color:var(--secondary-text);
+
 }
 
-
-.dark .popup-description{
-  color:#aeaeb2;
-}
 
 
 .url-input-row{
+
   display:flex;
 
-  align-items:stretch;
-
   gap:8px;
+
 }
 
 
+
 .url-input-row input{
-  min-width:0;
 
   flex:1;
+
+  min-width:0;
 
   height:44px;
 
   padding:0 12px;
 
-  border:0;
-
-  outline:none;
+  border:none;
 
   border-radius:12px;
 
   background:
     rgba(118,118,128,0.12);
 
-  color:var(--text);
+  color:inherit;
 
-  font-size:14px;
 }
 
-
-.dark .url-input-row input{
-  background:
-    rgba(118,118,128,0.24);
-
-  color:#fff;
-}
-
-
-.url-input-row input::placeholder{
-  color:#8e8e93;
-}
-
-
-#pasteButton{
-  min-height:44px;
-
-  padding-left:13px;
-
-  padding-right:13px;
-
-  background:var(--control-bg);
-
-  color:var(--accent);
-}
-
-
-.dark #pasteButton{
-  background:
-    rgba(118,118,128,0.24);
-}
 
 
 .url-error{
-  padding:8px 10px;
-
-  border-radius:10px;
-
-  background:
-    rgba(255,59,48,0.12);
 
   color:var(--danger);
 
   font-size:12px;
+
 }
+
 
 
 .url-error[hidden]{
+
   display:none !important;
+
 }
 
 
+
 .popup-actions{
+
   display:grid;
 
   grid-template-columns:
     repeat(2,minmax(0,1fr));
 
   gap:9px;
+
 }
 
 
@@ -1272,6 +1402,7 @@ input[type="range"]::-moz-range-thumb{
 ========================================================== */
 
 #toast{
+
   position:fixed;
 
   z-index:9999;
@@ -1297,92 +1428,66 @@ input[type="range"]::-moz-range-thumb{
   background:
     rgba(28,28,30,0.90);
 
-  color:#fff;
+  color:white;
 
   font-size:13px;
 
-  font-weight:550;
-
   text-align:center;
-
-  pointer-events:none;
 
   opacity:0;
 
+  pointer-events:none;
+
   transform:
-    translate(-50%, 12px)
-    scale(0.98);
+    translate(-50%,12px);
 
-  transition:
-    opacity 0.2s ease,
-    transform 0.2s ease;
+  transition:0.2s;
 
-  -webkit-backdrop-filter:
-    blur(20px);
-
-  backdrop-filter:
-    blur(20px);
 }
 
 
+
 #toast.show{
+
   opacity:1;
 
   transform:
-    translate(-50%, 0)
-    scale(1);
+    translate(-50%,0);
+
 }
 
 
 
 /* ==========================================================
-   SMALL DEVICES
+   SMALL SCREENS
 ========================================================== */
 
 @media(max-width:380px){
 
   .card{
+
     width:94vw;
 
     padding:26px 20px;
 
-    border-radius:26px;
   }
 
 
   .card h1{
+
     font-size:27px;
+
   }
 
 
   .settings-card,
+  .whats-new-card,
   .popup-card{
+
     width:94vw;
 
     padding:20px;
-  }
 
-}
-
-
-
-/* ==========================================================
-   REDUCED MOTION
-========================================================== */
-
-@media(
-  prefers-reduced-motion:
-  reduce
-){
-
-  *,
-  *::before,
-  *::after{
-    scroll-behavior:auto !important;
-
-    transition:none !important;
-
-    animation:none !important;
   }
 
 }
