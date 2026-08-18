@@ -8,6 +8,10 @@
 
   --card-opacity:0.65;
 
+  --card-blur:18.2px;
+
+  --card-shadow-opacity:0.091;
+
   --text:#1c1c1e;
 
   --secondary-text:#6e6e73;
@@ -91,6 +95,18 @@ body{
 
 
 /* ==========================================================
+   HIDDEN
+========================================================== */
+
+[hidden]{
+
+  display:none !important;
+
+}
+
+
+
+/* ==========================================================
    MAIN CONTAINER
 ========================================================== */
 
@@ -109,10 +125,96 @@ body{
   align-items:center;
 
   padding:
-    max(24px, env(safe-area-inset-top))
-    max(18px, env(safe-area-inset-right))
-    max(24px, env(safe-area-inset-bottom))
-    max(18px, env(safe-area-inset-left));
+    max(24px,env(safe-area-inset-top))
+    max(18px,env(safe-area-inset-right))
+    max(24px,env(safe-area-inset-bottom))
+    max(18px,env(safe-area-inset-left));
+
+}
+
+
+
+/* ==========================================================
+   OPACITY CARD SYSTEM
+
+   The card itself is transparent.
+
+   ::before contains ONLY the glass.
+
+   This means changing opacity never changes the opacity
+   of text, buttons, controls, notices, etc.
+========================================================== */
+
+.opacity-card{
+
+  position:relative;
+
+  isolation:isolate;
+
+  background:transparent;
+
+}
+
+
+
+.opacity-card::before{
+
+  content:"";
+
+  position:absolute;
+
+  inset:0;
+
+  z-index:-1;
+
+  border-radius:inherit;
+
+  pointer-events:none;
+
+  background:
+    rgba(
+      255,
+      255,
+      255,
+      var(--card-opacity)
+    );
+
+  -webkit-backdrop-filter:
+    blur(var(--card-blur))
+    saturate(180%);
+
+  backdrop-filter:
+    blur(var(--card-blur))
+    saturate(180%);
+
+  box-shadow:
+    0 18px 60px
+    rgba(
+      0,
+      0,
+      0,
+      var(--card-shadow-opacity)
+    );
+
+  transition:
+    background 0.08s linear,
+    backdrop-filter 0.08s linear,
+    -webkit-backdrop-filter 0.08s linear,
+    box-shadow 0.08s linear;
+
+}
+
+
+
+.dark .opacity-card::before{
+
+  background:
+    rgba(
+      28,
+      28,
+      30,
+      var(--card-opacity)
+    );
 
 }
 
@@ -124,29 +226,11 @@ body{
 
 .card{
 
-  position:relative;
-
   width:min(92vw,420px);
 
   padding:32px 28px;
 
   border-radius:30px;
-
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      var(--card-opacity)
-    );
-
-  -webkit-backdrop-filter:
-    blur(28px)
-    saturate(180%);
-
-  backdrop-filter:
-    blur(28px)
-    saturate(180%);
 
   display:flex;
 
@@ -158,58 +242,13 @@ body{
 
   text-align:center;
 
-  box-shadow:
-    0 18px 60px
-    rgba(0,0,0,0.14);
-
-  transition:
-    background 0.15s ease,
-    box-shadow 0.15s ease;
-
 }
 
 
 
 .dark .card{
 
-  background:
-    rgba(
-      28,
-      28,
-      30,
-      var(--card-opacity)
-    );
-
   color:#f5f5f7;
-
-}
-
-
-
-/* ==========================================================
-   TRUE ZERO OPACITY
-
-   This removes ONLY the actual card.
-
-   Children remain completely visible.
-========================================================== */
-
-.card.zero-opacity,
-.settings-card.zero-opacity{
-
-  background:transparent !important;
-
-  -webkit-backdrop-filter:
-    none !important;
-
-  backdrop-filter:
-    none !important;
-
-  box-shadow:
-    none !important;
-
-  border-color:
-    transparent !important;
 
 }
 
@@ -419,6 +458,15 @@ body{
 
 
 
+.sub-buttons button:active{
+
+  background:
+    var(--control-bg-pressed);
+
+}
+
+
+
 .dark .sub-buttons button{
 
   background:
@@ -499,14 +547,6 @@ body{
   display:block;
 
   margin-bottom:3px;
-
-}
-
-
-
-.notice[hidden]{
-
-  display:none !important;
 
 }
 
@@ -598,7 +638,7 @@ body{
 /* ==========================================================
    SETTINGS CARD
 
-   THIS IS AFFECTED BY OPACITY
+   Glass is supplied by .opacity-card::before.
 ========================================================== */
 
 .settings-card{
@@ -614,27 +654,7 @@ body{
 
   border-radius:28px;
 
-  background:
-    rgba(
-      255,
-      255,
-      255,
-      var(--card-opacity)
-    );
-
-  -webkit-backdrop-filter:
-    blur(30px)
-    saturate(180%);
-
-  backdrop-filter:
-    blur(30px)
-    saturate(180%);
-
   color:var(--text);
-
-  box-shadow:
-    0 24px 70px
-    rgba(0,0,0,0.22);
 
   display:flex;
 
@@ -647,14 +667,6 @@ body{
 
 
 .dark .settings-card{
-
-  background:
-    rgba(
-      28,
-      28,
-      30,
-      var(--card-opacity)
-    );
 
   color:#f5f5f7;
 
@@ -673,13 +685,9 @@ body{
 
 
 /* ==========================================================
-   WHAT'S NEW CARD
+   WHAT'S NEW
 
-   IMPORTANT:
-
-   THIS DOES NOT USE --card-opacity.
-
-   It ALWAYS stays readable.
+   COMPLETELY INDEPENDENT FROM UI OPACITY
 ========================================================== */
 
 .whats-new-card{
@@ -691,12 +699,12 @@ body{
 
   overflow-y:auto;
 
-  padding:24px;
+  padding:26px 24px;
 
   border-radius:28px;
 
   background:
-    rgba(255,255,255,0.92);
+    rgba(255,255,255,0.94);
 
   -webkit-backdrop-filter:
     blur(30px)
@@ -716,7 +724,7 @@ body{
 
   flex-direction:column;
 
-  gap:16px;
+  gap:20px;
 
 }
 
@@ -725,7 +733,7 @@ body{
 .dark .whats-new-card{
 
   background:
-    rgba(28,28,30,0.92);
+    rgba(28,28,30,0.94);
 
   color:#f5f5f7;
 
@@ -737,14 +745,16 @@ body{
 
   text-align:center;
 
-  font-size:25px;
+  font-size:28px;
+
+  letter-spacing:-0.5px;
 
 }
 
 
 
 /* ==========================================================
-   CHANGELOG
+   SIMPLE CHANGELOG
 ========================================================== */
 
 #changelogContent{
@@ -753,40 +763,7 @@ body{
 
   flex-direction:column;
 
-  gap:11px;
-
-}
-
-
-
-.changelog-version{
-
-  text-align:center;
-
-  font-size:13px;
-
-  color:var(--secondary-text);
-
-}
-
-
-
-.dark .changelog-version{
-
-  color:#aeaeb2;
-
-}
-
-
-
-.whats-new-item{
-
-  padding:13px 14px;
-
-  border-radius:14px;
-
-  background:
-    rgba(118,118,128,0.12);
+  gap:10px;
 
   text-align:left;
 
@@ -794,40 +771,29 @@ body{
 
 
 
-.dark .whats-new-item{
+#changelogContent h3{
 
-  background:
-    rgba(118,118,128,0.22);
+  font-size:19px;
 
-}
-
-
-
-.whats-new-item strong{
-
-  display:block;
-
-  margin-bottom:4px;
-
-  font-size:14px;
+  line-height:1.25;
 
 }
 
 
 
-.whats-new-item p{
+.release-date{
+
+  margin-top:-4px;
 
   color:var(--secondary-text);
 
   font-size:13px;
 
-  line-height:1.4;
-
 }
 
 
 
-.dark .whats-new-item p{
+.dark .release-date{
 
   color:#aeaeb2;
 
@@ -835,8 +801,54 @@ body{
 
 
 
+#changelogContent h4{
+
+  margin-top:10px;
+
+  font-size:16px;
+
+}
+
+
+
+#changelogContent ul{
+
+  padding-left:21px;
+
+  display:flex;
+
+  flex-direction:column;
+
+  gap:8px;
+
+}
+
+
+
+#changelogContent li{
+
+  padding-left:2px;
+
+  color:var(--secondary-text);
+
+  font-size:14px;
+
+  line-height:1.45;
+
+}
+
+
+
+.dark #changelogContent li{
+
+  color:#d1d1d6;
+
+}
+
+
+
 /* ==========================================================
-   SETTINGS SECTIONS
+   SETTINGS
 ========================================================== */
 
 .settings-section{
@@ -887,6 +899,10 @@ body{
 
   height:31px;
 
+  flex-shrink:0;
+
+  cursor:pointer;
+
 }
 
 
@@ -896,6 +912,10 @@ body{
   position:absolute;
 
   opacity:0;
+
+  width:100%;
+
+  height:100%;
 
 }
 
@@ -983,6 +1003,8 @@ body{
 
 .theme-grid button{
 
+  appearance:none;
+
   min-height:46px;
 
   padding:11px;
@@ -1037,6 +1059,8 @@ body{
 
   appearance:none;
 
+  -webkit-appearance:none;
+
   border:none;
 
   min-height:46px;
@@ -1048,6 +1072,8 @@ body{
   font-size:15px;
 
   font-weight:650;
+
+  cursor:pointer;
 
 }
 
@@ -1106,6 +1132,8 @@ body{
 
   overflow:hidden;
 
+  cursor:pointer;
+
 }
 
 
@@ -1118,12 +1146,14 @@ body{
 
   opacity:0;
 
+  cursor:pointer;
+
 }
 
 
 
 /* ==========================================================
-   OPACITY SLIDER
+   OPACITY SLIDER HEADER
 ========================================================== */
 
 .opacity-header{
@@ -1146,6 +1176,32 @@ body{
 
 
 
+/* ==========================================================
+   OPACITY SLIDER
+
+   range-wrap gives the slider a generous touch target.
+
+   The visible track remains slim.
+
+   The thumb is intentionally 28px for mobile grabbing.
+========================================================== */
+
+.range-wrap{
+
+  width:100%;
+
+  min-height:52px;
+
+  display:flex;
+
+  align-items:center;
+
+  touch-action:none;
+
+}
+
+
+
 input[type="range"]{
 
   appearance:none;
@@ -1154,9 +1210,17 @@ input[type="range"]{
 
   width:100%;
 
-  height:30px;
+  height:52px;
+
+  margin:0;
+
+  padding:0;
 
   background:transparent;
+
+  cursor:pointer;
+
+  touch-action:none;
 
 }
 
@@ -1165,12 +1229,14 @@ input[type="range"]{
 input[type="range"]
 ::-webkit-slider-runnable-track{
 
-  height:6px;
+  width:100%;
+
+  height:7px;
 
   border-radius:999px;
 
   background:
-    rgba(118,118,128,0.28);
+    rgba(118,118,128,0.30);
 
 }
 
@@ -1183,11 +1249,11 @@ input[type="range"]
 
   -webkit-appearance:none;
 
-  width:24px;
+  width:28px;
 
-  height:24px;
+  height:28px;
 
-  margin-top:-9px;
+  margin-top:-10.5px;
 
   border:none;
 
@@ -1196,8 +1262,8 @@ input[type="range"]
   background:var(--accent);
 
   box-shadow:
-    0 2px 6px
-    rgba(0,0,0,0.20);
+    0 2px 7px
+    rgba(0,0,0,0.24);
 
 }
 
@@ -1206,12 +1272,14 @@ input[type="range"]
 input[type="range"]
 ::-moz-range-track{
 
-  height:6px;
+  width:100%;
+
+  height:7px;
 
   border-radius:999px;
 
   background:
-    rgba(118,118,128,0.28);
+    rgba(118,118,128,0.30);
 
 }
 
@@ -1220,15 +1288,19 @@ input[type="range"]
 input[type="range"]
 ::-moz-range-thumb{
 
-  width:24px;
+  width:28px;
 
-  height:24px;
+  height:28px;
 
   border:none;
 
   border-radius:50%;
 
   background:var(--accent);
+
+  box-shadow:
+    0 2px 7px
+    rgba(0,0,0,0.24);
 
 }
 
@@ -1255,18 +1327,10 @@ input[type="range"]
 
 
 
-.warning[hidden]{
-
-  display:none !important;
-
-}
-
-
-
 /* ==========================================================
    URL POPUP
 
-   This popup is intentionally NOT controlled by UI opacity.
+   NOT affected by UI opacity.
 ========================================================== */
 
 .popup-card{
@@ -1278,7 +1342,7 @@ input[type="range"]
   border-radius:28px;
 
   background:
-    rgba(255,255,255,0.92);
+    rgba(255,255,255,0.94);
 
   -webkit-backdrop-filter:
     blur(30px);
@@ -1303,7 +1367,7 @@ input[type="range"]
 .dark .popup-card{
 
   background:
-    rgba(28,28,30,0.92);
+    rgba(28,28,30,0.94);
 
   color:white;
 
@@ -1376,14 +1440,6 @@ input[type="range"]
 
 
 
-.url-error[hidden]{
-
-  display:none !important;
-
-}
-
-
-
 .popup-actions{
 
   display:grid;
@@ -1392,6 +1448,101 @@ input[type="range"]
     repeat(2,minmax(0,1fr));
 
   gap:9px;
+
+}
+
+
+
+/* ==========================================================
+   HARD BLOCK
+
+   No Find Edition.
+   No Settings.
+   No changelog.
+   No Get Skylark.
+
+   Just the message.
+========================================================== */
+
+.hard-block{
+
+  position:fixed;
+
+  inset:0;
+
+  z-index:10000;
+
+  display:flex;
+
+  align-items:center;
+
+  justify-content:center;
+
+  padding:
+    max(24px,env(safe-area-inset-top))
+    max(20px,env(safe-area-inset-right))
+    max(24px,env(safe-area-inset-bottom))
+    max(20px,env(safe-area-inset-left));
+
+  background:#f2f2f7;
+
+}
+
+
+
+.dark .hard-block{
+
+  background:#000;
+
+}
+
+
+
+.hard-block-card{
+
+  width:min(90vw,400px);
+
+  text-align:center;
+
+}
+
+
+
+.hard-block-card h1{
+
+  margin-bottom:10px;
+
+  font-size:27px;
+
+  letter-spacing:-0.5px;
+
+}
+
+
+
+.hard-block-card p{
+
+  color:var(--secondary-text);
+
+  font-size:15px;
+
+  line-height:1.45;
+
+}
+
+
+
+.dark .hard-block-card{
+
+  color:white;
+
+}
+
+
+
+.dark .hard-block-card p{
+
+  color:#aeaeb2;
 
 }
 
